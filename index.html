@@ -1,0 +1,3359 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>McEnergy | Service &amp; Maintenance Report</title>
+<meta name="description" content="แบบฟอร์มรายงานตรวจสอบและบำรุงรักษาอุปกรณ์ออนไลน์ — McEnergy Evolution Co., Ltd.">
+<meta name="theme-color" content="#16264A">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<meta name="apple-mobile-web-app-capable" content="no">
+<meta name="apple-mobile-web-app-title" content="McEnergy Report">
+<meta name="mobile-web-app-capable" content="yes">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+    --navy:#16264A;
+    --navy-soft:#2A3D66;
+    --lav-bg:#ECEEFA;
+    --lav-line:#D6D9F0;
+    --green:#2E9E63;
+    --green-deep:#1F7248;
+    --amber:#F2A81D;
+    --paper:#FFFFFF;
+    --page:#F4F5FB;
+    --ink:#1A2233;
+    --ink-soft:#5A6178;
+    --ink-faint:#9299AC;
+    --line:#E3E5EF;
+    --radius:12px;
+    --danger:#C94F4F;
+  }
+  *{box-sizing:border-box;}
+  /* phones enlarge text inside narrow blocks on their own ("text inflation"),
+     which changed every proportion in the exported PDF. Turn it off so the
+     layout is identical on a phone, a tablet and a PC. */
+  html{-webkit-text-size-adjust:100%;-moz-text-size-adjust:100%;text-size-adjust:100%;}
+  body{
+    margin:0;
+    background:var(--page);
+    color:var(--ink);
+    font-family:'Inter',system-ui,sans-serif;
+    -webkit-font-smoothing:antialiased;
+  }
+  h1,h2,h3,.disp{font-family:'Sora',sans-serif;}
+  .wrap{max-width:900px;margin:0 auto;padding:0 20px 80px;}
+
+  /* ---- top bar ---- */
+  .topbar{
+    position:sticky;top:0;z-index:50;
+    background:var(--paper);
+    border-bottom:1px solid var(--line);
+  }
+  .topbar-inner{
+    max-width:900px;margin:0 auto;padding:12px 20px;
+    display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;
+  }
+  .brand{display:flex;align-items:center;gap:10px;}
+  .brand-mark{height:32px;width:auto;flex:0 0 auto;object-fit:contain;}
+  /* the McEnergy mark is much squarer than the TruKOOLING one, so at the same
+     height it looks smaller. Scale it up so both brands read the same size. */
+  body.brand-mce .brand-mark{height:44px;}
+  body.brand-mce .cv-logo{height:8.7cqw;}
+  .brand-text .name{font-family:'Sora';font-weight:700;font-size:15px;color:var(--navy);line-height:1.1;}
+  .brand-text .sub{font-size:11px;color:var(--ink-faint);letter-spacing:.02em;}
+  .actions{display:flex;gap:8px;flex-wrap:wrap;}
+  button{font-family:'Inter';cursor:pointer;}
+  .btn{
+    border:1px solid var(--line);background:var(--paper);color:var(--ink);
+    padding:9px 14px;border-radius:9px;font-size:13px;font-weight:600;
+    display:inline-flex;align-items:center;gap:6px;transition:.15s;
+  }
+  .btn:hover{border-color:var(--navy-soft);}
+  .btn-primary{background:var(--navy);color:#fff;border-color:var(--navy);}
+  .btn-primary:hover{background:var(--navy-soft);}
+  .btn-install{background:var(--green);border-color:var(--green);color:#fff;}
+  .btn-install:hover{background:var(--green-deep);border-color:var(--green-deep);}
+  .btn-save{background:var(--green);border-color:var(--green);color:#fff;}
+  .btn-save:hover{background:var(--green-deep);border-color:var(--green-deep);}
+  .btn-restore{background:var(--paper);border-color:var(--green);color:var(--green-deep);}
+  .btn-restore:hover{background:#E6F5EC;border-color:var(--green-deep);}
+  .btn-ghost{background:transparent;border-color:transparent;color:var(--ink-soft);}
+  .btn-ghost:hover{color:var(--danger);}
+  .status-chip{font-size:11px;color:var(--ink-faint);align-self:center;}
+
+  /* ---- letterhead ---- */
+  .letterhead{
+    border:1px solid var(--line);
+    border-radius:var(--radius);
+    overflow:hidden;
+    margin:24px 0 18px;
+    background:var(--paper);
+  }
+  .lh-top{display:grid;grid-template-columns:1.55fr 1.35fr 1.05fr;}
+  .lh-cell{padding:16px 18px;border-right:1px solid var(--line);}
+  .lh-cell:last-child{border-right:none;}
+  .lh-logo-box{
+    border:1px dashed var(--line);border-radius:8px;
+    padding:8px 10px;display:block;
+    margin-bottom:10px;background:var(--page);
+    width:100%;max-width:240px;
+  }
+  .lh-logo-box img{width:100%;height:auto;display:block;}
+  .lh-company{font-weight:700;font-size:14px;color:var(--navy);line-height:1.3;}
+  .lh-address{font-size:11px;color:var(--ink-faint);margin-top:3px;line-height:1.4;}
+  .lh-title{display:flex;flex-direction:column;justify-content:center;height:100%;}
+  .lh-title h1{font-size:21px;margin:0 0 4px;color:var(--navy);font-weight:700;line-height:1.2;}
+  .lh-title .sub{font-size:11.5px;color:var(--ink-soft);margin:0;}
+  .lh-meta{display:flex;flex-direction:column;gap:9px;justify-content:center;height:100%;}
+  .lh-meta-row{display:flex;justify-content:space-between;align-items:center;gap:8px;}
+  .lh-meta-row .lbl{font-size:10px;color:var(--ink-faint);text-transform:uppercase;letter-spacing:.05em;white-space:nowrap;}
+  .lh-meta-row input{text-align:right;font-weight:600;font-size:12.5px;padding:5px 8px;width:auto;flex:1 1 auto;min-width:0;}
+  .lh-meta-row .lbl{flex:0 0 auto;}
+
+  /* ---- sections ---- */
+  .card{
+    background:var(--paper);
+    border:1px solid var(--line);
+    border-radius:var(--radius);
+    padding:22px 24px;
+    margin-bottom:18px;
+    overflow:hidden;
+  }
+  .sec-bar{
+    background:var(--navy);color:#fff;
+    padding:10px 24px;margin:-22px -24px 18px -24px;
+    font-size:12px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;
+    display:flex;align-items:center;gap:10px;
+  }
+  .sec-bar .num{opacity:.55;font-weight:500;}
+  .sec-note{font-size:12px;color:var(--ink-faint);margin:-10px 0 16px;}
+
+  .grid{display:grid;grid-template-columns:1fr 1fr;gap:14px 18px;}
+  .grid.g3{grid-template-columns:1fr 1fr 1fr;}
+  .field{display:flex;flex-direction:column;gap:6px;}
+  .field.full{grid-column:1 / -1;}
+  label{font-size:12px;font-weight:700;color:#000;}
+  input[type=text],input[type=date],input[type=time],textarea,select{
+    font-family:'Inter';font-size:16px;color:var(--ink);
+    background:var(--page);border:1px solid var(--line);border-radius:8px;
+    padding:9px 11px;width:100%;outline:none;transition:.15s;
+  }
+  input:focus,textarea:focus,select:focus{border-color:var(--green);background:var(--paper);box-shadow:0 0 0 3px rgba(46,158,99,.12);}
+  textarea{resize:vertical;min-height:64px;line-height:1.5;}
+
+  /* ---- checklist summary + remarks ---- */
+  .chk-summary{display:flex;flex-wrap:wrap;gap:8px;margin-top:16px;}
+  .chk-sum{
+    display:inline-flex;align-items:center;gap:7px;
+    border:1px solid var(--line);background:var(--page);border-radius:20px;
+    padding:6px 13px;font-size:12.5px;color:var(--ink-soft);
+  }
+  .chk-sum b{font-family:'Sora';font-size:13.5px;}
+  .chk-sum .dot{width:9px;height:9px;border-radius:50%;flex:0 0 auto;}
+  .notes-block{display:none;}
+
+  /* ---- employee picker ---- */
+  .emp-picker{
+    display:flex;align-items:flex-start;gap:8px;
+    background:var(--page);border:1px solid var(--line);border-radius:8px;
+    padding:7px 8px;min-height:42px;
+  }
+  .emp-chips{display:flex;flex-wrap:wrap;gap:6px;flex:1;min-width:0;align-items:center;}
+  .emp-empty{font-size:14px;color:var(--ink-faint);padding:2px 3px;}
+  .emp-chip{
+    display:inline-flex;align-items:center;gap:6px;
+    background:var(--paper);border:1px solid var(--lav-line);border-radius:20px;
+    padding:4px 10px;font-size:13px;color:var(--ink);white-space:nowrap;
+  }
+  .emp-lead{
+    display:inline-block;border:1.5px solid var(--navy);color:var(--navy);
+    border-radius:5px;padding:1px 7px;font-size:10.5px;font-weight:700;letter-spacing:.02em;
+  }
+  .emp-add{
+    flex:0 0 auto;border:1px solid var(--line);background:var(--paper);color:var(--ink-soft);
+    border-radius:7px;padding:6px 12px;font-size:12.5px;font-weight:600;
+  }
+  .emp-add:hover{border-color:var(--navy-soft);color:var(--navy);}
+  .emp-list{max-height:44vh;overflow-y:auto;margin-bottom:14px;}
+  .emp-opt{
+    display:flex;align-items:center;gap:10px;width:100%;text-align:left;
+    border:1px solid var(--line);border-radius:9px;background:var(--page);
+    padding:11px 13px;margin-bottom:8px;cursor:pointer;font-size:14px;color:var(--ink);
+  }
+  .emp-opt:hover{border-color:var(--navy-soft);background:var(--paper);}
+  .emp-opt.on{border-color:var(--navy);background:var(--paper);}
+  .emp-box{
+    flex:0 0 auto;width:19px;height:19px;border:1.5px solid var(--ink-faint);border-radius:5px;
+    display:flex;align-items:center;justify-content:center;font-size:12px;color:#fff;font-weight:700;
+  }
+  .emp-opt.on .emp-box{background:var(--navy);border-color:var(--navy);}
+  .emp-opt .nm{flex:1;min-width:0;}
+
+  .emp-other{display:flex;gap:8px;margin-bottom:12px;}
+  .emp-other input{flex:1;min-width:0;}
+  .emp-other .btn{flex:0 0 auto;}
+  .emp-opt .emp-tag{
+    flex:0 0 auto;border:1px solid var(--lav-line);color:var(--ink-faint);
+    border-radius:5px;padding:1px 7px;font-size:10.5px;font-weight:600;
+  }
+
+  /* ---- parts / delivery table ---- */
+  .parts-table-wrap{
+    border:1px solid var(--line);border-radius:9px;background:var(--paper);
+    overflow-x:auto;-webkit-overflow-scrolling:touch;
+  }
+  .parts-table{width:100%;border-collapse:collapse;min-width:560px;}
+  .parts-table th{
+    background:var(--lav-bg);color:var(--navy);font-size:11px;font-weight:700;
+    text-align:left;padding:10px;letter-spacing:.06em;text-transform:uppercase;
+    border-bottom:1px solid var(--lav-line);white-space:nowrap;
+  }
+  .parts-table td{border-bottom:1px solid var(--line);padding:3px 5px;vertical-align:middle;}
+  .parts-table tr:last-child td{border-bottom:none;}
+  .parts-table input{
+    border:none;background:transparent;padding:7px 5px;font-size:13.5px;width:100%;border-radius:5px;
+  }
+  .parts-table input:focus{background:var(--page);box-shadow:none;}
+  .parts-table .qty-input{text-align:center;}
+  .parts-table .col-no{width:38px;text-align:center;color:var(--ink-faint);font-size:12px;}
+  .parts-table .col-act{width:44px;text-align:center;}
+  .part-del{
+    font-size:11px;font-weight:700;
+    border:1px solid var(--danger);background:#FBEAEA;color:var(--danger);
+    border-radius:6px;padding:4px 8px;
+  }
+  .part-del:hover{background:var(--danger);color:#fff;}
+
+  .time-row{display:flex;align-items:center;gap:8px;}
+  .time-row select{flex:1 1 0;min-width:0;text-align:center;}
+  .time-sep{font-weight:700;color:var(--ink-soft);flex:0 0 auto;}
+
+  .pill-row{display:flex;gap:8px;flex-wrap:wrap;}
+  .pill{
+    border:1px solid var(--line);border-radius:20px;padding:7px 14px;font-size:13px;
+    color:var(--ink-soft);cursor:pointer;user-select:none;background:var(--page);font-weight:500;
+  }
+  .pill.on{background:var(--navy);border-color:var(--navy);color:#fff;}
+
+  .checklist{display:flex;flex-direction:column;gap:10px;}
+  .chk-row{
+    display:flex;align-items:center;gap:10px;flex-wrap:wrap;
+    border:1px solid var(--line);border-radius:9px;padding:9px 12px;background:var(--page);
+  }
+  .chk-row .chk-text{flex:1;min-width:160px;border:none;background:transparent;padding:2px 0;font-size:13.5px;}
+  .chk-row .chk-text:focus{box-shadow:none;}
+  .chk-status{display:flex;gap:6px;flex:0 0 auto;flex-wrap:wrap;}
+  .chk-status button{
+    border:1px solid var(--line);background:var(--paper);border-radius:6px;
+    font-size:11px;font-weight:600;padding:5px 9px;color:var(--ink-faint);white-space:nowrap;
+  }
+  .chk-del{
+    flex:0 0 auto;font-size:11px;font-weight:700;
+    border:1px solid var(--danger);background:#FBEAEA;color:var(--danger);
+    border-radius:6px;padding:5px 10px;
+  }
+  .chk-del:hover{background:var(--danger);color:#fff;}
+  .tpl-picker{
+    display:flex;align-items:center;justify-content:space-between;gap:10px;
+    border:1px dashed var(--line);border-radius:9px;padding:12px 14px;margin-bottom:14px;background:var(--page);
+  }
+  .tpl-picker .tpl-info{font-size:12.5px;color:var(--ink-soft);}
+  .tpl-picker .tpl-info b{color:var(--navy);}
+  .tpl-empty{
+    border:1px dashed var(--line);border-radius:9px;padding:24px;text-align:center;
+    color:var(--ink-faint);font-size:13px;margin-bottom:14px;
+  }
+  .add-row{border:1px dashed var(--line);background:transparent;color:var(--ink-faint);border-radius:9px;padding:9px 12px;font-size:13px;text-align:left;width:100%;}
+  .add-row:hover{border-color:var(--green);color:var(--green-deep);}
+
+  /* modal */
+  .modal-overlay{
+    position:fixed;inset:0;background:rgba(20,25,40,.5);
+    display:flex;align-items:center;justify-content:center;z-index:100;padding:20px;
+  }
+  .modal-box{
+    background:var(--paper);border-radius:14px;max-width:520px;width:100%;
+    padding:22px 24px;max-height:88vh;overflow-y:auto;
+  }
+  .modal-head{font-family:'Sora';font-weight:700;font-size:16px;color:var(--navy);margin-bottom:4px;}
+  .modal-sub{font-size:12.5px;color:var(--ink-faint);margin-bottom:16px;}
+  .modal-opt{
+    display:block;width:100%;text-align:left;border:1px solid var(--line);border-radius:10px;
+    padding:14px 16px;margin-bottom:10px;background:var(--page);cursor:pointer;transition:.15s;
+  }
+  .modal-opt:hover{border-color:var(--navy-soft);background:var(--paper);}
+  .modal-opt.on{border-color:var(--green);background:#F2FBF6;}
+  .modal-opt .t{font-family:'Sora';font-weight:700;font-size:14px;color:var(--navy);margin-bottom:4px;}
+  .modal-opt .t::before{
+    content:'';display:inline-block;vertical-align:-2px;margin-right:8px;
+    width:16px;height:16px;border:1.5px solid var(--ink-faint);border-radius:5px;
+  }
+  .modal-opt.on .t::before{
+    content:'\2713';background:var(--green);border-color:var(--green);color:#fff;
+    font-size:11px;line-height:15px;text-align:center;font-weight:700;
+  }
+  .chk-group{
+    font-family:'Sora';font-weight:700;font-size:12px;color:var(--navy);
+    letter-spacing:.04em;margin:14px 0 2px;
+  }
+  .chk-group:first-child{margin-top:0;}
+  .scope-block + .scope-block{margin-top:30px;padding-top:24px;border-top:2px solid var(--lav-line);}
+  .scope-block .log-wrap{display:block;margin-top:22px;}
+  .scope-block .add-row{margin-top:10px;}
+  .modal-opt .d{font-size:12px;color:var(--ink-soft);line-height:1.5;}
+  .modal-opt .legend{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px;}
+  .modal-opt .legend span{font-size:10.5px;font-weight:600;padding:3px 8px;border-radius:5px;}
+  .modal-actions{display:flex;gap:10px;margin-top:14px;}
+  .modal-actions .btn{flex:1;justify-content:center;padding:11px 14px;font-size:13.5px;}
+  .btn-danger{background:var(--danger);border-color:var(--danger);color:#fff;}
+  .btn-danger:hover{background:#B03F3F;border-color:#B03F3F;}
+  .modal-close{margin-top:6px;font-size:12.5px;color:var(--ink-faint);background:none;border:none;font-weight:600;}
+  .modal-close:hover{color:var(--danger);}
+  /* ---- print preview ---- */
+  .pv-overlay{
+    position:fixed;inset:0;z-index:200;background:#6E7486;
+    display:flex;flex-direction:column;
+  }
+  .pv-bar{
+    flex:0 0 auto;background:var(--paper);border-bottom:1px solid var(--line);
+    padding:10px 16px;display:flex;align-items:center;justify-content:space-between;
+    gap:12px;flex-wrap:wrap;
+  }
+  .pv-title{font-family:'Sora';font-weight:700;font-size:14px;color:var(--navy);}
+  .pv-hint{font-family:'Inter';font-weight:400;font-size:12px;color:var(--ink-faint);margin-left:6px;}
+  .pv-actions{display:flex;gap:8px;}
+  .pv-stage{flex:1 1 auto;overflow:auto;-webkit-overflow-scrolling:touch;padding:8px 0;}
+  /* The iframe keeps a fixed 820px viewport so the layout inside behaves like a
+     desktop (and renders at full resolution for the PDF). It is then scaled
+     down visually with a transform, which does NOT change its inner layout. */
+  .pv-fit{position:relative;margin:0 auto;}
+  .pv-stage iframe{display:block;width:820px;border:none;background:#6E7486;transform-origin:top left;}
+
+  /* ---- iOS printing help ---- */
+  .ios-steps{margin:0 0 14px;padding-left:22px;font-size:13.5px;line-height:1.75;color:var(--ink);}
+  .ios-steps li{margin-bottom:7px;}
+  .ios-steps b{color:var(--navy);}
+  .ios-ico{
+    display:inline-block;border:1.5px solid var(--navy);color:var(--navy);
+    border-radius:5px;padding:0 6px;font-weight:700;line-height:1.5;font-size:12px;
+  }
+  .ios-note{
+    font-size:12.5px;color:var(--ink-soft);line-height:1.6;
+    background:var(--lav-bg);border-radius:9px;padding:11px 13px;margin:0 0 14px;
+  }
+  .ios-note b{color:var(--navy);}
+
+  .photo-remove{font-size:11px;color:var(--ink-faint);background:none;border:none;padding:0;flex:0 0 auto;}
+  .photo-remove:hover{color:var(--danger);}
+
+  /* photos */
+  .photo-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;}
+  .photo-page + .photo-page{margin-top:18px;padding-top:18px;border-top:1px dashed var(--lav-line);}
+  .photo-card{border:1px solid var(--line);border-radius:8px;overflow:hidden;background:var(--paper);display:flex;flex-direction:column;}
+  .photo-slot{
+    aspect-ratio:4/3;background:#fff;display:flex;align-items:center;justify-content:center;
+    position:relative;border-bottom:1px solid var(--line);overflow:hidden;cursor:pointer;
+  }
+  /* contain, not cover: a portrait shot or a screenshot must never be cropped */
+  .photo-slot img{width:100%;height:100%;object-fit:contain;object-position:center;
+    display:block;background:#fff;}
+  .photo-slot .empty{display:flex;flex-direction:column;align-items:center;gap:6px;color:var(--ink-faint);font-size:12px;}
+  .photo-slot .empty svg{opacity:.55;}
+  .photo-slot .photo-x{
+    position:absolute;top:6px;right:6px;width:22px;height:22px;border-radius:50%;
+    background:rgba(20,25,40,.55);color:#fff;border:none;font-size:13px;line-height:22px;
+    text-align:center;padding:0;
+  }
+  .photo-slot .photo-x:hover{background:var(--danger);}
+  .photo-meta{padding:9px 12px 11px;display:flex;flex-direction:column;gap:3px;}
+  .ph-label-row{display:flex;align-items:baseline;gap:6px;}
+  .ph-num{font-size:11px;font-weight:700;color:#2C5FAE;flex:0 0 auto;white-space:nowrap;}
+  .photo-caption{border:none;background:transparent;padding:0;font-size:12.5px;font-weight:600;color:var(--ink);flex:1;}
+  .photo-caption:focus{box-shadow:none;background:var(--page);border-radius:4px;padding:1px 3px;}
+  .add-photo-btn{
+    border:1px dashed var(--line);border-radius:10px;min-height:180px;
+    display:flex;align-items:center;justify-content:center;color:var(--ink-faint);
+    background:transparent;font-size:13px;font-weight:600;gap:6px;
+  }
+  .add-photo-btn:hover{border-color:var(--green);color:var(--green-deep);}
+
+  /* signature */
+  .sig-wrap{border:1px solid var(--line);border-radius:10px;background:var(--page);overflow:hidden;}
+  canvas{display:block;width:100%;height:260px;touch-action:none;background:#fff;cursor:crosshair;}
+  .sig-print-img{display:none;}
+  .sig-toolbar{display:flex;justify-content:space-between;align-items:center;padding:8px 12px;border-top:1px solid var(--line);}
+  .sig-hint{font-size:11.5px;color:var(--ink-faint);}
+  .sig-clear{font-size:12px;color:var(--ink-soft);background:none;border:none;font-weight:600;}
+  .sig-clear:hover{color:var(--danger);}
+
+
+  /* ================= COVER PAGE ================= */
+  .cover-page{
+    position:relative;
+    width:100%;
+    max-width:794px;
+    aspect-ratio:210/297;
+    margin:24px auto 10px;
+    background:var(--paper);
+    border:1px solid var(--line);
+    border-radius:var(--radius);
+    overflow:hidden;
+    display:flex;
+    flex-direction:column;
+    container-type:inline-size;
+  }
+  .cover-hint{
+    max-width:794px;margin:0 auto 24px;text-align:center;
+    font-size:11px;color:var(--ink-faint);letter-spacing:.04em;
+  }
+  /* --- top band --- */
+  .cv-band{
+    position:relative;
+    background:linear-gradient(135deg,var(--navy) 0%,var(--navy-soft) 100%);
+    padding:5.2cqw 6cqw 4.4cqw;
+    color:#fff;
+    flex:0 0 auto;
+  }
+  .cv-band::after{
+    content:'';position:absolute;left:0;right:0;bottom:0;height:.9cqw;
+    background:linear-gradient(90deg,var(--green) 0%,var(--green) 38%,var(--amber) 38%,var(--amber) 62%,#fff 62%,#fff 100%);
+  }
+  .cv-band-top{display:flex;align-items:flex-start;justify-content:space-between;gap:3cqw;}
+  .cv-logo{height:6.2cqw;width:auto;display:block;background:#fff;padding:1.1cqw 1.5cqw;border-radius:.9cqw;}
+  .cv-doc-tag{text-align:right;line-height:1.35;}
+  .cv-doc-tag .t0{font-size:1.5cqw;letter-spacing:.14em;opacity:.6;margin-bottom:.9cqw;}
+  .cv-doc-tag .t1{font-size:1.55cqw;letter-spacing:.22em;text-transform:uppercase;opacity:.72;}
+  .cv-doc-tag .t2{font-family:'Sora';font-size:2.5cqw;font-weight:700;letter-spacing:.03em;margin-top:.5cqw;}
+  /* --- body --- */
+  .cv-body{flex:1 1 auto;padding:5.6cqw 6cqw 0;position:relative;z-index:2;}
+  .cv-eyebrow{
+    font-size:1.6cqw;letter-spacing:.24em;text-transform:uppercase;
+    color:var(--green-deep);font-weight:700;margin-bottom:2.2cqw;
+  }
+  .cv-title{
+    font-family:'Sora';font-weight:700;color:var(--navy);
+    font-size:5.6cqw;line-height:1.12;margin:0 0 1.6cqw;letter-spacing:-.01em;
+  }
+  .cv-title-th{font-size:2.05cqw;color:var(--ink-soft);line-height:1.5;margin-bottom:3.4cqw;}
+  .cv-rule{height:.42cqw;width:14cqw;background:var(--navy);border-radius:2px;margin-bottom:4.2cqw;}
+  .cv-table{width:100%;border-collapse:collapse;}
+  .cv-table tr{border-bottom:1px solid var(--lav-line);}
+  .cv-table tr:first-child{border-top:1px solid var(--lav-line);}
+  .cv-table th{
+    text-align:left;vertical-align:middle;
+    font-size:1.55cqw;letter-spacing:.13em;text-transform:uppercase;
+    color:var(--ink-faint);font-weight:600;
+    padding:1.75cqw 2.6cqw 1.75cqw 0;width:31%;white-space:nowrap;
+  }
+  .cv-table td{
+    font-size:2.15cqw;color:var(--ink);font-weight:600;
+    padding:1.75cqw 0;line-height:1.35;
+  }
+  .cv-table td.empty{color:var(--ink-faint);font-weight:400;}
+  /* --- footer --- */
+  .cv-foot{
+    flex:0 0 auto;position:relative;z-index:2;
+    margin-top:auto;padding:3.4cqw 6cqw 4.4cqw;
+    display:flex;align-items:flex-end;justify-content:space-between;gap:3cqw;
+    border-top:1px solid var(--lav-line);
+  }
+  .cv-foot-lbl{font-size:1.45cqw;letter-spacing:.16em;text-transform:uppercase;color:var(--ink-faint);margin-bottom:.7cqw;}
+  .cv-foot-val{font-size:2cqw;font-weight:600;color:var(--navy);}
+  .cv-foot-r{text-align:right;line-height:1.6;}
+  .cv-chip{
+    display:inline-block;border:1px solid var(--danger);color:var(--danger);
+    font-size:1.35cqw;letter-spacing:.2em;text-transform:uppercase;font-weight:700;
+    padding:.55cqw 1.5cqw;border-radius:99px;margin-bottom:1cqw;
+  }
+  .cv-foot-co{font-size:1.6cqw;color:var(--ink-soft);}
+  /* --- flair --- */
+  .cv-mark{
+    position:absolute;right:-6cqw;bottom:8cqw;z-index:0;
+    font-family:'Sora';font-weight:700;font-size:38cqw;line-height:.8;
+    color:var(--navy);opacity:.038;letter-spacing:-.06em;user-select:none;pointer-events:none;
+  }
+  .cv-corner{
+    position:absolute;right:0;bottom:0;z-index:1;pointer-events:none;
+    width:0;height:0;border-style:solid;border-width:0 0 9cqw 9cqw;
+    border-color:transparent transparent var(--green) transparent;opacity:.9;
+  }
+  .cv-corner-2{
+    position:absolute;right:0;bottom:0;z-index:1;pointer-events:none;
+    width:0;height:0;border-style:solid;border-width:0 0 4.4cqw 4.4cqw;
+    border-color:transparent transparent var(--amber) transparent;
+  }
+
+  .print-foot{display:none;}
+  .create-time{display:none;}
+
+  .foot-note{font-size:11.5px;color:var(--ink-faint);text-align:center;margin-top:18px;line-height:1.6;}
+
+  /* ---- log sheet (water cooled chiller) ---- */
+  .log-wrap{display:none;}
+  .log-head{
+    display:flex;align-items:baseline;justify-content:space-between;gap:10px;flex-wrap:wrap;
+    margin:2px 0 12px;
+  }
+  .log-head .lg-t{font-family:'Sora';font-weight:700;font-size:14px;color:var(--navy);}
+  .log-head .lg-s{font-size:11.5px;color:var(--ink-faint);}
+  .log-grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.55fr);gap:14px;}
+  .log-col{display:flex;flex-direction:column;gap:14px;min-width:0;}
+  .log-col-r{align-self:start;}
+  .log-box{border:1px solid var(--line);border-radius:9px;background:var(--paper);overflow-x:auto;-webkit-overflow-scrolling:touch;}
+  .log-table{width:100%;border-collapse:collapse;}
+  .log-table th{
+    background:var(--lav-bg);color:var(--navy);font-size:10.5px;font-weight:700;
+    text-align:left;padding:8px 9px;letter-spacing:.05em;text-transform:uppercase;
+    border-bottom:1px solid var(--lav-line);white-space:nowrap;
+  }
+  .log-table th.num{text-align:center;}
+  .log-table td{border-bottom:1px solid var(--line);padding:2px 4px;vertical-align:middle;}
+  .log-table tr:last-child td{border-bottom:none;}
+  .log-table td.lbl{
+    font-size:12px;color:var(--ink);padding:6px 9px;line-height:1.35;
+    border-right:1px solid var(--line);width:46%;
+  }
+  .log-readings td.lbl{width:36%;}
+  .log-table tr.grp td{
+    background:var(--page);font-family:'Sora';font-weight:700;font-size:11px;
+    color:var(--navy);letter-spacing:.05em;text-transform:uppercase;padding:6px 9px;
+  }
+  .log-table input{
+    border:none;background:transparent;padding:6px 5px;font-size:13px;width:100%;
+    border-radius:5px;text-align:center;
+  }
+  .log-table input:focus{background:var(--page);box-shadow:none;}
+  .log-table td.val{border-right:1px solid var(--line);}
+  .log-table td.val:last-child{border-right:none;}
+  .log-foot{display:grid;grid-template-columns:1fr 1fr;gap:14px 18px;margin-top:14px;}
+  .log-note{margin-top:14px;}
+  .log-sheet + .log-sheet{margin-top:26px;padding-top:22px;border-top:2px dashed var(--lav-line);}
+  .log-sheet-bar{
+    display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:12px;
+  }
+  .ls-no{
+    font-family:'Sora';font-weight:700;font-size:12px;color:#fff;background:var(--navy);
+    border-radius:6px;padding:5px 11px;flex:0 0 auto;letter-spacing:.04em;
+  }
+  .ls-tag{flex:1 1 200px;min-width:0;}
+  .ls-meta{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px 14px;margin-bottom:12px;}
+  .ls-del{
+    flex:0 0 auto;border:1px solid var(--line);background:var(--paper);color:var(--ink-faint);
+    border-radius:7px;padding:6px 12px;font-size:12.5px;font-weight:600;
+  }
+  .ls-del{border-color:var(--danger);background:#FBEAEA;color:var(--danger);font-weight:700;}
+  .ls-del:hover{background:var(--danger);border-color:var(--danger);color:#fff;}
+
+  @media print{
+    /* margin:0 leaves Chrome no margin box to print its own
+       date / title / URL / page-number into, so they disappear.
+       the real page margins are rebuilt as padding below. */
+    @page{ size:A4 portrait; margin:0; }
+    @page cover{ margin:0; }
+
+    html,body{background:#fff !important;margin:0;padding:0;}
+    body{font-size:11.5pt;color:#000;-webkit-print-color-adjust:exact;print-color-adjust:exact;}
+    .wrap{max-width:none;margin:0;padding:0 15mm;}
+
+    .topbar,.btn-install,.add-row,.add-photo-btn,.photo-x,.photo-remove,.sig-toolbar,.foot-note,
+    .chk-status button:not(.sel),.tpl-picker,.modal-overlay,.chk-del,.cover-hint{display:none !important;}
+
+    /* ---- cover: full-bleed first page ---- */
+    .cover-page{
+      page:cover; break-after:page;
+      width:210mm; height:296.6mm; max-width:none; aspect-ratio:auto;
+      margin:0 -15mm; border:none; border-radius:0; overflow:hidden;
+    }
+    .cover-page .cv-band{padding:16mm 18mm 13mm;}
+    .cover-page .cv-logo{height:17mm;padding:3mm 4mm;border-radius:2mm;}
+    body.brand-mce .cover-page .cv-logo{height:24mm;}
+    .cover-page .cv-doc-tag .t0{font-size:7.5pt;margin-bottom:2.5mm;}
+    .cover-page .cv-doc-tag .t1{font-size:7.5pt;}
+    .cover-page .cv-doc-tag .t2{font-size:13pt;}
+    .cover-page .cv-body{padding:17mm 18mm 0;}
+    .cover-page .cv-eyebrow{font-size:8pt;margin-bottom:7mm;}
+    .cover-page .cv-title{font-size:29pt;margin-bottom:5mm;}
+    .cover-page .cv-title-th{font-size:11pt;margin-bottom:10mm;}
+    .cover-page .cv-rule{height:1.3mm;width:42mm;margin-bottom:13mm;}
+    .cover-page .cv-table th{font-size:7.5pt;padding:5mm 8mm 5mm 0;}
+    .cover-page .cv-table td{font-size:11.5pt;padding:5mm 0;}
+    .cover-page .cv-foot{padding:10mm 18mm 14mm;}
+    .cover-page .cv-foot-lbl{font-size:7pt;}
+    .cover-page .cv-foot-val{font-size:11pt;}
+    .cover-page .cv-chip{font-size:6.5pt;padding:1.6mm 4mm;}
+    .cover-page .cv-foot-co{font-size:8pt;}
+    .cover-page .cv-mark{font-size:120mm;right:-18mm;bottom:24mm;}
+    .cover-page .cv-corner{border-width:0 0 27mm 27mm;}
+    .cover-page .cv-corner-2{border-width:0 0 13mm 13mm;}
+
+    /* ---- formal document body ---- */
+    .letterhead{
+      border:none;
+      border-radius:0;margin:0 -15mm 8mm;
+      /* padding, not margin: a top margin collapses out of the page box and
+         the letterhead ends up jammed against the edge of the sheet */
+      padding-top:16mm;
+    }
+    .lh-cell{border-right:.6pt solid #C9CDE0;padding:5mm 8mm;}
+    .lh-title h1{font-size:17pt;letter-spacing:.01em;}
+    .lh-title .sub{font-size:8pt;}
+    .lh-company{font-size:10.5pt;}
+    .lh-address{font-size:8pt;}
+    .lh-logo-box{border:none;background:transparent;padding:0;margin-bottom:4mm;max-width:60mm;}
+
+    .card{
+      border:none;box-shadow:none;break-inside:auto;
+      padding:16mm 0 15mm;margin:0;border-radius:0;
+    }
+    /* keep photos crisp when the printer/PDF downsamples them */
+    .photo-slot img{image-rendering:auto;}
+    /* Fields sit right under one another at the top of the sheet instead of
+       being spread down the page - easier to read and to write on. */
+    .card > .grid{align-content:start;min-height:0;row-gap:7mm;}
+    /* Sign off is different: the signature belongs directly under the client
+       name it goes with, not spread to the bottom of the sheet. */
+    .signoff-card{position:relative;min-height:264mm;}
+    /* The signature box is pinned to the second row of the right-hand column,
+       so a long list of employees on the left can never push it down. */
+    .signoff-card > .grid{
+      align-content:start;min-height:0;row-gap:6mm;
+      grid-template-rows:15mm auto;align-items:start;
+    }
+    .signoff-card > .grid > .field:first-child{grid-column:1;grid-row:1 / span 2;}
+    .signoff-card > .grid > .field:nth-child(2){grid-column:2;grid-row:1;}
+    /* when the file was produced - quiet, at the foot of the last page */
+    .create-time{
+      display:block !important;position:absolute;left:0;bottom:14mm;
+      font-size:7.5pt;color:#A7ADBE !important;letter-spacing:.04em;
+    }
+    .card > .field.full textarea{min-height:52mm;}
+    .sec-bar{
+      margin:0 0 7mm;border-radius:0;padding:3.2mm 5mm;
+      font-size:10.5pt;letter-spacing:.16em;break-after:avoid;
+      background:var(--navy) !important;color:#fff !important;
+    }
+    .sec-note{display:none !important;}
+
+    /* form fields render as ruled lines, like a printed form */
+    label{font-size:9pt;letter-spacing:.09em;text-transform:uppercase;color:#4A5169 !important;font-weight:700;}
+    .field{gap:1.8mm;break-inside:avoid;}
+    .grid{gap:7mm 10mm;}
+    input[type=text],input[type=date],input[type=time],select{
+      border:none !important;border-bottom:.6pt solid #9AA0B4 !important;
+      background:transparent !important;box-shadow:none !important;
+      border-radius:0 !important;padding:1.6mm 0 !important;font-size:12pt;color:#000 !important;
+      -webkit-appearance:none;appearance:none;
+    }
+    textarea{
+      border:none !important;border-bottom:.6pt solid #9AA0B4 !important;
+      background:transparent !important;box-shadow:none !important;
+      border-radius:0 !important;padding:1.6mm 0 !important;font-size:12pt;color:#000 !important;
+    }
+
+    /* ---- every numbered section starts on a new page ---- */
+    .card{break-before:page;}
+    /* section 01 shares its page with the letterhead, so it gets what is left */
+    .letterhead + .card{break-before:auto;padding-top:0;}
+    .sec-bar{break-after:avoid;}
+    .tpl-empty{display:none !important;}
+
+    /* blocks the user left empty are omitted from the PDF */
+    .is-blank{display:none !important;}
+    /* never print grey placeholder hints */
+    input::placeholder,textarea::placeholder{color:transparent !important;opacity:0 !important;}
+
+    /* delivery table keeps its grid lines - a table needs them to be readable */
+    .parts-table-wrap{border:none !important;border-radius:0 !important;overflow:visible !important;}
+    .parts-table{min-width:0 !important;width:100% !important;}
+    .parts-table th,.parts-table td{
+      border:.5pt solid #8A90A6 !important;padding:1.7mm 2mm !important;
+    }
+    .parts-table th{
+      background:#EDEFF7 !important;color:#16264A !important;
+      font-size:8.5pt;letter-spacing:.08em;
+    }
+    .parts-table td{font-size:10.5pt;}
+    .parts-table input{
+      border:none !important;border-bottom:none !important;background:transparent !important;
+      padding:0 !important;font-size:10.5pt;color:#000 !important;
+    }
+    .parts-table .col-act{display:none !important;}
+    .parts-table tr{break-inside:avoid;}
+
+    /* a place to write notes by hand on site, filling the space that the
+       checklist leaves at the bottom of the sheet */
+    .notes-block{display:none !important;margin-top:9mm;break-inside:avoid;}
+    .notes-title{
+      font-size:9pt;letter-spacing:.09em;text-transform:uppercase;
+      color:#4A5169;font-weight:700;margin-bottom:4mm;
+    }
+    .notes-rule{
+      height:54mm;
+      background:repeating-linear-gradient(to bottom,
+        transparent 0, transparent 8.6mm, #C2C7DC 8.6mm, #C2C7DC 8.75mm);
+    }
+    .chk-summary{margin-top:8mm;gap:4mm;break-inside:avoid;}
+    .chk-sum{
+      border:.6pt solid #C2C7DC !important;background:transparent !important;
+      border-radius:99px;padding:1.6mm 4mm;font-size:9.5pt;color:#1A2233 !important;
+    }
+    .chk-sum b{font-size:10.5pt;}
+    .chk-sum .dot{width:2.4mm;height:2.4mm;}
+
+    .checklist{gap:0 !important;}
+    .chk-row{
+      break-inside:avoid;
+      border:none !important;background:transparent !important;
+      border-radius:0 !important;padding:1.4mm 0 !important;
+      gap:6mm;flex-wrap:nowrap;justify-content:space-between;align-items:baseline;
+    }
+    .chk-row .chk-text{
+      border:none !important;border-bottom:none !important;
+      background:transparent !important;box-shadow:none !important;
+      padding:0 !important;font-size:11.5pt;font-weight:500;color:#000 !important;
+      flex:1 1 auto;min-width:0;
+    }
+    .chk-status{flex:0 0 auto;gap:0;}
+    .chk-status button.sel{
+      background:transparent !important;border:none !important;
+      border-radius:0 !important;padding:0 !important;box-shadow:none !important;
+      font-size:10.5pt;font-weight:700;white-space:nowrap;
+    }
+    .photo-grid{gap:6mm;}
+    /* six to a sheet - the next batch starts on a new page */
+    .photo-page{break-inside:avoid;}
+    .photo-page + .photo-page{
+      break-before:page;margin-top:0;padding-top:6mm;border-top:none;
+    }
+    .photo-card{break-inside:avoid;border:.6pt solid #B9BFD2;border-radius:0;}
+    .photo-meta{padding:2.5mm 3mm;}
+    .ph-num{font-size:7pt;}
+    .photo-caption{font-size:10.5pt;}
+    /* ---- document footer, repeated on every page ---- */
+    .print-foot{
+      display:flex !important;
+      position:fixed;left:15mm;right:15mm;bottom:8mm;
+      align-items:baseline;justify-content:space-between;gap:6mm;
+      padding-top:2.2mm;border-top:.6pt solid #C2C7DC;
+      font-size:7.5pt;line-height:1.3;color:#5A6178;
+      z-index:1;
+    }
+    .print-foot .pf-l{font-weight:700;color:#16264A;white-space:nowrap;}
+    .print-foot .pf-c{
+      flex:1;text-align:center;min-width:0;
+      overflow:hidden;text-overflow:ellipsis;white-space:nowrap;
+    }
+    .print-foot .pf-r{
+      color:#C94F4F;font-weight:700;letter-spacing:.14em;
+      text-transform:uppercase;white-space:nowrap;
+    }
+    /* the cover is opaque and sits above the footer, so page 1 stays clean */
+    .cover-page{position:relative;z-index:5;background:#fff !important;}
+
+    /* employees print as a vertical list, one name per line */
+    .emp-picker{
+      border:none !important;background:transparent !important;
+      padding:0 !important;min-height:0 !important;display:block !important;
+    }
+    .emp-add{display:none !important;}
+    .emp-chips{display:block !important;}
+    .emp-chip{
+      display:block !important;border:none !important;background:transparent !important;
+      border-radius:0 !important;padding:0 0 1.6mm 0 !important;
+      font-size:11.5pt;color:#000 !important;white-space:normal !important;
+    }
+    .emp-lead{
+      border:.9pt solid #16264A !important;color:#16264A !important;
+      border-radius:1mm !important;padding:.3mm 1.6mm !important;
+      font-size:7.5pt;margin-left:2mm;
+    }
+    .emp-empty{display:none !important;}
+
+    /* signature moves into the right-hand column, under "Client name" */
+    .sig-field{
+      grid-column:2 / 3 !important;grid-row:2 !important;
+      align-self:start;margin-top:0 !important;
+    }
+    .sig-wrap{border:.6pt solid #9AA0B4;border-radius:0;break-inside:avoid;background:#fff;}
+    canvas{display:none !important;}
+    .sig-print-img{
+      display:block !important;width:100%;height:26mm;
+      object-fit:contain;object-position:center center;
+    }
+    .sig-field.is-empty .sig-print-img{display:none !important;}
+    .sig-field.is-empty .sig-wrap{height:26mm;}
+
+    /* ---- log sheet in print ---- */
+    .log-wrap.on{display:block !important;break-before:page;padding-top:8mm;}
+    .log-head{margin:0 0 4mm;}
+    .log-head .lg-t{font-size:11pt;}
+    .log-head .lg-s{font-size:8pt;}
+    .log-grid{gap:4mm;}
+    .log-col{gap:2.6mm;}
+    .log-box{border:none !important;border-radius:0 !important;overflow:visible !important;}
+    .log-table{width:100% !important;}
+    .log-table th,.log-table td{
+      border:.5pt solid #8A90A6 !important;padding:1.1mm 1.4mm !important;
+    }
+    .log-table th{background:#EDEFF7 !important;color:#16264A !important;font-size:7.5pt;letter-spacing:.05em;}
+    .log-table td.lbl{font-size:8pt;color:#000 !important;line-height:1.25;}
+    .log-table tr.grp td{background:#F3F4FA !important;font-size:8pt;color:#16264A !important;}
+    .log-table input{
+      border:none !important;border-bottom:none !important;background:transparent !important;
+      padding:0 !important;font-size:8.5pt;color:#000 !important;text-align:center;
+    }
+    .log-table tr{break-inside:avoid;}
+    .log-foot{gap:5mm 8mm;margin-top:5mm;break-inside:avoid;}
+    .log-note{margin-top:5mm;break-inside:avoid;}
+    .ls-add,.ls-del{display:none !important;}
+    .log-block + .log-block{
+      break-before:page;margin-top:0;padding-top:8mm;border-top:none;
+    }
+    .chk-group{
+      font-size:9.5pt;font-weight:700;color:#16264A;letter-spacing:.04em;
+      margin:5mm 0 1.5mm;break-after:avoid;break-inside:avoid;
+    }
+    .chk-group:first-child{margin-top:0;}
+    /* every extra log sheet starts on a fresh page, laid out like the first:
+       the same gap from the paper edge and the same title above it */
+    .log-sheet + .log-sheet{
+      break-before:page;margin-top:0;border-top:none;
+      padding-top:8mm;
+    }
+    .log-sheet + .log-sheet::before{
+      content:attr(data-title);
+      display:block;font-family:'Sora',sans-serif;font-weight:700;
+      font-size:10pt;color:#16264A;margin-bottom:2.5mm;
+    }
+    .log-sheet-bar{margin-bottom:3.5mm;gap:4mm;}
+    .ls-no{background:var(--navy) !important;color:#fff !important;font-size:8.5pt;
+      border-radius:1.2mm;padding:1.2mm 3mm;}
+    .ls-tag{
+      border:none !important;border-bottom:.6pt solid #9AA0B4 !important;
+      background:transparent !important;box-shadow:none !important;border-radius:0 !important;
+      padding:1mm 0 !important;font-size:10.5pt;color:#000 !important;flex:1 1 auto;
+    }
+    /* ---- one log sheet = exactly one A4 page ---- */
+    .log-sheet{break-inside:avoid;}
+    /* the section header, the title and the first sheet stay together */
+    .log-head{margin:0 0 2.5mm;break-after:avoid;}
+    .log-head .lg-t{font-size:10pt;}
+    .log-head .lg-s{display:none;}
+    .log-sheet-bar{margin:0 0 2.5mm;gap:3mm;break-after:avoid;}
+    .ls-no{font-size:7.5pt;padding:.9mm 2.6mm;}
+    .ls-tag{font-size:9pt;padding:.5mm 0 !important;}
+    .ls-meta{gap:2mm 6mm;margin-bottom:2.5mm;}
+    .ls-meta label{font-size:6.5pt;letter-spacing:.06em;}
+    .ls-meta .field{gap:.6mm;}
+    .ls-meta input[type=text]{font-size:9pt;padding:.5mm 0 !important;}
+    /* trim the top of the page, and keep clear of the footer at the bottom */
+    .card:has(.log-wrap.on){padding-top:8mm !important;padding-bottom:20mm !important;}
+    .log-grid{gap:3mm;}
+    .log-table th{font-size:6.2pt;padding:.75mm 1.1mm !important;letter-spacing:.03em;}
+    .log-table td{padding:.2mm 1.1mm !important;}
+    .log-table td.lbl{font-size:6.6pt;line-height:1.08;padding:.35mm 1.1mm !important;}
+    .log-table tr.grp td{font-size:6.6pt;padding:.35mm 1.1mm !important;}
+    .log-table input,.log-table .pv-text{
+      font-size:7.5pt;padding:0 !important;line-height:1.15;
+      color:#000 !important;text-align:center;display:block;width:100%;
+      min-height:3.1mm;overflow:hidden;white-space:nowrap;
+    }
+    .ls-tag.pv-text{
+      display:block;text-align:left;border-bottom:.6pt solid #9AA0B4;
+      min-height:4mm;white-space:nowrap;overflow:hidden;
+    }
+    .log-note .pv-text{
+      display:block;white-space:pre-wrap;font-size:9pt;color:#000 !important;
+      border-bottom:.6pt solid #9AA0B4;min-height:14mm;padding:.8mm 0;line-height:1.3;
+    }
+    .log-note{margin-top:2.5mm;}
+    .log-note label{font-size:7.5pt;}
+    .log-note textarea{
+      min-height:14mm !important;height:14mm;font-size:9pt !important;
+      padding:.8mm 0 !important;line-height:1.3;
+    }
+    .log-foot{margin-top:2.5mm;gap:4mm;break-inside:avoid;}
+    .log-foot label{font-size:7.5pt;}
+    .log-foot input[type=text]{font-size:10pt;padding:.8mm 0 !important;}
+    /* The reading columns hold the data the report exists for, so they get
+       bigger type and taller rows and run down most of the sheet. These rules
+       come last on purpose: they have to beat the compact .log-table defaults
+       above, which the left-hand reference tables keep. */
+    .log-readings th{font-size:7pt;padding:.9mm 1.2mm !important;}
+    .log-readings td{padding:.7mm 1.2mm !important;}
+    .log-readings td.lbl{font-size:7.5pt;line-height:1.15;padding:.7mm 1.2mm !important;}
+    .log-readings tr.grp td{font-size:7.5pt;padding:.6mm 1.2mm !important;}
+    .log-readings input,.log-readings .pv-text{
+      font-size:9pt !important;line-height:1.2;min-height:3.8mm;
+    }
+
+    /* the air-cooled book lists four compressors, so its rows are tighter */
+    .log-dense .log-readings th{font-size:6.8pt;padding:.7mm 1.1mm !important;}
+    .log-dense .log-readings td{padding:.45mm 1.1mm !important;}
+    .log-dense .log-readings td.lbl{font-size:7pt;line-height:1.12;padding:.45mm 1.1mm !important;}
+    .log-dense .log-readings tr.grp td{font-size:7pt;padding:.4mm 1.1mm !important;}
+    .log-dense .log-readings input,.log-dense .log-readings .pv-text{
+      font-size:8.5pt !important;line-height:1.15;min-height:3.4mm;
+    }
+    .log-dense .log-note textarea,.log-dense .log-note .pv-text{
+      min-height:12mm !important;height:12mm;
+    }
+
+    /* the extra job-description box must not push the sheet onto page 2 */
+    .card:has(.log-wrap.on) > .field.full textarea{min-height:24mm !important;}
+    .card:has(.log-wrap.on) > .field.full label{font-size:7.5pt;}
+    /* every form printed in section 02 starts on a page of its own */
+    .scope-block + .scope-block{break-before:page;margin-top:0;padding-top:0;border-top:none;}
+    .scope-block .chk-group{margin-top:0;}
+  }
+  @media screen and (max-width:640px){
+    .topbar-inner{padding:10px 14px;gap:8px;}
+    .actions{gap:6px;}
+    .actions .btn{padding:8px 10px;font-size:12px;}
+    .status-chip{width:100%;order:-1;}
+    .grid,.grid.g3,.photo-grid{grid-template-columns:1fr;}
+    .log-grid,.log-foot{grid-template-columns:1fr;}
+    .lh-top{grid-template-columns:1fr;}
+    .lh-cell{border-right:none;border-bottom:1px solid var(--line);}
+    .lh-cell:last-child{border-bottom:none;}
+  }
+
+</style>
+</head>
+<body>
+<div class="topbar">
+  <div class="topbar-inner">
+    <div class="brand">
+      <img data-logo class="brand-mark" src="" alt="McEnergy logo">
+      <div class="brand-text">
+        <div class="name" id="brandName" style="font-family:'Sora';font-weight:700;font-size:14px;color:var(--navy);">McEnergy Evolution</div>
+        <div class="sub">Service &amp; Maintenance Form</div>
+      </div>
+    </div>
+    <div class="actions">
+      <button class="btn btn-install" id="installBtn" type="button" style="display:none;">ติดตั้งแอป</button>
+      <span class="status-chip" id="statusChip">ฉบับร่างใหม่</span>
+      <button class="btn btn-save" id="snapshotBtn" type="button" title="เก็บข้อมูลทั้งหมดที่กรอกไว้เป็นจุดกู้คืน">บันทึกสถานะล่าสุด</button>
+      <button class="btn btn-restore" id="restoreBtn" type="button" style="display:none;">กู้คืนสถานะ</button>
+      <button class="btn btn-ghost" id="clearBtn" type="button">ล้างฟอร์ม</button>
+      <button class="btn" id="openFileBtn" type="button">เปิดงานที่ค้าง</button>
+      <button class="btn" id="saveFileBtn" type="button">เก็บงานไว้ทำต่อ</button>
+      <button class="btn" id="shareBtn" type="button">แชร์</button>
+      <button class="btn" id="previewBtn" type="button">ดูตัวอย่าง</button>
+      <button class="btn btn-primary" id="sendPdfBtn" type="button">ส่งเป็นไฟล์ PDF</button>
+      <button class="btn" id="printBtn" type="button" title="สั่งพิมพ์ด้วยระบบของเบราว์เซอร์ ได้ตัวหนังสือคมชัดที่สุด">พิมพ์</button>
+      <input type="file" id="openFileInput" accept="application/json,.json" style="display:none;">
+    </div>
+  </div>
+</div>
+
+<div class="wrap">
+
+  <!-- ===== COVER PAGE (prints as page 1) ===== -->
+  <div class="cover-page" id="coverPage">
+    <div class="cv-mark">M</div>
+
+    <div class="cv-band">
+      <div class="cv-band-top">
+        <img data-logo class="cv-logo" src="" alt="McEnergy">
+        <div class="cv-doc-tag">
+          <div class="t0">Rev.2026001</div>
+          <div class="t1">Technical Document</div>
+          <div class="t2" id="cvDocNo">REPORT</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="cv-body">
+      <div class="cv-eyebrow" id="cvCompany">McEnergy Evolution Co., Ltd.</div>
+      <h1 class="cv-title">Service and<br>Maintenance Report</h1>
+      <div class="cv-title-th">รายงานตรวจสอบบำรุงรักษาอุปกรณ์ และ งานโครงการ</div>
+      <div class="cv-rule"></div>
+
+      <table class="cv-table">
+        <tbody>
+          <tr><th>Customer</th><td id="cvCustomer" class="empty">—</td></tr>
+          <tr><th>Job Details</th><td id="cvJob" class="empty">—</td></tr>
+          <tr><th>Site Location</th><td id="cvLocation" class="empty">—</td></tr>
+          <tr><th>Equipment</th><td id="cvEquip" class="empty">—</td></tr>
+          <tr><th>Contract Type</th><td id="cvContract" class="empty">—</td></tr>
+          <tr><th>Report Date</th><td id="cvDate" class="empty">—</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="cv-foot">
+      <div>
+        <div class="cv-foot-lbl">Prepared by</div>
+        <div class="cv-foot-val" id="cvPrepared">—</div>
+      </div>
+      <div class="cv-foot-r">
+        <div class="cv-chip">Confidential</div>
+        <div class="cv-foot-co" id="cvFootCo">McEnergy Evolution Co., Ltd.</div>
+      </div>
+    </div>
+
+    <div class="cv-corner"></div>
+    <div class="cv-corner-2"></div>
+  </div>
+  <div class="cover-hint">หน้าปก — จะถูกพิมพ์เป็นหน้าแรกของ PDF โดยอัตโนมัติ</div>
+
+  <div class="letterhead">
+    <div class="lh-top">
+      <div class="lh-cell">
+        <div class="lh-logo-box"><img data-logo src="" alt="McEnergy logo"></div>
+        <div class="lh-company" id="lhCompany">McEnergy Evolution Co.,Ltd.</div>
+        <div class="lh-address">แบบฟอร์มรายงานตรวจสอบบำรุงรักษาอุปกรณ์ และ งานโครงการ</div>
+      </div>
+      <div class="lh-cell lh-title">
+        <h1>Service and Maintenance Report</h1>
+        <p class="sub">รายงานตรวจสอบบำรุงรักษาอุปกรณ์ และ งานโครงการ — กรอกข้อมูลออนไลน์แล้วพิมพ์หรือบันทึกเป็น PDF</p>
+      </div>
+      <div class="lh-cell lh-meta">
+        <div class="lh-meta-row">
+          <span class="lbl">Report no.</span>
+          <input type="text" id="reportNo" placeholder="Report no.">
+        </div>
+        <div class="lh-meta-row">
+          <span class="lbl">Date</span>
+          <input type="date" id="reportDate">
+        </div>
+        <div class="lh-meta-row">
+          <span class="lbl">Rev.</span>
+          <input type="text" id="reportRev" placeholder="00" style="text-align:right;">
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SECTION 1: INFORMATION -->
+  <div class="card">
+    <div class="sec-bar"><span class="num">01</span> Information</div>
+
+    <div class="field" style="margin-bottom:16px;max-width:320px;">
+      <label>Contract type</label>
+      <select id="contractType">
+        <option value="">-- เลือกประเภทสัญญา --</option>
+        <option value="Warranty Service">Warranty Service</option>
+        <option value="Service Contract">Service Contract</option>
+        <option value="Project">Project</option>
+        <option value="Other">Other</option>
+      </select>
+    </div>
+    <div class="field full" id="contractOtherWrap" style="margin-bottom:16px;display:none;">
+      <label>ระบุรายละเอียด (Other)</label>
+      <input type="text" id="contractOther" placeholder="ระบุประเภทสัญญาเพิ่มเติม...">
+    </div>
+
+    <div class="grid">
+      <div class="field"><label>Company</label>
+        <select id="company">
+          <option value="McEnergy Evolution" selected>McEnergy Evolution</option>
+          <option value="TruKOOLING Advance">TruKOOLING Advance</option>
+        </select>
+      </div>
+      <div class="field"><label>Customer</label>
+        <select id="customer">
+          <option value="">-- เลือกลูกค้า --</option>
+          <option value="3M Innovation">3M Innovation</option>
+          <option value="3M Thailand">3M Thailand</option>
+          <option value="After you">After you</option>
+          <option value="AIT">AIT</option>
+          <option value="AJINIMOTO">AJINIMOTO</option>
+          <option value="AMARI DMK">AMARI DMK</option>
+          <option value="ASI">ASI</option>
+          <option value="BIGL Plant 1">BIGL Plant 1</option>
+          <option value="BIGL Plant 2">BIGL Plant 2</option>
+          <option value="BIGL Plant 3">BIGL Plant 3</option>
+          <option value="BKK CITY">BKK CITY</option>
+          <option value="Colgate GDC">Colgate GDC</option>
+          <option value="Colgate ILP">Colgate ILP</option>
+          <option value="Colgate RPL">Colgate RPL</option>
+          <option value="Colgate RSP">Colgate RSP</option>
+          <option value="DAIZO">DAIZO</option>
+          <option value="GPF">GPF</option>
+          <option value="GPO">GPO</option>
+          <option value="INC2">INC2</option>
+          <option value="Indo Thai">Indo Thai</option>
+          <option value="KMUTT">KMUTT</option>
+          <option value="KNAUF SIAM GYPSUM">KNAUF SIAM GYPSUM</option>
+          <option value="LION">LION</option>
+          <option value="Mercury Ville">Mercury Ville</option>
+          <option value="MEUYUME">MEUYUME</option>
+          <option value="MIRACLE BIO">MIRACLE BIO</option>
+          <option value="NSTDA - BIOTEC">NSTDA - BIOTEC</option>
+          <option value="NSTDA - CO">NSTDA - CO</option>
+          <option value="NSTDA - MTEC">NSTDA - MTEC</option>
+          <option value="NSTDA - NECTEC">NSTDA - NECTEC</option>
+          <option value="NXP">NXP</option>
+          <option value="PEPSI">PEPSI</option>
+          <option value="PTT Data Center">PTT Data Center</option>
+          <option value="PTT GC">PTT GC</option>
+          <option value="PTT Innovation">PTT Innovation</option>
+          <option value="SHARP">SHARP</option>
+          <option value="SIG Combibloc">SIG Combibloc</option>
+          <option value="Singapore Power (SP)">Singapore Power (SP)</option>
+          <option value="SONY">SONY</option>
+          <option value="Standard CAN">Standard CAN</option>
+          <option value="Stanley Lamp 5">Stanley Lamp 5</option>
+          <option value="Stanley Lamp 7 / 7.5">Stanley Lamp 7 / 7.5</option>
+          <option value="Suntory Pepsico">Suntory Pepsico</option>
+          <option value="Supalai Grand Tower">Supalai Grand Tower</option>
+          <option value="SYNNEX">SYNNEX</option>
+          <option value="Thai PBS">Thai PBS</option>
+          <option value="THAIYO">THAIYO</option>
+          <option value="TPV Technology">TPV Technology</option>
+          <option value="UniSUN">UniSUN</option>
+          <option value="YOTHI">YOTHI</option>
+          <option value="บ้านวิทย์">บ้านวิทย์</option>
+          <option value="โรงพยาบาล BNH">โรงพยาบาล BNH</option>
+          <option value="Other">Other</option>
+        
+        </select>
+      </div>
+      <div class="field" id="customerOtherWrap" style="display:none;">
+        <label>ระบุชื่อลูกค้า (Other)</label>
+        <input type="text" id="customerOther" placeholder="พิมพ์ชื่อลูกค้า...">
+      </div>
+      <div class="field full"><label>Job Details</label><input type="text" id="customerDetail" placeholder="Job Details"></div>
+      <div class="field"><label>Location</label>
+        <select id="location">
+          <option value="">-- เลือกพื้นที่ --</option>
+          <option value="กรุงเทพมหานคร">กรุงเทพมหานคร</option>
+          <option value="ชลบุรี">ชลบุรี</option>
+          <option value="ระยอง">ระยอง</option>
+          <option value="เพชรบุรี">เพชรบุรี</option>
+          <option value="Other">Other</option>
+        </select>
+      </div>
+      <div class="field" id="locationOtherWrap" style="display:none;">
+        <label>ระบุพื้นที่ (Other)</label>
+        <input type="text" id="locationOther" placeholder="ระบุพื้นที่...">
+      </div>
+      <div class="field"><label>Equipment type</label>
+        <select id="equipType">
+          <option value="">-- เลือกประเภทอุปกรณ์ --</option>
+          <option value="Chiller Air Cool">Chiller Air Cool</option>
+          <option value="Chiller Hybrid">Chiller Hybrid</option>
+          <option value="Chiller Water Cool">Chiller Water Cool</option>
+          <option value="Control and Power Plant">Control and Power Plant</option>
+          <option value="Inspection">Inspection</option>
+          <option value="Maintenance Agreement Service (MA)">Maintenance Agreement Service (MA)</option>
+          <option value="Order Send spare parts">Order Send spare parts</option>
+          <option value="Preventive Maintenance Service (PM)">Preventive Maintenance Service (PM)</option>
+          <option value="Project Chiller Plant">Project Chiller Plant</option>
+          <option value="Site Survey">Site Survey</option>
+          <option value="Other">Other</option>
+        </select>
+      </div>
+      <div class="field" id="equipTypeOtherWrap" style="display:none;">
+        <label>ระบุประเภทอุปกรณ์ (Other)</label>
+        <input type="text" id="equipTypeOther" placeholder="พิมพ์ประเภทอุปกรณ์...">
+      </div>
+      <div class="field"><label>Tag no.</label><input type="text" id="tagNo" placeholder="Tag no."></div>
+      <div class="field"><label>Model no.</label><input type="text" id="modelNo" placeholder="Model no."></div>
+      <div class="field"><label>Serial no.</label><input type="text" id="serialNo" placeholder="Serial no."></div>
+      <div class="field"><label>Start date</label><input type="date" id="startDate"></div>
+    </div>
+  </div>
+
+  <!-- SECTION 2: SCOPE OF WORK -->
+  <div class="card scope-card">
+    <div class="sec-bar"><span class="num">02</span> Scope of work</div>
+    <p class="sec-note">เลือกแบบฟอร์มตรวจสอบได้มากกว่าหนึ่งแบบ แล้วติ๊กสถานะแต่ละรายการ</p>
+
+    <div class="tpl-picker">
+      <div class="tpl-info" id="tplInfo">ยังไม่ได้เลือกแบบฟอร์มตรวจสอบ</div>
+      <button class="btn" id="openTplModal" type="button">เลือกแบบฟอร์ม</button>
+    </div>
+
+    <div class="tpl-empty" id="tplEmptyMsg">เลือกแบบฟอร์มด้านบนเพื่อเริ่มกรอก — เลือกได้มากกว่าหนึ่งแบบ</div>
+
+    <!-- one block per selected form: its checklist, then its own tables -->
+    <div id="scopeBlocks"></div>
+
+    <div class="chk-summary" id="chkSummary"></div>
+
+    <div class="notes-block" aria-hidden="true">
+      <div class="notes-title">หมายเหตุเพิ่มเติม / Additional remarks</div>
+      <div class="notes-rule"></div>
+    </div>
+
+    <div class="field full" style="margin-top:18px;">
+      <label>Job description เพิ่มเติม</label>
+      <textarea id="jobDescription" placeholder="รายละเอียดงานเพิ่มเติม..."></textarea>
+    </div>
+  </div>
+
+  <!-- SECTION 3: PHOTO REPORT -->
+  <div class="card">
+    <div class="sec-bar"><span class="num">03</span> Photo record — ภาพถ่ายหน้างาน</div>
+    <p class="sec-note">คลิกช่องภาพเพื่ออัปโหลด</p>
+    <div id="photoGrid"></div>
+    <button class="add-photo-btn" id="addPhotoBtn" type="button" style="margin-top:16px;width:100%;">+ เพิ่มรูปภาพ</button>
+  </div>
+
+  <!-- SECTION 4: SUMMARY -->
+  <div class="card" id="partsCard">
+    <div class="sec-bar"><span class="num">04</span> Parts &amp; material supply</div>
+    <div class="field full" style="margin-bottom:14px;">
+      <label>Summary of work details / สรุปรายละเอียดงานที่ทำ</label>
+      <textarea id="summary" style="min-height:110px;" placeholder="สรุปปัญหาที่พบและการดำเนินการ..."></textarea>
+    </div>
+    <div class="field full">
+      <label>Parts / material used (ถ้ามี)</label>
+      <textarea id="parts" style="min-height:70px;" placeholder="รายการอะไหล่หรือวัสดุที่ใช้..."></textarea>
+    </div>
+  </div>
+
+  <!-- SECTION 5: SIGN OFF -->
+  <div class="card signoff-card">
+    <div class="sec-bar"><span class="num">05</span> Sign off</div>
+    <div class="grid">
+      <div class="field"><label>List of employees / ชื่อผู้ให้บริการ</label>
+        <div class="emp-picker">
+          <div class="emp-chips" id="empChips"></div>
+          <button type="button" class="emp-add" id="openEmpModal">เลือกชื่อ</button>
+        </div>
+        <input type="hidden" id="employees">
+      </div>
+      <div class="field"><label>Client name / รายชื่อลูกค้า</label><input type="text" id="clientName" placeholder="Client name"></div>
+      <div class="create-time" id="createTime" aria-hidden="true"></div>
+      <div class="field full sig-field">
+        <label>Client signature / ลายเซ็นต์ลูกค้า</label>
+        <div class="sig-wrap">
+          <canvas id="sigPad"></canvas>
+          <img class="sig-print-img" id="sigPrintImg" alt="">
+          <div class="sig-toolbar">
+            <span class="sig-hint">ลงลายเซ็นด้วยเมาส์หรือนิ้วในกรอบด้านบน</span>
+            <button class="sig-clear" id="sigClear" type="button">ล้างลายเซ็น</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <p class="foot-note">
+    ข้อมูลในฟอร์มนี้จะถูกบันทึกไว้ในเบราว์เซอร์ของคุณโดยอัตโนมัติ (ยกเว้นรูปภาพและลายเซ็น) เพื่อความปลอดภัย โปรดพิมพ์หรือบันทึกเป็น PDF เมื่อกรอกข้อมูลเสร็จสิ้น<br>
+    <span id="footNoteCo">McEnergy Evolution Co.,Ltd.</span> — Service &amp; Maintenance Report
+  </p>
+
+</div>
+
+<!-- repeats at the foot of every printed page -->
+<div class="print-foot" aria-hidden="true">
+  <span class="pf-l" id="pfCompany">McEnergy Evolution Co., Ltd.</span>
+  <span class="pf-c" id="pfDoc">Service &amp; Maintenance Report</span>
+  <span class="pf-r">Confidential</span>
+</div>
+
+<div class="pv-overlay" id="pvOverlay" style="display:none;">
+  <div class="pv-bar">
+    <div class="pv-title">ตัวอย่างก่อนส่ง <span class="pv-hint" id="pvPages"></span><span class="pv-hint" id="pvStatus"></span></div>
+    <div class="pv-actions">
+      <button class="btn btn-ghost" id="pvZoom" type="button">ขนาดเต็ม</button>
+      <button class="btn btn-ghost" id="pvClose" type="button">ปิด</button>
+      <button class="btn" id="pvPrint" type="button">พิมพ์</button>
+      <button class="btn btn-primary" id="pvSend" type="button">ส่งเป็นไฟล์ PDF</button>
+    </div>
+  </div>
+  <div class="pv-stage" id="pvStage"><div class="pv-fit" id="pvFit"><iframe id="pvFrame" title="ตัวอย่างรายงาน"></iframe></div></div>
+</div>
+
+<div class="modal-overlay" id="iosModal" style="display:none;">
+  <div class="modal-box">
+    <div class="modal-head">บันทึก PDF บน iPhone / iPad</div>
+    <p class="modal-sub">แชร์ PDF ได้เลยโดยไม่ต้องเซฟก่อน ทำตามนี้ครับ</p>
+    <ol class="ios-steps">
+      <li>กดปุ่ม <b>แชร์</b> <span class="ios-ico">&#8593;</span> บนแถบเครื่องมือ Safari</li>
+      <li>เลื่อนลงหาแล้วเลือก <b>Print</b></li>
+      <li>ใช้สองนิ้ว <b>บีบออก</b> บนภาพตัวอย่างหน้าแรก &mdash; ตรงนี้กลายเป็นไฟล์ PDF จริงแล้ว</li>
+      <li>กดปุ่ม <b>แชร์</b> มุมบนขวา แล้วส่งเข้า LINE / Mail ได้ทันที</li>
+    </ol>
+    <p class="ios-note" style="background:#E6F5EC;color:#1F7248;">
+      ขั้นที่ 4 <b>ไม่ต้องกด Save to Files</b> ก็แชร์ได้เลย
+      จะเก็บสำเนาไว้ด้วยค่อยเลือก Save to Files</p>
+    <p class="ios-note">ถ้าอยากให้ปุ่มพิมพ์ในฟอร์มใช้ได้เลย ให้ปิด
+      <b>Settings &rarr; Apps &rarr; Safari &rarr; Block Pop-ups</b> แล้วกดปุ่มด้านล่าง</p>
+    <button class="btn btn-primary" id="iosTryPrint" type="button" style="width:100%;justify-content:center;">ลองสั่งพิมพ์อัตโนมัติ</button>
+    <button class="modal-close" id="iosClose" type="button">ปิด</button>
+  </div>
+</div>
+
+<div class="modal-overlay" id="empModal" style="display:none;">
+  <div class="modal-box">
+    <div class="modal-head">เลือกชื่อผู้ให้บริการ</div>
+    <p class="modal-sub">ติ๊กได้หลายคน — คนแรกที่ติ๊กจะถูกกำหนดเป็น <b>หัวหน้างาน</b> โดยอัตโนมัติ</p>
+    <div class="emp-list" id="empList"></div>
+    <div class="emp-other">
+      <input type="text" id="empOtherInput" placeholder="พิมพ์ชื่อผู้ให้บริการอื่น (Other)...">
+      <button type="button" class="btn" id="empOtherAdd">เพิ่ม</button>
+    </div>
+    <button type="button" class="btn btn-primary" id="empDone" style="width:100%;justify-content:center;">เสร็จสิ้น</button>
+    <button type="button" class="modal-close" id="empClear">ล้างชื่อที่เลือกทั้งหมด</button>
+  </div>
+</div>
+
+<div class="modal-overlay" id="tplModal" style="display:none;">
+  <div class="modal-box">
+    <div class="modal-head">เลือกแบบฟอร์มตรวจสอบ</div>
+    <p class="modal-sub">แตะเพื่อเลือก — เลือกได้หลายแบบฟอร์มในงานเดียว แตะซ้ำเพื่อเอาออก</p>
+
+    <button type="button" class="modal-opt" data-tpl="service">
+      <div class="t">Service / Repair</div>
+      <div class="d">ตรวจสอบและบำรุงรักษาเครื่องจักร 6 รายการ</div>
+      <div class="legend">
+        <span style="background:#E6F5EC;color:#1F7248;">ปกติ</span>
+        <span style="background:#FBEAEA;color:#C94F4F;">ชำรุด</span>
+        <span style="background:#FDF3D8;color:#8A6D0E;">รอซ่อม</span>
+        <span style="background:#E6F0FB;color:#1D5FA8;">อยู่ระหว่างการซ่อม</span>
+      </div>
+    </button>
+
+    <button type="button" class="modal-opt" data-tpl="project">
+      <div class="t">Project Plant</div>
+      <div class="d">ความคืบหน้างานติดตั้งระบบ 6 รายการ</div>
+      <div class="legend">
+        <span style="background:#E6F5EC;color:#1F7248;">เสร็จสิ้น</span>
+        <span style="background:#FBEAEA;color:#C94F4F;">เกินกำหนด</span>
+        <span style="background:#E6F0FB;color:#1D5FA8;">ตามแผนงาน</span>
+      </div>
+    </button>
+
+    <button type="button" class="modal-opt" data-tpl="delivery">
+      <div class="t">ส่งของ</div>
+      <div class="d">รายการอะไหล่ / สินค้าที่จัดส่ง — กรอกเป็นตาราง</div>
+      <div class="legend">
+        <span style="background:#EDEFF7;color:#16264A;">Name part</span>
+        <span style="background:#EDEFF7;color:#16264A;">Part No.</span>
+        <span style="background:#EDEFF7;color:#16264A;">Description</span>
+        <span style="background:#EDEFF7;color:#16264A;">Qty</span>
+      </div>
+    </button>
+
+    <button type="button" class="modal-opt" data-tpl="logwc">
+      <div class="t">Log sheet water cool</div>
+      <div class="d">สโคปงานตรวจสอบ 14 รายการ + ตารางบันทึกค่า Water Cooled Chiller (Design condition, Set point, ค่าที่อ่านได้ 3 ครั้ง)</div>
+      <div class="legend">
+        <span style="background:#E6F5EC;color:#1F7248;">ปกติ</span>
+        <span style="background:#FDF3D8;color:#8A6D0E;">เฝ้าระวัง</span>
+        <span style="background:#FBEAEA;color:#C94F4F;">ชำรุด</span>
+        <span style="background:#E6F0FB;color:#1D5FA8;">ควรเปลี่ยน</span>
+      </div>
+    </button>
+
+    <button type="button" class="modal-opt" data-tpl="logac">
+      <div class="t">Log sheet air cool</div>
+      <div class="d">สโคปงานตรวจสอบ 12 รายการ + ตารางบันทึกค่า Air Cooled Chiller (Design condition, Unit status, Comp #1-#3, ค่าที่อ่านได้ 3 ครั้ง)</div>
+      <div class="legend">
+        <span style="background:#E6F5EC;color:#1F7248;">ปกติ</span>
+        <span style="background:#FDF3D8;color:#8A6D0E;">เฝ้าระวัง</span>
+        <span style="background:#FBEAEA;color:#C94F4F;">ชำรุด</span>
+        <span style="background:#E6F0FB;color:#1D5FA8;">ควรเปลี่ยน</span>
+      </div>
+    </button>
+
+    <div class="modal-actions">
+      <button type="button" class="btn btn-primary" id="modalCloseBtn">เสร็จสิ้น</button>
+      <button type="button" class="btn btn-danger" id="modalCancelBtn">ยกเลิก</button>
+    </div>
+  </div>
+</div>
+<script>
+(function(){
+  var STORAGE_KEY = 'mce_service_form_draft_v1';
+  var $ = function(id){ return document.getElementById(id); };
+
+  var TEMPLATES = {
+    service: {
+      name: 'Service / Repair',
+      statuses: [
+        { key:'normal',     label:'ปกติ',                bg:'#E6F5EC', fg:'#1F7248', border:'#2E9E63' },
+        { key:'broken',     label:'ชำรุด',                bg:'#FBEAEA', fg:'#C94F4F', border:'#C94F4F' },
+        { key:'pending',    label:'รอซ่อม',               bg:'#FDF3D8', fg:'#8A6D0E', border:'#E0B400' },
+        { key:'inprogress', label:'อยู่ระหว่างการซ่อม',    bg:'#E6F0FB', fg:'#1D5FA8', border:'#378ADD' }
+      ],
+      items: [
+        'ตรวจสอบการทำงานและสภาพทั่วไปของตัวเครื่อง',
+        'ตรวจสอบการทำงานของ Controller',
+        'ตรวจสอบและบันทึกค่าการทำงานต่างๆของตัวเครื่อง',
+        'ตรวจสอบและทำความสะอาดตัวเครื่อง',
+        'ตรวจสอบแรงดันของสารทำความเย็นและน้ำมัน',
+        'ตรวจสอบการรั่วซึมของสารทำความเย็นและน้ำมัน'
+      ]
+    },
+    delivery: {
+      name: 'ส่งของ',
+      mode: 'table',
+      statuses: [],
+      items: []
+    },
+    logac: {
+      name: 'Log sheet air cool',
+      mode: 'log',
+      statuses: [
+        { key:'normal',  label:'ปกติ',        bg:'#E6F5EC', fg:'#1F7248', border:'#2E9E63' },
+        { key:'watch',   label:'เฝ้าระวัง',    bg:'#FDF3D8', fg:'#8A6D0E', border:'#E0B400' },
+        { key:'broken',  label:'ชำรุด',        bg:'#FBEAEA', fg:'#C94F4F', border:'#C94F4F' },
+        { key:'replace', label:'ควรเปลี่ยน',   bg:'#E6F0FB', fg:'#1D5FA8', border:'#378ADD' }
+      ],
+      items: [
+        'ตรวจสอบสภาพฉนวนและทำความสะอาดตัวเครื่อง',
+        'ตรวจสอบและฉีดล้างทำความสะอาด Coil condenser ด้วยเครื่องฉีดน้ำแรงดันสูง',
+        'ตรวจสอบการทำงานของพัดลมระบายความร้อน',
+        'ตรวจสอบแรงดันของสารทำความเย็นและน้ำมัน',
+        'ตรวจสอบการรั่วของสารทำความเย็นและน้ำมัน',
+        'ตรวจสอบอุณหภูมิเข้าออก Cooler',
+        'ตรวจสอบการทำงานของ Solenoid valve และ Expansion Valve',
+        'ตรวจสอบและบันทึกค่าการทำงานของเครื่อง',
+        'ตรวจสอบค่า Super head และ Sub cooling',
+        'ตรวจสอบการทำงานของ Oil Pump และ Oil heater',
+        'ตรวจสอบเสียงและการสั่นสะเทือนขณะเครื่องทำงาน',
+        'ตรวจสอบสภาพสายไฟ Control จุดต่อสายไฟภายในตู้ Chiller Control Panel'
+      ]
+    },
+    logwc: {
+      name: 'Log sheet water cool',
+      mode: 'log',
+      statuses: [
+        { key:'normal',  label:'ปกติ',        bg:'#E6F5EC', fg:'#1F7248', border:'#2E9E63' },
+        { key:'watch',   label:'เฝ้าระวัง',    bg:'#FDF3D8', fg:'#8A6D0E', border:'#E0B400' },
+        { key:'broken',  label:'ชำรุด',        bg:'#FBEAEA', fg:'#C94F4F', border:'#C94F4F' },
+        { key:'replace', label:'ควรเปลี่ยน',   bg:'#E6F0FB', fg:'#1D5FA8', border:'#378ADD' }
+      ],
+      items: [
+        'ตรวจสอบสภาพฉนวนและทำความสะอาดตัวเครื่อง',
+        'ตรวจสอบสภาพทั่วไปบริเวณรอบๆ ตัวเครื่อง',
+        'ตรวจสอบการทำงานของ Magnetic Bearing Compressor',
+        'ตรวจสอบแรงดันของสารทำความเย็นและน้ำมัน',
+        'ตรวจสอบการรั่วของสารทำความเย็นและน้ำมัน',
+        'ตรวจสอบอุณหภูมิเข้าออก Cooler',
+        'ตรวจสอบการทำงานของ Solenoid valve และ Expansion valve',
+        'ตรวจสอบและบันทึกค่าการทำงานของเครื่อง',
+        'ตรวจสอบค่า Super head และ Sub cooling',
+        'ตรวจสอบการทำงานของ Oil Pump และ Oil heater',
+        'ตรวจสอบเสียงและการสั่นสะเทือนขณะเครื่องทำงาน',
+        'ตรวจสอบค่า Approach Temp',
+        'ตรวจสอบสภาพสายไฟ Control จุดต่อสายไฟภายในตู้ Chiller Control Panel',
+        'ตรวจสอบการทำงานของ Controller Chiller'
+      ]
+    },
+    project: {
+      name: 'Project Plant',
+      statuses: [
+        { key:'done',    label:'เสร็จสิ้น',    bg:'#E6F5EC', fg:'#1F7248', border:'#2E9E63' },
+        { key:'overdue', label:'เกินกำหนด',    bg:'#FBEAEA', fg:'#C94F4F', border:'#C94F4F' },
+        { key:'onplan',  label:'ตามแผนงาน',    bg:'#E6F0FB', fg:'#1D5FA8', border:'#378ADD' }
+      ],
+      items: [
+        'คุมผู้รับเหมาติดตั้งงานระบบ Chiller',
+        'คุมผู้รับเหมาติดตั้งงานระบบไฟฟ้า',
+        'งานเดินระบบไฟฟ้า Power',
+        'งานเดินระบบไฟฟ้า Control CPMS',
+        'งาน Defect หลังส่งมอบงาน',
+        'ส่งมอบงาน'
+      ]
+    }
+  };
+
+  var defaultPhotos = [
+    { caption: '', img: null },
+    { caption: '', img: null },
+    { caption: '', img: null },
+    { caption: '', img: null }
+  ];
+
+  var state = {
+    fields: {},
+    templates: [],
+    checklist: [],
+    partsTable: [],
+    logs: {},
+    employees: [],
+    photos: JSON.parse(JSON.stringify(defaultPhotos)),
+    signature: null
+  };
+
+  var fieldIds = ['company','customer','customerDetail','location','equipType',
+    'tagNo','modelNo','serialNo','startDate','jobDescription','summary','parts',
+    'employees','clientName','reportDate','contractType','contractOther','reportNo','reportRev',
+    'locationOther','customerOther','equipTypeOther'];
+
+  function loadDraft(){
+    try{
+      var raw = localStorage.getItem(STORAGE_KEY);
+      if(!raw) return;
+      var d = JSON.parse(raw);
+      if(d.fields) state.fields = d.fields;
+      adoptTemplates(d);
+      if(d.signature) state.signature = d.signature;
+      $('statusChip').textContent = 'โหลดฉบับร่างล่าสุดแล้ว';
+    }catch(e){}
+  }
+
+  function saveDraft(silent){
+    fieldIds.forEach(function(id){
+      var el = $(id);
+      if(el) state.fields[id] = el.value;
+    });
+    var data = {
+      fields: state.fields,
+      templates: state.templates,
+      checklist: state.checklist,
+      partsTable: state.partsTable,
+      logs: state.logs,
+      signature: state.signature
+    };
+    try{
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+      $('statusChip').textContent = 'บันทึกฉบับร่างแล้ว · ' + new Date().toLocaleTimeString('th-TH',{hour:'2-digit',minute:'2-digit'});
+    }catch(e){
+      $('statusChip').textContent = 'บันทึกไม่สำเร็จ (พื้นที่จัดเก็บเต็ม)';
+    }
+  }
+
+  function applyFieldValues(){
+    fieldIds.forEach(function(id){
+      var el = $(id);
+      if(el && state.fields[id] !== undefined) el.value = state.fields[id];
+    });
+    if(!$('reportDate').value){
+      var t = new Date();
+      $('reportDate').value = t.toISOString().slice(0,10);
+    }
+    /* an older draft may hold a company name that is no longer an option */
+    if(!$('company').value){ $('company').value = 'McEnergy Evolution'; }
+    pullEmployees();
+    renderEmpChips();
+    updateContractOtherVisibility();
+    updateLocationOtherVisibility();
+    updateCustomerOtherVisibility();
+    updateEquipOtherVisibility();
+  }
+
+  /* ---- employee picker (multi-select, first pick = supervisor) ---- */
+  var EMPLOYEES = [
+    'ฟายโซ เต๊ะ',
+    'ธนภัทร อยู่คง',
+    'ณัฐพล จันต๊ะ',
+    'พัฒนพงษ์ แสงศร',
+    'กรเพ็รช จันทร์เป้า',
+    'ณัฐพล กองสุวรรณ',
+    'ฌัฐวุฒิ สารแดง',
+    'วัชรพงษ์ เสนาบุญ',
+    'ศิรวุธ ทาอามาตร์',
+    'อดิชาติ พันธุ์วิเชียร'
+  ];
+  var EMP_SEP = '\n';
+
+  function escapeHtml(s){
+    return (s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+  }
+
+  /* selected names -> the hidden input that gets saved */
+  function pushEmployees(){
+    $('employees').value = state.employees.join(EMP_SEP);
+  }
+  /* saved value -> selected names */
+  function pullEmployees(){
+    var raw = $('employees').value || '';
+    state.employees = raw ? raw.split(EMP_SEP).filter(function(n){ return n.trim() !== ''; }) : [];
+  }
+
+  function renderEmpChips(){
+    var wrap = $('empChips');
+    if(!wrap) return;
+    if(!state.employees.length){
+      wrap.innerHTML = '<span class="emp-empty">ยังไม่ได้เลือกชื่อผู้ให้บริการ</span>';
+      return;
+    }
+    wrap.innerHTML = state.employees.map(function(n, i){
+      return '<span class="emp-chip">' + escapeHtml(n) +
+             (i === 0 ? ' <span class="emp-lead">หัวหน้างาน</span>' : '') +
+             '</span>';
+    }).join('');
+  }
+
+  function renderEmpList(){
+    var wrap = $('empList');
+    if(!wrap) return;
+    /* names added by hand are not in EMPLOYEES - show them as well so they
+       can be seen, reordered by re-ticking, and removed */
+    var extras = state.employees.filter(function(n){ return EMPLOYEES.indexOf(n) === -1; });
+    wrap.innerHTML = EMPLOYEES.concat(extras).map(function(n){
+      var at = state.employees.indexOf(n);
+      var on = at !== -1;
+      return '<button type="button" class="emp-opt' + (on ? ' on' : '') + '" data-n="' + escapeAttr(n) + '">' +
+               '<span class="emp-box">' + (on ? '&#10003;' : '') + '</span>' +
+               '<span class="nm">' + escapeHtml(n) + '</span>' +
+               (EMPLOYEES.indexOf(n) === -1 ? '<span class="emp-tag">Other</span>' : '') +
+               (at === 0 ? '<span class="emp-lead">หัวหน้างาน</span>' : '') +
+             '</button>';
+    }).join('');
+  }
+
+  function refreshEmployees(){
+    pushEmployees();
+    renderEmpChips();
+    renderEmpList();
+  }
+
+  function addCustomEmployee(){
+    var el = $('empOtherInput');
+    var n = (el.value || '').trim().replace(/\s+/g, ' ');
+    if(!n) return;
+    if(state.employees.indexOf(n) === -1){ state.employees.push(n); }
+    el.value = '';
+    refreshEmployees();
+    syncCover();
+    saveDraft();
+  }
+  $('empOtherAdd').addEventListener('click', addCustomEmployee);
+  $('empOtherInput').addEventListener('keydown', function(e){
+    if(e.key === 'Enter'){ e.preventDefault(); addCustomEmployee(); }
+  });
+
+  $('openEmpModal').addEventListener('click', function(){
+    renderEmpList();
+    $('empModal').style.display = 'flex';
+  });
+  $('empDone').addEventListener('click', function(){
+    $('empModal').style.display = 'none';
+    saveDraft();
+  });
+  $('empClear').addEventListener('click', function(){
+    state.employees = [];
+    refreshEmployees();
+    syncCover();
+  });
+  $('empModal').addEventListener('click', function(e){
+    if(e.target.id === 'empModal'){ $('empModal').style.display = 'none'; saveDraft(); return; }
+    var opt = e.target.closest('.emp-opt');
+    if(!opt) return;
+    var n = opt.getAttribute('data-n');
+    var at = state.employees.indexOf(n);
+    if(at === -1){ state.employees.push(n); }   /* order of ticking decides the supervisor */
+    else         { state.employees.splice(at, 1); }
+    refreshEmployees();
+    syncCover();
+  });
+
+  /* ---- customer "Other" ---- */
+  function updateCustomerOtherVisibility(){
+    var isOther = $('customer').value === 'Other';
+    $('customerOtherWrap').style.display = isOther ? 'flex' : 'none';
+    if(!isOther){ $('customerOther').value = ''; }
+  }
+  $('customer').addEventListener('change', function(){
+    updateCustomerOtherVisibility();
+    saveDraft();
+  });
+
+  /* the name to show and print - resolves "Other" to what was typed */
+  function customerName(){
+    var v = val('customer');
+    if(v === 'Other'){ return val('customerOther').trim() || 'Other'; }
+    return v;
+  }
+
+  /* ---- location "Other" ---- */
+  function updateLocationOtherVisibility(){
+    var isOther = $('location').value === 'Other';
+    $('locationOtherWrap').style.display = isOther ? 'flex' : 'none';
+    if(!isOther){ $('locationOther').value = ''; }
+  }
+  $('location').addEventListener('change', function(){
+    updateLocationOtherVisibility();
+    saveDraft();
+  });
+
+  /* ---- equipment type select ---- */
+  function updateEquipOtherVisibility(){
+    var isOther = $('equipType').value === 'Other';
+    $('equipTypeOtherWrap').style.display = isOther ? 'flex' : 'none';
+    if(!isOther){ $('equipTypeOther').value = ''; }
+  }
+  $('equipType').addEventListener('change', function(){
+    updateEquipOtherVisibility();
+    saveDraft();
+  });
+
+  /* ---- contract type select ---- */
+  function updateContractOtherVisibility(){
+    var isOther = $('contractType').value === 'Other';
+    $('contractOtherWrap').style.display = isOther ? 'flex' : 'none';
+    if(!isOther){ $('contractOther').value = ''; }
+  }
+  $('contractType').addEventListener('change', function(){
+    updateContractOtherVisibility();
+    saveDraft();
+  });
+
+
+  /* ================= LOG SHEET : WATER COOLED CHILLER ================= */
+  /* Every log-sheet template describes its own tables here. The left column
+     is built from whichever of design / setpoint / evap / cond it defines;
+     the reading table on the right comes from read[]. */
+  var LOG_SPECS = {
+    logwc: {
+      title: 'Water Cooled Chiller Log Book',
+      design: ['Refrigerant','Ton','CHW Press Drop (PSI/BAR)','CW Press Drop (PSI/BAR)',
+               'Ent Evap Water (C/F)','Lvg. Evap Water (C/F)','CW Flow (GPM)',
+               'Saturated Evap (C/F)','Saturated Evap (PSI/BAR)','Saturated Cond (C/F)',
+               'Saturated Cond (PSI/BAR)','%RLA (A)','Kw (Kw.)','Voltage/Hertz (V/Hz)'],
+      setpoint: ['Leaving Evap SPT','Max Amp Limit','High Disch Limit','High Disch Temp-Shutdn',
+                 'High Oil feed temp','Low net oil pressure'],
+      evap: ['Actual Chiller Water Outlet press (PSI/BAR)',
+             'Actual Chiller Water Inlet press (PSI/BAR)',
+             'Actual Chiller Water Press Drop (PSI/BAR)'],
+      cond: ['Actual CW Outlet pressure (Bar/PSI)','Actual CW Inlet pressure (Bar/PSI)',
+             'Actual CW Pressure drop (Bar/PSI)'],
+      read: [
+        { g:'', text:true, rows:['Date','Time'] },
+        { g:'Unit Status', text:true, rows:['Unit is Running ok','Running Mode'] },
+        { g:'Water / flow', rows:['Ent Evap (C/F)','Lvg Evap (C/F)','Delta T (C/F)',
+                                  'Ent Cond (C/F)','Lvg Cond (C/F)','Delta T (C/F)'] },
+        { g:'Refrigerant', rows:['Saturated Evap (C/F)','Saturated Evap (KPA/PSI)','Evap Apprch (C/F)',
+                                 'Expansion valve position','Liquid level','Saturated Cond (C/F)',
+                                 'Saturated Cond (KPA/PSI)','Cond Apprch (C/F)','Frequency Command',
+                                 'Rfgt Diff Pressure','Rfgt Discharge Temp','Discharge superheat'] },
+        { g:'Motor Amp.', rows:['% Rated RLA Amps','Motor Amps (A)','Volts'] },
+        { g:'Oil Temp / Press', rows:['Oil Pressure','Oil level sensor'] },
+        { g:'Operating Hours', rows:['Compr Hours','Starts'] }
+      ]
+    },
+    logac: {
+      title: 'Air Cooled Chiller Log Book',
+      dense: true,                       /* three compressors - more rows than water */
+      design: ['Refrigerant','Tons','Total Amp','Outdoor air (C/F)','Control mode',
+               'Leaving Set Point (C/F)','Comp#1 RLA','Comp#2 RLA','Comp#3 RLA',
+               'Fan motor FLA','Sat. Evap T','Sat. Evap P','Sat. Cond T','Sat. Cond P'],
+      read: [
+        { g:'', text:true, rows:['Date','Time'] },
+        { g:'Unit Status', rows:['Cooling stage / Time','Comp#1 /Amp','Comp#2 /Amp',
+                                 'Comp#3 /Amp'] },
+        { g:'Water Temp', rows:['Entering Water Temp','Leaving Water Temp'] },
+        { g:'Comp #1', rows:['Evap press / Temp','Cond press / Temp','Suction Temp',
+                             'Suction Superheat','Comp Run / Starts','Discharge Temp',
+                             'Discharge Superheat','Oil Pressure','Oil Level'] },
+        { g:'Comp #2', rows:['Evap press / Temp','Cond press / Temp','Suction Temp',
+                             'Suction Superheat','Comp Run / Starts','Discharge Temp',
+                             'Discharge Superheat','Oil Pressure','Oil Level'] },
+        { g:'Comp #3', rows:['Evap press / Temp','Cond press / Temp','Suction Temp',
+                             'Suction Superheat','Comp Run / Starts','Discharge Temp',
+                             'Discharge Superheat','Oil Pressure','Oil Level'] }
+      ]
+    }
+  };
+  function logSpec(t){
+    return LOG_SPECS[t] || LOG_SPECS.logwc;
+  }
+  var LOG_COLS = 3;
+
+  function emptyLogSheet(){
+    return { unit:'', brand:'', model:'', serial:'',
+             design:{}, setpoint:{}, read:{}, evap:{}, cond:{},
+             comments:'', verifiedBy:'' };
+  }
+  function normalizeLog(d){
+    var o = emptyLogSheet();
+    if(!d) return o;
+    ['design','setpoint','read','evap','cond'].forEach(function(k){
+      if(d[k] && typeof d[k] === 'object'){ o[k] = d[k]; }
+    });
+    ['unit','brand','model','serial','comments','verifiedBy'].forEach(function(k){
+      if(typeof d[k] === 'string'){ o[k] = d[k]; }
+    });
+    return o;
+  }
+  /* accepts both the old single-sheet draft and the new list */
+  function normalizeLogList(d){
+    var list = [];
+    if(Object.prototype.toString.call(d) === '[object Array]'){
+      list = d.map(normalizeLog);
+    } else if(d){
+      list = [normalizeLog(d)];
+    }
+    if(!list.length){ list = [emptyLogSheet()]; }
+    return list;
+  }
+  function logSheets(t){
+    if(!state.logs[t] || !state.logs[t].length){ state.logs[t] = [emptyLogSheet()]; }
+    return state.logs[t];
+  }
+  function logVal(t, si, sec, key){
+    var sh = logSheets(t)[si];
+    var m = sh && sh[sec];
+    return (m && m[key] !== undefined) ? m[key] : '';
+  }
+  function logInput(t, si, sec, key, num){
+    return '<input type="text"' + (num ? ' inputmode="decimal"' : '') +
+           ' id="log_' + t + '_' + si + '_' + sec + '_' + key +
+           '" data-log="' + sec + '" data-lk="' + key +
+           '" value="' + escapeAttr(logVal(t, si, sec, key)) + '">';
+  }
+  function logSimpleRows(t, si, labels, sec){
+    return labels.map(function(lb, i){
+      return '<tr><td class="lbl">' + escapeHtml(lb) + '</td>' +
+             '<td class="val">' + logInput(t, si, sec, String(i)) + '</td></tr>';
+    }).join('');
+  }
+  function logReadRows(t, si){
+    var html = [];
+    logSpec(t).read.forEach(function(grp, gi){
+      if(grp.g){
+        html.push('<tr class="grp"><td colspan="' + (LOG_COLS + 1) + '">' +
+                  escapeHtml(grp.g) + '</td></tr>');
+      }
+      grp.rows.forEach(function(lb, ri){
+        var tds = '';
+        for(var c = 0; c < LOG_COLS; c++){
+          tds += '<td class="val">' + logInput(t, si, 'read', gi + '_' + ri + '_' + c, !grp.text) + '</td>';
+        }
+        html.push('<tr><td class="lbl">' + escapeHtml(lb) + '</td>' + tds + '</tr>');
+      });
+    });
+    return html.join('');
+  }
+  function logMetaField(t, si, key, label, value){
+    return '<div class="field"><label>' + label + '</label>' +
+      '<input type="text" id="log' + key + '_' + t + '_' + si + '" data-lf="' + key +
+      '" value="' + escapeAttr(value || '') + '" placeholder="' + label + '..."></div>';
+  }
+  function logRefBox(t, si, labels, sec, title){
+    if(!labels || !labels.length) return '';
+    return '<div class="log-box"><table class="log-table"><thead><tr><th colspan="2">' +
+      escapeHtml(title) + '</th></tr></thead><tbody>' +
+      logSimpleRows(t, si, labels, sec) + '</tbody></table></div>';
+  }
+
+  function logSheetHtml(t, sh, si, total){
+    var many = total > 1;
+    var sp = logSpec(t);
+    return '<div class="log-sheet' + (sp.dense ? ' log-dense' : '') +
+             '" data-t="' + t + '" data-s="' + si + '" data-title="' + escapeAttr(sp.title) + '">' +
+      '<div class="log-sheet-bar">' +
+        '<span class="ls-no">Log sheet ' + (si + 1) + (many ? ' / ' + total : '') + '</span>' +
+        '<input type="text" class="ls-tag" id="logUnit_' + t + '_' + si + '" data-lf="unit"' +
+          ' value="' + escapeAttr(sh.unit || '') +
+          '" placeholder="ระบุเครื่อง / Tag no. / วันที่ ของแผ่นนี้...">' +
+        (many ? '<button type="button" class="ls-del">ลบแผ่นนี้</button>' : '') +
+      '</div>' +
+      '<div class="ls-meta">' +
+        logMetaField(t, si, 'brand',  'Brand',      sh.brand) +
+        logMetaField(t, si, 'model',  'Model',      sh.model) +
+        logMetaField(t, si, 'serial', 'Serial No.', sh.serial) +
+      '</div>' +
+      '<div class="log-grid">' +
+        '<div class="log-col">' +
+          logRefBox(t, si, sp.design,   'design',   'Full load design condition') +
+          logRefBox(t, si, sp.setpoint, 'setpoint', 'Set point') +
+          logRefBox(t, si, sp.evap,     'evap',     'Evaporator') +
+          logRefBox(t, si, sp.cond,     'cond',     'Condenser') +
+        '</div>' +
+        '<div class="log-box log-col-r"><table class="log-table log-readings"><thead><tr>' +
+          '<th>Chiller Report</th><th class="num">1st Reading</th><th class="num">2nd Reading</th><th class="num">3rd Reading</th>' +
+          '</tr></thead><tbody>' + logReadRows(t, si) + '</tbody></table></div>' +
+      '</div>' +
+      '<div class="field full log-note"><label>Comments</label>' +
+        '<textarea id="logComments_' + t + '_' + si + '" data-lf="comments" ' +
+        'placeholder="หมายเหตุ / สิ่งที่ตรวจพบ...">' + escapeHtml(sh.comments || '') + '</textarea></div>' +
+      '<div class="log-foot">' +
+        '<div class="field"><label>Verified by</label>' +
+          '<input type="text" id="logVerifiedBy_' + t + '_' + si + '" data-lf="verifiedBy" value="' +
+          escapeAttr(sh.verifiedBy || '') + '" placeholder="ชื่อผู้ตรวจสอบ"></div>' +
+      '</div>' +
+    '</div>';
+  }
+
+  /* the log book that belongs to one scope block - it keeps the class the
+     print stylesheet looks for, so it still starts on a page of its own */
+  function logBlockHtml(t){
+    var sp = logSpec(t);
+    var sheets = logSheets(t);
+    return '<div class="log-wrap on log-block" data-t="' + t + '" style="display:block;">' +
+      '<div class="log-head">' +
+        '<div class="lg-t">' + escapeHtml(sp.title) + '</div>' +
+        '<div class="lg-s">บันทึกค่าการทำงานของเครื่อง — กรอกเฉพาะช่องที่มีค่า</div>' +
+      '</div>' +
+      sheets.map(function(sh, si){ return logSheetHtml(t, sh, si, sheets.length); }).join('') +
+      '<button class="add-row ls-add" type="button" data-t="' + t + '">+ เพิ่มแผ่น ' +
+        escapeHtml(sp.title) + '</button>' +
+    '</div>';
+  }
+
+  /* ---- checklist (several templates at once) ---- */
+  var TPL_ORDER = ['service','project','delivery','logwc','logac'];
+
+  function tplSelected(k){ return state.templates.indexOf(k) !== -1; }
+  function selectedTemplates(){ return TPL_ORDER.filter(tplSelected); }
+  function logTemplates(){
+    return selectedTemplates().filter(function(k){ return TEMPLATES[k].mode === 'log'; });
+  }
+  function listTemplates(){
+    return selectedTemplates().filter(function(k){ return TEMPLATES[k].mode !== 'table'; });
+  }
+
+  /* load a draft or a saved file, in either the old single-template shape or
+     the current multi-template one */
+  function adoptTemplates(d){
+    var list = [];
+    if(d.templates && d.templates.length){ list = d.templates.slice(); }
+    else if(d.checklistTemplate){ list = [d.checklistTemplate]; }
+    state.templates = TPL_ORDER.filter(function(k){ return list.indexOf(k) !== -1; });
+
+    state.checklist = (d.checklist || []).map(function(it){
+      return { text: it.text || '', status: it.status || '',
+               tpl: it.tpl || d.checklistTemplate || state.templates[0] || '' };
+    });
+    state.partsTable = d.partsTable || [];
+
+    state.logs = {};
+    if(d.logs && typeof d.logs === 'object'){
+      Object.keys(d.logs).forEach(function(k){ state.logs[k] = normalizeLogList(d.logs[k]); });
+    } else if(d.logSheets || d.logSheet){
+      var k0 = (d.checklistTemplate && TEMPLATES[d.checklistTemplate] &&
+                TEMPLATES[d.checklistTemplate].mode === 'log') ? d.checklistTemplate : 'logwc';
+      state.logs[k0] = normalizeLogList(d.logSheets || d.logSheet);
+    }
+    ensureTemplateData();
+  }
+
+  /* fill in what a newly ticked template needs, drop what an unticked one left */
+  function ensureTemplateData(){
+    state.templates.forEach(function(k){
+      var t = TEMPLATES[k];
+      if(!t) return;
+      if(t.mode === 'table'){
+        if(!state.partsTable.length){
+          state.partsTable = [emptyPartRow(), emptyPartRow(), emptyPartRow()];
+        }
+      } else {
+        var has = state.checklist.some(function(it){ return it.tpl === k; });
+        if(!has){
+          t.items.forEach(function(txt){
+            state.checklist.push({ text:txt, status:'', tpl:k });
+          });
+        }
+      }
+      if(t.mode === 'log' && (!state.logs[k] || !state.logs[k].length)){
+        state.logs[k] = [emptyLogSheet()];
+      }
+    });
+    state.checklist = state.checklist.filter(function(it){
+      return !it.tpl || tplSelected(it.tpl);
+    });
+    Object.keys(state.logs).forEach(function(k){
+      if(!tplSelected(k)){ delete state.logs[k]; }
+    });
+    if(!tplSelected('delivery')){ state.partsTable = []; }
+  }
+
+  function updateTplUI(){
+    var sel = selectedTemplates();
+    $('tplInfo').innerHTML = sel.length
+      ? 'แบบฟอร์มที่ใช้: <b>' + sel.map(function(k){ return escapeHtml(TEMPLATES[k].name); }).join('</b> · <b>') + '</b>'
+      : 'ยังไม่ได้เลือกแบบฟอร์มตรวจสอบ';
+    $('openTplModal').textContent = sel.length ? 'เปลี่ยนแบบฟอร์ม' : 'เลือกแบบฟอร์ม';
+    $('tplEmptyMsg').style.display = sel.length ? 'none' : 'block';
+  }
+
+  /* ---- delivery table ---- */
+  function emptyPartRow(){ return { name:'', partNo:'', desc:'', qty:'' }; }
+
+  function partsRowsHtml(){
+    return state.partsTable.map(function(r, i){
+      return '<tr>' +
+        '<td class="col-no">'+(i+1)+'</td>' +
+        '<td><input type="text" data-i="'+i+'" data-k="name"   value="'+escapeAttr(r.name)+'"   placeholder="ชื่ออะไหล่..."></td>' +
+        '<td><input type="text" data-i="'+i+'" data-k="partNo" value="'+escapeAttr(r.partNo)+'" placeholder="Part No."></td>' +
+        '<td><input type="text" data-i="'+i+'" data-k="desc"   value="'+escapeAttr(r.desc)+'"   placeholder="รายละเอียด..."></td>' +
+        '<td><input type="text" class="qty-input" data-i="'+i+'" data-k="qty" value="'+escapeAttr(r.qty)+'" placeholder="0"></td>' +
+        '<td class="col-act"><button type="button" class="part-del" data-i="'+i+'">ลบ</button></td>' +
+      '</tr>';
+    }).join('');
+  }
+  function partsTableHtml(){
+    return '<div class="parts-table-wrap"><table class="parts-table"><thead><tr>' +
+      '<th class="col-no">#</th><th style="width:24%;">Name part</th>' +
+      '<th style="width:20%;">Part No.</th><th>Description</th>' +
+      '<th style="width:10%;">Qty</th><th class="col-act"></th>' +
+      '</tr></thead><tbody class="parts-body">' + partsRowsHtml() + '</tbody></table></div>' +
+      '<button class="add-row add-part" type="button">+ เพิ่มรายการอะไหล่</button>';
+  }
+
+  /* tally the ticked statuses - only meaningful for a single plain checklist */
+  function renderChkSummary(){
+    var box = $('chkSummary');
+    if(!box) return;
+    var sel = selectedTemplates();
+    var tpl = sel.length === 1 ? TEMPLATES[sel[0]] : null;
+    if(!tpl || tpl.mode === 'table' || tpl.mode === 'log' || !state.checklist.length){
+      box.innerHTML = ''; box.style.display = 'none';
+      return;
+    }
+    box.style.display = 'flex';
+
+    var counts = {};
+    state.checklist.forEach(function(it){
+      if(it.status){ counts[it.status] = (counts[it.status] || 0) + 1; }
+    });
+    var parts = ['<span class="chk-sum"><b>' + state.checklist.length + '</b> รายการทั้งหมด</span>'];
+    tpl.statuses.forEach(function(st){
+      var n = counts[st.key] || 0;
+      if(!n) return;
+      parts.push('<span class="chk-sum">' +
+                   '<span class="dot" style="background:' + st.border + '"></span>' +
+                   escapeHtml(st.label) + ' <b>' + n + '</b></span>');
+    });
+    var untouched = state.checklist.filter(function(it){ return !it.status; }).length;
+    if(untouched){
+      parts.push('<span class="chk-sum">ยังไม่ระบุ <b>' + untouched + '</b></span>');
+    }
+    box.innerHTML = parts.join('');
+  }
+
+  function statusBtnsHtml(item, i, statuses){
+    return statuses.map(function(st){
+      var sel = item.status === st.key;
+      var style = sel ? 'background:'+st.bg+';color:'+st.fg+';border-color:'+st.border+';' : '';
+      return '<button type="button" class="'+(sel?'sel':'')+'" style="'+style+
+             '" data-i="'+i+'" data-s="'+st.key+'">'+st.label+'</button>';
+    }).join('');
+  }
+
+  function checklistHtml(k, statuses){
+    var rows = [];
+    state.checklist.forEach(function(item, i){
+      if((item.tpl || '') !== k) return;
+      rows.push('<div class="chk-row">' +
+        '<input type="text" data-i="'+i+'" class="chk-text" value="'+escapeAttr(item.text)+'" placeholder="รายการตรวจสอบ...">' +
+        '<div class="chk-status">' + statusBtnsHtml(item, i, statuses) + '</div>' +
+        '<button type="button" class="chk-del" data-i="'+i+'">ลบ</button>' +
+      '</div>');
+    });
+    return '<div class="checklist">' + rows.join('') + '</div>';
+  }
+
+  /* Each selected form gets its own block: heading, its checklist, then the
+     tables that belong to it. Printing follows the same order, so a scope list
+     is never mixed up with another form's log book. */
+  function renderChecklist(){
+    updateTplUI();
+    renderChkSummary();
+    var host = $('scopeBlocks');
+    if(!host) return;
+    var sel = selectedTemplates();
+    var showHeads = sel.length > 1;
+
+    host.innerHTML = sel.map(function(k){
+      var t = TEMPLATES[k];
+      var html = '<div class="scope-block" data-t="' + k + '">';
+      if(showHeads){ html += '<div class="chk-group">' + escapeHtml(t.name) + '</div>'; }
+      if(t.mode === 'table'){
+        html += partsTableHtml();
+      } else {
+        html += checklistHtml(k, t.statuses) +
+                '<button class="add-row add-item" type="button" data-t="' + k +
+                '">+ เพิ่มรายการตรวจสอบ (Other)</button>';
+      }
+      if(t.mode === 'log'){ html += logBlockHtml(k); }
+      return html + '</div>';
+    }).join('');
+
+    /* items that belong to a form that is no longer ticked */
+    var orphans = state.checklist.some(function(it){ return !it.tpl; });
+    if(orphans){
+      var extra = '<div class="scope-block" data-t="">' +
+        (showHeads ? '<div class="chk-group">รายการเพิ่มเติม</div>' : '') +
+        checklistHtml('', []) + '</div>';
+      host.insertAdjacentHTML('beforeend', extra);
+    }
+  }
+  function escapeAttr(s){ return (s||'').replace(/"/g,'&quot;'); }
+
+  function sheetOf(el){
+    var box = el.closest ? el.closest('.log-sheet') : null;
+    if(!box) return null;
+    var list = state.logs[box.getAttribute('data-t')];
+    return list ? list[+box.getAttribute('data-s')] : null;
+  }
+
+  /* ---- one delegated listener for everything inside the blocks ---- */
+  $('scopeBlocks').addEventListener('input', function(e){
+    var el = e.target;
+
+    if(el.classList.contains('chk-text')){
+      state.checklist[+el.getAttribute('data-i')].text = el.value;
+      return;
+    }
+    var pk = el.getAttribute('data-k');
+    if(pk && el.closest('.parts-table')){
+      var pi = +el.getAttribute('data-i');
+      if(state.partsTable[pi]){ state.partsTable[pi][pk] = el.value; }
+      return;
+    }
+    var sh = sheetOf(el);
+    if(!sh) return;
+    var sec = el.getAttribute('data-log');
+    if(sec){
+      if(!sh[sec]) sh[sec] = {};
+      sh[sec][el.getAttribute('data-lk')] = el.value;
+      return;
+    }
+    var f = el.getAttribute('data-lf');
+    if(f){ sh[f] = el.value; }
+  });
+
+  $('scopeBlocks').addEventListener('change', function(){ saveDraft(true); });
+
+  $('scopeBlocks').addEventListener('click', function(e){
+    var btn = e.target.closest('button');
+    if(!btn) return;
+
+    if(btn.classList.contains('add-item')){
+      state.checklist.push({ text:'', status:'', tpl: btn.getAttribute('data-t') || '' });
+      renderChecklist();
+      saveDraft();
+      return;
+    }
+    if(btn.classList.contains('chk-del')){
+      state.checklist.splice(+btn.getAttribute('data-i'), 1);
+      renderChecklist();
+      saveDraft();
+      return;
+    }
+    if(btn.classList.contains('add-part')){
+      state.partsTable.push(emptyPartRow());
+      var tb = btn.parentNode.querySelector('.parts-body');
+      if(tb){ tb.innerHTML = partsRowsHtml(); }
+      saveDraft();
+      return;
+    }
+    if(btn.classList.contains('part-del')){
+      state.partsTable.splice(+btn.getAttribute('data-i'), 1);
+      if(!state.partsTable.length){ state.partsTable.push(emptyPartRow()); }
+      var body = btn.closest('.parts-table').querySelector('.parts-body');
+      if(body){ body.innerHTML = partsRowsHtml(); }
+      saveDraft();
+      return;
+    }
+    if(btn.classList.contains('ls-add')){
+      var k = btn.getAttribute('data-t');
+      logSheets(k).push(emptyLogSheet());
+      renderChecklist();
+      saveDraft(true);
+      var blk = $('scopeBlocks').querySelector('.log-block[data-t="' + k + '"]');
+      var last = blk ? blk.querySelector('.log-sheet:last-of-type') : null;
+      if(last && last.scrollIntoView){ last.scrollIntoView({ behavior:'smooth', block:'start' }); }
+      return;
+    }
+    if(btn.classList.contains('ls-del')){
+      var box = btn.closest('.log-sheet');
+      var list = state.logs[box.getAttribute('data-t')] || [];
+      if(list.length < 2) return;
+      if(!confirm('ลบ Log sheet แผ่นนี้ใช่หรือไม่?')) return;
+      list.splice(+box.getAttribute('data-s'), 1);
+      renderChecklist();
+      saveDraft(true);
+      return;
+    }
+    /* a status button: repaint just that row, so the tables below keep their
+       scroll position and the page does not flicker */
+    var sKey = btn.getAttribute('data-s');
+    var idx  = btn.getAttribute('data-i');
+    if(sKey !== null && idx !== null){
+      var i = +idx;
+      var item = state.checklist[i];
+      if(!item) return;
+      item.status = (item.status === sKey) ? '' : sKey;
+      var tpl = TEMPLATES[item.tpl];
+      var holder = btn.closest('.chk-status');
+      if(holder && tpl){ holder.innerHTML = statusBtnsHtml(item, i, tpl.statuses); }
+      renderChkSummary();
+      saveDraft(true);
+    }
+  });
+
+  /* ---- template picker modal (multi-select) ---- */
+  function syncTplModal(){
+    Array.prototype.forEach.call($('tplModal').querySelectorAll('.modal-opt'), function(op){
+      var k = op.getAttribute('data-tpl');
+      if(tplSelected(k)){ op.classList.add('on'); } else { op.classList.remove('on'); }
+    });
+  }
+  var tplSnapshot = null;
+  function openTplModal(){
+    /* remember the state so "ยกเลิก" can put everything back */
+    try{
+      tplSnapshot = JSON.parse(JSON.stringify({
+        templates: state.templates, checklist: state.checklist,
+        partsTable: state.partsTable, logs: state.logs
+      }));
+    }catch(e){ tplSnapshot = null; }
+    syncTplModal();
+    $('tplModal').style.display = 'flex';
+  }
+  function closeTplModal(){ $('tplModal').style.display = 'none'; }
+  $('openTplModal').addEventListener('click', openTplModal);
+  $('modalCloseBtn').addEventListener('click', closeTplModal);
+  $('modalCancelBtn').addEventListener('click', function(){
+    if(tplSnapshot){
+      state.templates  = tplSnapshot.templates;
+      state.checklist  = tplSnapshot.checklist;
+      state.partsTable = tplSnapshot.partsTable;
+      state.logs       = tplSnapshot.logs;
+      renderChecklist();
+      saveDraft(true);
+    }
+    closeTplModal();
+  });
+  $('tplModal').addEventListener('click', function(e){
+    if(e.target.id === 'tplModal'){ closeTplModal(); return; }
+    var opt = e.target.closest('.modal-opt');
+    if(!opt) return;
+    var key = opt.getAttribute('data-tpl');
+    var tpl = TEMPLATES[key];
+    if(!tpl) return;
+
+    if(tplSelected(key)){
+      var hasData = tpl.mode === 'table'
+        ? state.partsTable.some(function(r){ return r.name || r.partNo || r.desc || r.qty; })
+        : state.checklist.some(function(it){ return it.tpl === key; });
+      if(hasData && !confirm('เอาแบบฟอร์ม "' + tpl.name + '" ออกจากงานนี้?\n' +
+                             'รายการและค่าที่กรอกของแบบฟอร์มนี้จะถูกลบ')){ return; }
+      state.templates = state.templates.filter(function(k2){ return k2 !== key; });
+    } else {
+      state.templates.push(key);
+    }
+    state.templates = TPL_ORDER.filter(tplSelected);
+    ensureTemplateData();
+    syncTplModal();
+    renderChecklist();
+    saveDraft();
+  });
+
+  /* ---- photos ---- */
+  function pad2(n){ return n < 10 ? '0'+n : ''+n; }
+
+  var PHOTOS_PER_PAGE = 6;
+
+  function renderPhotos(){
+    var wrap = $('photoGrid');
+    wrap.innerHTML = '';
+    var grid = null;
+    state.photos.forEach(function(p, i){
+      /* a fresh sheet every six photos, so a printed page never cuts one in half */
+      if(i % PHOTOS_PER_PAGE === 0){
+        var page = document.createElement('div');
+        page.className = 'photo-page';
+        grid = document.createElement('div');
+        grid.className = 'photo-grid';
+        page.appendChild(grid);
+        wrap.appendChild(page);
+      }
+      var card = document.createElement('div');
+      card.className = 'photo-card';
+      var slotInner = p.img
+        ? '<img src="'+p.img+'" alt="photo '+(i+1)+'"><button type="button" class="photo-x" data-i="'+i+'" title="ลบรูปนี้">&times;</button>'
+        : '<div class="empty"><svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="8.5" cy="10.5" r="1.5"/><path d="M21 15l-5-5-9 9"/></svg><span>คลิกเพื่อเลือกรูป</span></div>';
+      card.innerHTML =
+        '<div class="photo-slot" data-i="'+i+'">'+slotInner+
+          '<input type="file" accept="image/*" data-i="'+i+'" class="photo-input" style="display:none;">' +
+        '</div>' +
+        '<div class="photo-meta">' +
+          '<div class="ph-label-row">' +
+            '<span class="ph-num">PHOTO '+(i+1)+'</span>' +
+            '<input type="text" class="photo-caption" data-i="'+i+'" value="'+escapeAttr(p.caption)+'" placeholder="คำอธิบายรูป...">' +
+          '</div>' +
+        '</div>';
+      grid.appendChild(card);
+    });
+  }
+  $('photoGrid').addEventListener('click', function(e){
+    var xBtn = e.target.closest('.photo-x');
+    if(xBtn){
+      var xi = +xBtn.getAttribute('data-i');
+      state.photos[xi].img = null;
+      renderPhotos();
+      return;
+    }
+    var slot = e.target.closest('.photo-slot');
+    if(slot){
+      slot.querySelector('.photo-input').click();
+    }
+  });
+  $('photoGrid').addEventListener('change', function(e){
+    if(e.target.classList.contains('photo-input')){
+      var i = +e.target.getAttribute('data-i');
+      var file = e.target.files[0];
+      if(!file) return;
+      var reader = new FileReader();
+      reader.onload = function(ev){
+        state.photos[i].img = ev.target.result;
+        renderPhotos();
+      };
+      reader.readAsDataURL(file);
+    }
+  });
+  $('photoGrid').addEventListener('input', function(e){
+    if(e.target.classList.contains('photo-caption')){
+      var i = +e.target.getAttribute('data-i');
+      state.photos[i].caption = e.target.value;
+    }
+  });
+  $('addPhotoBtn').addEventListener('click', function(){
+    state.photos.push({ caption:'', img:null });
+    renderPhotos();
+  });
+
+  /* ---- signature pad ---- */
+  var canvas = $('sigPad');
+  var ctx = canvas.getContext('2d');
+  var drawing = false, lastX = 0, lastY = 0;
+
+  function resizeCanvas(){
+    var ratio = window.devicePixelRatio || 1;
+    var rect = canvas.getBoundingClientRect();
+    canvas.width = rect.width * ratio;
+    canvas.height = rect.height * ratio;
+    ctx.scale(ratio, ratio);
+    ctx.lineJoin = 'round';
+    ctx.lineCap = 'round';
+    ctx.lineWidth = 2;
+    ctx.strokeStyle = '#16264A';
+    if(state.signature){
+      var img = new Image();
+      img.onload = function(){ ctx.drawImage(img, 0, 0, rect.width, rect.height); };
+      img.src = state.signature;
+    }
+  }
+  function pos(e){
+    var rect = canvas.getBoundingClientRect();
+    var cx = (e.touches ? e.touches[0].clientX : e.clientX) - rect.left;
+    var cy = (e.touches ? e.touches[0].clientY : e.clientY) - rect.top;
+    return [cx, cy];
+  }
+  function start(e){
+    drawing = true;
+    var p = pos(e);
+    lastX = p[0]; lastY = p[1];
+    e.preventDefault();
+  }
+  function move(e){
+    if(!drawing) return;
+    var p = pos(e);
+    ctx.beginPath();
+    ctx.moveTo(lastX, lastY);
+    ctx.lineTo(p[0], p[1]);
+    ctx.stroke();
+    lastX = p[0]; lastY = p[1];
+    e.preventDefault();
+  }
+  function end(){
+    if(!drawing) return;
+    drawing = false;
+    state.signature = canvas.toDataURL('image/png');
+    syncSignature();
+  }
+  canvas.addEventListener('mousedown', start);
+  canvas.addEventListener('mousemove', move);
+  window.addEventListener('mouseup', end);
+  canvas.addEventListener('touchstart', start, {passive:false});
+  canvas.addEventListener('touchmove', move, {passive:false});
+  canvas.addEventListener('touchend', end);
+  window.addEventListener('resize', resizeCanvas);
+
+  /* copy the drawn signature into the print-only image */
+  function syncSignature(){
+    var img = $('sigPrintImg');
+    var fld = document.querySelector('.sig-field');
+    if(!img || !fld) return;
+    if(state.signature){
+      img.src = state.signature;
+      fld.classList.remove('is-empty');
+    } else {
+      img.removeAttribute('src');
+      fld.classList.add('is-empty');
+    }
+  }
+
+  $('sigClear').addEventListener('click', function(){
+    var rect = canvas.getBoundingClientRect();
+    ctx.clearRect(0,0,rect.width,rect.height);
+    state.signature = null;
+    syncSignature();
+  });
+
+  /* ---- top actions ---- */
+  /* ---- omit empty detail blocks from the printed PDF ---- */
+  var OPTIONAL_FIELDS = ['jobDescription','summary','parts'];
+
+  function markBlankBlocks(){
+    var filled = {};
+    OPTIONAL_FIELDS.forEach(function(id){
+      var el = $(id);
+      if(!el) return;
+      var has = el.value.trim() !== '';
+      filled[id] = has;
+      var block = el.closest('.field');
+      if(block){
+        if(has){ block.classList.remove('is-blank'); }
+        else   { block.classList.add('is-blank'); }
+      }
+    });
+    /* section 04 holds nothing but those two boxes - drop the whole page if both are empty */
+    var pc = $('partsCard');
+    if(pc){
+      if(filled.summary || filled.parts){ pc.classList.remove('is-blank'); }
+      else                              { pc.classList.add('is-blank'); }
+    }
+  }
+
+  /* the moment the PDF was made, printed small at the foot of the last page */
+  function stampCreateTime(){
+    var el = $('createTime');
+    if(!el) return;
+    var t = new Date();
+    el.textContent = 'Create Time : ' + pad2(t.getHours()) + ' : ' +
+                     pad2(t.getMinutes()) + ' : ' + pad2(t.getSeconds());
+  }
+
+  /* ---- cover page: keep in sync with the form ---- */
+  var MONTHS = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  function prettyDate(iso){
+    if(!iso) return '';
+    var p = iso.split('-');
+    if(p.length !== 3) return iso;
+    var d = parseInt(p[2],10), m = parseInt(p[1],10), y = p[0];
+    if(isNaN(d) || isNaN(m) || m < 1 || m > 12) return iso;
+    return pad2(d) + ' ' + MONTHS[m-1] + ' ' + y;
+  }
+  function setCover(id, val){
+    var el = $(id);
+    if(!el) return;
+    var v = (val || '').trim();
+    el.textContent = v || '\u2014';
+    if(v){ el.classList.remove('empty'); } else { el.classList.add('empty'); }
+  }
+  function val(id){ var el = $(id); return el ? el.value : ''; }
+
+  function syncFooter(){
+    var el = $('pfDoc');
+    if(!el) return;
+    var bits = [];
+    var no = val('reportNo').trim();
+    var cust = customerName().trim();
+    var job  = val('customerDetail').trim();
+    if(no)   bits.push('Report No. ' + no);
+    if(cust) bits.push(cust);
+    if(job)  bits.push(job);
+    el.textContent = bits.length ? bits.join('  ·  ') : 'Service & Maintenance Report';
+  }
+
+  function syncCover(){
+    var no  = val('reportNo').trim();
+    var rev = val('reportRev').trim();
+    var doc = no ? ('No. ' + no) : 'REPORT';
+    if(no && rev){ doc += '  /  Rev. ' + rev; }
+    var dn = $('cvDocNo');
+    if(dn){ dn.textContent = doc; }
+
+    var contract = val('contractType');
+    if(contract === 'Other'){
+      contract = val('contractOther').trim() || 'Other';
+    }
+
+    setCover('cvCustomer', customerName());
+    setCover('cvJob',      val('customerDetail'));
+    var loc = val('location');
+    if(loc === 'Other'){ loc = val('locationOther').trim() || 'Other'; }
+    setCover('cvLocation', loc);
+    var equip = val('equipType');
+    if(equip === 'Other'){ equip = val('equipTypeOther').trim() || 'Other'; }
+    setCover('cvEquip',    equip);
+    setCover('cvContract', contract);
+    setCover('cvDate',     prettyDate(val('reportDate')));
+    /* the cover names the person who leads the job - just the first name picked */
+    var team = state.employees || [];
+    setCover('cvPrepared', team.length ? team[0] : '');
+    syncFooter();
+    try{ applyBrand(); }catch(e){}
+  }
+  /* update the cover as the user types */
+  document.addEventListener('input',  syncCover);
+  document.addEventListener('change', syncCover);
+
+  /* ---- build filename: Report + Customer + Job detail ---- */
+  var ORIGINAL_TITLE = document.title;
+  function buildFileName(){
+    function clean(v){
+      return (v || '')
+        .replace(/[\\/:*?"<>|]/g, ' ')   /* remove characters illegal in filenames */
+        .replace(/\s+/g, ' ')
+        .trim();
+    }
+    var customer = clean(customerName());
+    var jobDetail = clean($('customerDetail') ? $('customerDetail').value : '');
+    var parts = ['Report'];
+    if(customer)  parts.push(customer);
+    if(jobDetail) parts.push(jobDetail);
+    return parts.join(' - ');
+  }
+
+  /* everything that has to happen before the print dialog.
+     wrapped so a failure in any one step can never stop the dialog. */
+  function preparePrint(){
+    try{ saveDraft(); }       catch(e){ console.error('saveDraft', e); }
+    try{ syncCover(); }       catch(e){ console.error('syncCover', e); }
+    try{ syncSignature(); }   catch(e){ console.error('syncSignature', e); }
+    try{ stampCreateTime(); } catch(e){ console.error('stampCreateTime', e); }
+    try{ markBlankBlocks(); } catch(e){ console.error('markBlankBlocks', e); }
+    try{ document.title = buildFileName(); }
+    catch(e){ console.error('buildFileName', e); }
+  }
+
+  /* iOS strips Safari's toolbar in home-screen (standalone) mode, which removes
+     the Share button AND makes window.print() a no-op. Detect it and say so
+     instead of appearing to do nothing. */
+  /* iPadOS 13+ reports itself as "Macintosh", so touch points are the giveaway */
+  function isIOS(){
+    var ua = navigator.userAgent || '';
+    if(/iPad|iPhone|iPod/.test(ua)) return true;
+    return ua.indexOf('Macintosh') > -1 && (navigator.maxTouchPoints || 0) > 1;
+  }
+  function iosStandalone(){
+    return isIOS() && navigator.standalone === true;
+  }
+
+  /* ---------- save to a file / reopen it ----------
+     localStorage keeps a draft, but only on this one browser, and it
+     deliberately leaves out photos and the signature because they are large.
+     A file carries everything and moves between phone and PC.            */
+  var FILE_TAG = 'mcenergy-report';
+
+  function collectAll(){
+    saveDraft(true);
+    return {
+      _app: FILE_TAG,
+      _version: 1,
+      _savedAt: new Date().toISOString(),
+      fields: state.fields,
+      templates: state.templates,
+      checklist: state.checklist,
+      partsTable: state.partsTable,
+      logs: state.logs,
+      employees: state.employees,
+      photos: state.photos,
+      signature: state.signature
+    };
+  }
+
+  function reportFileName(ext){
+    var base = 'Report';
+    try{ base = buildFileName(); }catch(e){}
+    return base.replace(/[\\/:*?"<>|]/g, ' ').replace(/\s+/g, ' ').trim() + ext;
+  }
+
+  $('saveFileBtn').addEventListener('click', function(){
+    var json = JSON.stringify(collectAll());
+    var name = reportFileName('.json');
+    var blob = new Blob([json], { type: 'application/json' });
+
+    /* on a phone, offer the native share sheet so it can go straight to
+       Files / LINE / Mail; fall back to a plain download elsewhere */
+    if(navigator.canShare && window.File){
+      try{
+        var f = new File([blob], name, { type: 'application/json' });
+        if(navigator.canShare({ files: [f] })){
+          navigator.share({ files: [f], title: name }).catch(function(){});
+          $('statusChip').textContent = 'ส่งไฟล์งานแล้ว';
+          return;
+        }
+      }catch(e){}
+    }
+    var a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = name;
+    document.body.appendChild(a);
+    a.click();
+    setTimeout(function(){ URL.revokeObjectURL(a.href); a.remove(); }, 1000);
+    $('statusChip').textContent = 'เก็บงานไว้แล้ว';
+  });
+
+  $('openFileBtn').addEventListener('click', function(){ $('openFileInput').click(); });
+
+  $('openFileInput').addEventListener('change', function(e){
+    var file = e.target.files && e.target.files[0];
+    if(!file) return;
+    var reader = new FileReader();
+    reader.onload = function(ev){
+      var d;
+      try{ d = JSON.parse(ev.target.result); }
+      catch(err){ alert('ไฟล์นี้อ่านไม่ได้ ต้องเป็นไฟล์งานที่เก็บไว้จากฟอร์มนี้'); return; }
+      if(!d || d._app !== FILE_TAG){
+        alert('ไฟล์นี้ไม่ใช่ข้อมูลของฟอร์มรายงาน McEnergy');
+        return;
+      }
+      if(!confirm('เปิดงานนี้จะแทนที่ข้อมูลที่กรอกอยู่ทั้งหมด ดำเนินการต่อหรือไม่?')) return;
+
+      saveSnapshot();          /* so the work on screen can still be brought back */
+      applyLoadedData(d);
+      $('statusChip').textContent = 'เปิดงานที่ค้างแล้ว';
+    };
+    reader.readAsText(file);
+    e.target.value = '';
+  });
+
+  /* ---------- snapshot: a manual restore point kept in this browser ----------
+     "ล้างฟอร์ม" is one tap away from wiping a whole day of typing, so the
+     green button freezes everything (photos and signature included) and the
+     clear / open-file actions take an automatic snapshot first.            */
+  var SNAP_KEY = 'mce_service_form_snapshot_v1';
+
+  function readSnapshot(){
+    try{
+      var raw = localStorage.getItem(SNAP_KEY);
+      if(!raw) return null;
+      var d = JSON.parse(raw);
+      return (d && d._app === FILE_TAG) ? d : null;
+    }catch(e){ return null; }
+  }
+
+  function snapTime(d){
+    try{
+      var t = new Date(d._snapAt);
+      var today = new Date();
+      var hm = t.toLocaleTimeString('th-TH', { hour:'2-digit', minute:'2-digit' });
+      if(t.toDateString() === today.toDateString()) return hm + ' น.';
+      return t.toLocaleDateString('th-TH', { day:'2-digit', month:'short' }) + ' ' + hm + ' น.';
+    }catch(e){ return ''; }
+  }
+
+  function updateRestoreBtn(){
+    var btn = $('restoreBtn');
+    if(!btn) return;
+    var d = readSnapshot();
+    if(!d){ btn.style.display = 'none'; return; }
+    btn.style.display = 'inline-flex';
+    btn.textContent = 'กู้คืนสถานะ · ' + snapTime(d);
+    btn.title = 'กลับไปใช้ข้อมูลชุดที่บันทึกไว้เมื่อ ' + snapTime(d) +
+                (d._noPhotos ? ' (ชุดนี้ไม่มีรูปภาพ เพราะพื้นที่จัดเก็บไม่พอ)' : '');
+  }
+
+  /* returns 'full' | 'lite' (photos dropped) | null (could not save) */
+  function saveSnapshot(){
+    var data = collectAll();
+    data._snapAt = new Date().toISOString();
+    try{
+      localStorage.setItem(SNAP_KEY, JSON.stringify(data));
+      updateRestoreBtn();
+      return 'full';
+    }catch(e){}
+    /* photos are what blows past the storage limit - keep the typing at least */
+    try{
+      data._noPhotos = true;
+      data.photos = (data.photos || []).map(function(p){
+        return { caption: p.caption, img: null };
+      });
+      localStorage.setItem(SNAP_KEY, JSON.stringify(data));
+      updateRestoreBtn();
+      return 'lite';
+    }catch(e2){}
+    return null;
+  }
+
+  /* one code path for every restore: snapshot, saved file, anything */
+  function applyLoadedData(d){
+    state.fields            = d.fields || {};
+    adoptTemplates(d);
+    state.employees         = d.employees || [];
+    state.photos            = (d.photos && d.photos.length) ? d.photos
+                              : JSON.parse(JSON.stringify(defaultPhotos));
+    state.signature         = d.signature || null;
+
+    applyFieldValues();
+    renderChecklist();
+    renderPhotos();
+    renderEmpChips();
+    resizeCanvas();
+    syncCover();
+    syncSignature();
+    saveDraft(true);
+  }
+
+  $('snapshotBtn').addEventListener('click', function(){
+    var r = saveSnapshot();
+    if(r === 'full'){
+      $('statusChip').textContent = 'บันทึกสถานะไว้แล้ว · ' +
+        new Date().toLocaleTimeString('th-TH',{hour:'2-digit',minute:'2-digit'});
+    } else if(r === 'lite'){
+      $('statusChip').textContent = 'บันทึกสถานะแล้ว (ไม่รวมรูปภาพ)';
+      alert('บันทึกข้อมูลที่กรอกไว้เรียบร้อย แต่รูปภาพมีขนาดใหญ่เกินพื้นที่ของเบราว์เซอร์\n' +
+            'ถ้าต้องการเก็บรูปด้วย ให้กด "เก็บงานไว้ทำต่อ" เพื่อบันทึกเป็นไฟล์');
+    } else {
+      $('statusChip').textContent = 'บันทึกสถานะไม่สำเร็จ';
+      alert('พื้นที่จัดเก็บของเบราว์เซอร์เต็ม บันทึกสถานะไม่ได้\nกรุณาใช้ปุ่ม "เก็บงานไว้ทำต่อ" เพื่อบันทึกเป็นไฟล์แทน');
+    }
+  });
+
+  $('restoreBtn').addEventListener('click', function(){
+    var d = readSnapshot();
+    if(!d){ updateRestoreBtn(); return; }
+    if(!confirm('กู้คืนข้อมูลชุดที่บันทึกไว้เมื่อ ' + snapTime(d) + '\n' +
+                'ข้อมูลที่กรอกอยู่ตอนนี้จะถูกแทนที่ ดำเนินการต่อหรือไม่?')) return;
+    applyLoadedData(d);
+    $('statusChip').textContent = 'กู้คืนสถานะเมื่อ ' + snapTime(d) + ' แล้ว';
+    if(d._noPhotos){
+      alert('กู้คืนข้อมูลที่กรอกแล้ว — ชุดนี้ไม่ได้เก็บรูปภาพไว้ กรุณาแนบรูปใหม่');
+    }
+  });
+
+  /* ---------- share ---------- */
+  $('shareBtn').addEventListener('click', function(){
+    var onWeb = location.protocol.indexOf('http') === 0;
+    var url   = onWeb ? location.href.split('#')[0] : '';
+    var title = 'McEnergy — Service & Maintenance Report';
+
+    if(!onWeb){
+      alert('ปุ่มแชร์ใช้ได้เมื่อเปิดฟอร์มผ่านลิงก์เว็บครับ\n' +
+            'ตอนนี้กำลังเปิดจากไฟล์ในเครื่องอยู่');
+      return;
+    }
+    if(navigator.share){
+      navigator.share({ title: title, text: 'แบบฟอร์มรายงานตรวจสอบและบำรุงรักษาอุปกรณ์', url: url })
+               .catch(function(){});
+      return;
+    }
+    if(navigator.clipboard && navigator.clipboard.writeText){
+      navigator.clipboard.writeText(url).then(function(){
+        $('statusChip').textContent = 'คัดลอกลิงก์แล้ว';
+      }, function(){ prompt('คัดลอกลิงก์นี้', url); });
+      return;
+    }
+    prompt('คัดลอกลิงก์นี้', url);
+  });
+
+  $('printBtn').addEventListener('click', function(){
+    preparePrint();
+    if(iosStandalone()){
+      alert('ไอคอนนี้เปิดแบบไม่มีแถบ Safari จึงไม่มีปุ่มแชร์ให้สั่งพิมพ์\n\n' +
+            'แก้ครั้งเดียวจบ:\n' +
+            '1. ลบไอคอนนี้ออกจากหน้าจอโฮม\n' +
+            '2. เปิดลิงก์ใน Safari แล้วกดแชร์ → Add to Home Screen ใหม่');
+      return;
+    }
+    /* Safari blocks window.print() behind the pop-up blocker and fails silently,
+       so on iOS show the reliable Share -> Print route instead of doing nothing. */
+    if(isIOS()){
+      $('iosModal').style.display = 'flex';
+      return;
+    }
+    window.print();
+  });
+  $('iosTryPrint').addEventListener('click', function(){
+    $('iosModal').style.display = 'none';
+    setTimeout(function(){ window.print(); }, 120);
+  });
+  $('iosClose').addEventListener('click', function(){ $('iosModal').style.display = 'none'; });
+  $('iosModal').addEventListener('click', function(e){
+    if(e.target.id === 'iosModal'){ $('iosModal').style.display = 'none'; }
+  });
+
+  /* ---------- preview before saving ----------
+     The preview reuses the REAL @media print rules by re-scoping them to
+     @media all inside an iframe, so what you see cannot drift away from
+     what actually prints. */
+  function getPrintCss(){
+    var inline = document.querySelector('style');
+    if(inline && inline.textContent.indexOf('@media print') > -1){
+      return Promise.resolve(inline.textContent);
+    }
+    var link = document.querySelector('link[rel="stylesheet"][href*="styles.css"]');
+    if(link){
+      return fetch(link.href).then(function(r){ return r.text(); }).catch(function(){ return ''; });
+    }
+    return Promise.resolve('');
+  }
+
+  /* turn "@media print{...}" into "@media all{...}" without touching the rest */
+  function printCssToScreen(css){
+    var i = css.indexOf('@media print{');
+    if(i === -1) return css;
+    return css.slice(0, i) + '@media all{' + css.slice(i + '@media print{'.length);
+  }
+
+  var pvFit = null;      /* re-layout function for the current preview */
+  var pvFull = false;    /* false = shrink to fit the screen, true = 1:1 */
+
+  function openPreview(){
+    preparePrint();
+    var frame = $('pvFrame');
+    $('pvOverlay').style.display = 'flex';
+
+    getPrintCss().then(function(css){
+      var body = document.body.cloneNode(true);
+      /* strip the chrome that never prints */
+      ['.topbar','.pv-overlay','.modal-overlay','.cover-hint','.foot-note']
+        .forEach(function(sel){
+          Array.prototype.forEach.call(body.querySelectorAll(sel), function(n){ n.remove(); });
+        });
+
+      /* Carry the live values across; cloneNode does not copy what the user
+         typed. Match each field to its original BY IDENTITY, never by position
+         - the clone has had the toolbar and modals stripped out, so the two
+         lists are different lengths and index pairing puts values in the
+         wrong fields. */
+      Array.prototype.forEach.call(body.querySelectorAll('input,textarea,select'), function(dst){
+        var src = null;
+        if(dst.id){
+          src = document.getElementById(dst.id);
+        } else {
+          /* rows rendered in loops carry class + data-i instead of an id */
+          var cls = (dst.className || '').split(/\s+/)[0];
+          var idx = dst.getAttribute('data-i');
+          var key = dst.getAttribute('data-k');
+          if(cls && idx !== null){
+            var sel = '.' + cls + '[data-i="' + idx + '"]' +
+                      (key ? '[data-k="' + key + '"]' : '');
+            src = document.querySelector(sel);
+          }
+        }
+        if(!src) return;
+        if(dst.tagName === 'SELECT'){
+          dst.selectedIndex = src.selectedIndex;
+          if(dst.options[dst.selectedIndex]){
+            dst.options[dst.selectedIndex].setAttribute('selected', 'selected');
+          }
+        } else if(dst.type === 'checkbox' || dst.type === 'radio'){
+          dst.checked = src.checked;
+        } else {
+          dst.setAttribute('value', src.value);
+          if(dst.tagName === 'TEXTAREA'){ dst.textContent = src.value; }
+        }
+      });
+      /* the running footer is copied into every sheet further down */
+      var footSrcEl = body.querySelector('.print-foot');
+      if(footSrcEl){ footSrcEl.parentNode.removeChild(footSrcEl); }
+
+      /* the signature is a canvas - swap in the flattened image */
+      var sigImg = body.querySelector('#sigPrintImg');
+      if(sigImg && state.signature){ sigImg.setAttribute('src', state.signature); }
+
+      /* placeholders are hints for the person filling the form, never content */
+      Array.prototype.forEach.call(body.querySelectorAll('[placeholder]'), function(n){
+        n.removeAttribute('placeholder');
+      });
+
+      /* html2canvas paints <input> text off its baseline at the sizes used in
+         the log tables, which is why the phone's PDF looked empty or smudged
+         there. Flatten those fields to plain text - the value is already in
+         the value attribute, and printing shows the same thing. */
+      Array.prototype.forEach.call(
+        body.querySelectorAll('.log-table input, .ls-tag, .ls-meta input, .log-note textarea'),
+        function(inp){
+          var span = document.createElement(inp.tagName === 'TEXTAREA' ? 'div' : 'span');
+          span.className = 'pv-text ' + (inp.className || '');
+          span.textContent = inp.tagName === 'TEXTAREA'
+            ? (inp.textContent || '')
+            : (inp.getAttribute('value') || '');
+          inp.parentNode.replaceChild(span, inp);
+        });
+
+      /* The print stylesheet starts every log sheet on a new page. The PDF is
+         built element by element, so that split has to exist in the DOM too -
+         otherwise the sheets run together and get sliced mid-table. */
+      /* Section 02 is printed one form at a time: the scope list of a form,
+         then that form's log sheets, then the next form. The PDF is built from
+         elements, so the same order is laid out here as real pages. */
+      var scopeHost = body.querySelector('#scopeBlocks');
+      if(scopeHost){
+        var scopeCard = scopeHost.parentNode;
+        while(scopeCard && (scopeCard.className || '').indexOf('card') === -1){
+          scopeCard = scopeCard.parentNode;
+        }
+        if(scopeCard){
+          var secBar = scopeCard.querySelector('.sec-bar');
+          var anchorEl = scopeCard;
+          Array.prototype.forEach.call(scopeHost.querySelectorAll('.scope-block'), function(blk, bi){
+            if(bi > 0){
+              var bPage = document.createElement('div');
+              bPage.className = 'card';
+              if(secBar){ bPage.appendChild(secBar.cloneNode(true)); }
+              bPage.appendChild(blk);
+              anchorEl.parentNode.insertBefore(bPage, anchorEl.nextSibling);
+              anchorEl = bPage;
+            }
+            var lw = blk.querySelector('.log-wrap');
+            if(!lw) return;
+            var bHead = lw.querySelector('.log-head');
+            Array.prototype.forEach.call(lw.querySelectorAll('.log-sheet'), function(sh){
+              var page = document.createElement('div');
+              page.className = 'card';
+              var wrap = document.createElement('div');
+              wrap.className = 'log-wrap on';
+              wrap.style.display = 'block';
+              if(bHead){ wrap.appendChild(bHead.cloneNode(true)); }
+              wrap.appendChild(sh);
+              page.appendChild(wrap);
+              anchorEl.parentNode.insertBefore(page, anchorEl.nextSibling);
+              anchorEl = page;
+            });
+            lw.parentNode.removeChild(lw);
+          });
+        }
+      }
+
+      /* photos are paged six to a sheet - make each batch its own page so the
+         PDF builder cannot slice through a picture */
+      var pGrid = body.querySelector('#photoGrid');
+      if(pGrid){
+        var pPages = Array.prototype.slice.call(pGrid.querySelectorAll('.photo-page'));
+        if(pPages.length > 1){
+          var pCard = pGrid.closest('.card');
+          var pBar  = pCard ? pCard.querySelector('.sec-bar') : null;
+          var pAnchor = pCard;
+          pPages.slice(1).forEach(function(pp){
+            var page = document.createElement('div');
+            page.className = 'card';
+            if(pBar){ page.appendChild(pBar.cloneNode(true)); }
+            page.appendChild(pp);
+            pAnchor.parentNode.insertBefore(page, pAnchor.nextSibling);
+            pAnchor = page;
+          });
+        }
+      }
+
+      /* The letterhead is not a .card, so it was never captured and never
+         reached the PDF. In print it shares its page with section 01, so
+         group the two into one sheet here as well. */
+      var lh = body.querySelector('.letterhead');
+      if(lh){
+        var firstCard = lh.nextElementSibling;
+        while(firstCard && firstCard.className.indexOf('card') === -1){
+          firstCard = firstCard.nextElementSibling;
+        }
+        if(firstCard){
+          var grouped = document.createElement('div');
+          grouped.className = 'pv-sheet';
+          lh.parentNode.insertBefore(grouped, lh);
+          grouped.appendChild(lh);
+          grouped.appendChild(firstCard);
+        }
+      }
+
+      /* Every sheet is made a full A4 page and carries its own copy of the
+         running footer, pinned to the bottom. The browser does that by itself
+         when printing; the PDF builder photographs elements, so the footer has
+         to be part of the element or it disappears from the file. */
+      if(footSrcEl){
+        var FOOT_CSS = 'position:absolute;left:15mm;right:15mm;bottom:8mm;' +
+          'display:flex;align-items:baseline;justify-content:space-between;' +
+          'gap:6mm;padding-top:2.2mm;border-top:.6pt solid #C2C7DC;' +
+          'font-size:7.5pt;line-height:1.3;color:#5A6178;background:transparent;';
+        Array.prototype.forEach.call(body.querySelectorAll('.wrap > *'), function(pg){
+          var c = pg.className || '';
+          if(c.indexOf('cover-page') !== -1){
+            /* the cover carries no footer, but it must still be a full sheet -
+               the print rule trims it slightly to stop Chrome emitting a blank
+               page, which would leave a white strip in the exported PDF */
+            pg.style.height    = '297mm';
+            pg.style.minHeight = '297mm';
+            return;
+          }
+          if(c.indexOf('card') === -1 && c.indexOf('pv-sheet') === -1) return;
+          pg.style.position  = 'relative';
+          pg.style.minHeight = '297mm';
+          var f = footSrcEl.cloneNode(true);
+          f.removeAttribute('aria-hidden');
+          f.style.cssText = FOOT_CSS;
+          pg.appendChild(f);
+        });
+      }
+
+      /* the stamp lines up with the running footer, 15mm in from the edge */
+      var ctEl = body.querySelector('#createTime');
+      if(ctEl){
+        var allPages = body.querySelectorAll('.wrap > .card, .wrap > .pv-sheet');
+        var lastPage = allPages[allPages.length - 1];
+        if(lastPage){
+          ctEl.parentNode.removeChild(ctEl);
+          lastPage.style.position = 'relative';
+          ctEl.style.cssText = 'position:absolute;left:15mm;bottom:15mm;display:block;' +
+            'font-size:7.5pt;color:#A7ADBE;letter-spacing:.04em;';
+          lastPage.appendChild(ctEl);
+        }
+      }
+
+      var sheets = 1 + body.querySelectorAll('.card').length;   /* cover + sections */
+      $('pvPages').textContent = 'ประมาณ ' + sheets + ' หน้า';
+
+      var doc = '<!DOCTYPE html><html lang="th"><head><meta charset="utf-8">' +
+        '<meta name="viewport" content="width=820">' +
+        '<link rel="preconnect" href="https://fonts.googleapis.com">' +
+        '<link href="https://fonts.googleapis.com/css2?family=Sora:wght@500;600;700' +
+        '&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">' +
+        '<style>' + printCssToScreen(css) + '</style>' +
+        '<style>' +
+          'html{-webkit-text-size-adjust:100% !important;text-size-adjust:100% !important;}' +
+          'html,body{background:#6E7486;margin:0;padding:14px 0;}' +
+          '.wrap{width:210mm;margin:0 auto;}' +
+          /* draw each section as its own sheet of paper */
+          '.cover-page,.card{background:#fff !important;box-shadow:0 2px 10px rgba(0,0,0,.35);' +
+            'margin:0 auto 14px !important;width:210mm;}' +
+          '.card{padding-left:15mm !important;padding-right:15mm !important;}' +
+          '.pv-sheet{background:#fff !important;width:210mm;box-sizing:border-box;' +
+            'padding:0 15mm;margin:0 auto 14px;box-shadow:0 2px 10px rgba(0,0,0,.35);}' +
+          '.pv-sheet > .card{padding-left:0 !important;padding-right:0 !important;' +
+            'margin:0 !important;box-shadow:none !important;width:auto !important;}' +
+          '.cover-page{margin-left:auto !important;margin-right:auto !important;}' +
+          '.wrap{padding:0 !important;}' +
+          /* while exporting, remove everything that is only there to make the
+             preview look like sheets of paper - otherwise it gets photographed
+             into the PDF as white margin */
+          '.exporting{background:#fff !important;}' +
+          '.exporting body{background:#fff !important;padding:0 !important;margin:0 !important;}' +
+          '.exporting .wrap{width:210mm !important;margin:0 !important;padding:0 !important;}' +
+          '.exporting .cover-page,.exporting .card,.exporting .pv-sheet{' +
+            'box-shadow:none !important;margin:0 !important;width:210mm !important;}' +
+          '.exporting .pv-sheet > .card{width:auto !important;}' +
+        '</style></head><body class="' + (document.body.className || '') + '">' +
+        body.innerHTML + '</body></html>';
+
+      var d = frame.contentWindow.document;
+      d.open(); d.write(doc); d.close();
+
+      /* size the frame to its content, then shrink-to-fit visually only */
+      function fit(){
+        try{
+          var inner = frame.contentWindow.document.documentElement;
+          var hpx = Math.max(inner.scrollHeight, inner.offsetHeight);
+          frame.style.height = hpx + 'px';
+          var avail = $('pvStage').clientWidth - 16;
+          var sc = pvFull ? 1 : Math.min(1, avail / 820);
+          frame.style.transform = 'scale(' + sc + ')';
+          $('pvFit').style.width  = (820 * sc) + 'px';
+          $('pvFit').style.height = (hpx * sc) + 'px';
+        }catch(e){}
+      }
+      pvFit = fit;
+      if(frame.contentWindow.document.readyState === 'complete'){ setTimeout(fit, 60); }
+      else { frame.contentWindow.addEventListener('load', function(){ setTimeout(fit, 60); }); }
+      setTimeout(fit, 400);
+      window.addEventListener('resize', fit);
+    });
+  }
+
+  /* On iOS the print route ends in the share sheet with a real PDF attached,
+     so the button says so there. On desktop it ends in "Save as PDF", and
+     calling that "share" would be a lie - so the label stays honest. */
+  /* ---------- build a real PDF file and hand it to the share sheet ----------
+     The browser never gives the page the PDF that "Print" produces, so to
+     SHARE a PDF the page has to build one itself. That is done by rasterising
+     the print-styled preview, which means the text is a picture: crisp to look
+     at, but not selectable or searchable. The "พิมพ์" button is still there
+     for anyone who needs the vector-text version. */
+  var PDF_LIBS = [
+    'https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js',
+    'https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js'
+  ];
+  var libsReady = null;
+
+  function loadScript(src){
+    return new Promise(function(res, rej){
+      var el = document.createElement('script');
+      el.src = src; el.onload = res;
+      el.onerror = function(){ rej(new Error('โหลดไม่สำเร็จ: ' + src)); };
+      document.head.appendChild(el);
+    });
+  }
+  function ensurePdfLibs(){
+    if(window.html2canvas && window.jspdf) return Promise.resolve();
+    if(!libsReady){
+      libsReady = PDF_LIBS.reduce(function(p, u){
+        return p.then(function(){ return loadScript(u); });
+      }, Promise.resolve()).catch(function(e){ libsReady = null; throw e; });
+    }
+    return libsReady;
+  }
+
+  function pvSay(msg){ var el = $('pvStatus'); if(el){ el.textContent = msg ? '· ' + msg : ''; } }
+
+  /* wait until the preview iframe has laid out and its webfonts are in */
+  function previewReady(){
+    var frame = $('pvFrame');
+    return new Promise(function(res){
+      var win = frame.contentWindow, doc = win.document;
+      function go(){
+        var f = doc.fonts && doc.fonts.ready ? doc.fonts.ready : Promise.resolve();
+        f.then(function(){ win.requestAnimationFrame(function(){ setTimeout(res, 120); }); });
+      }
+      if(doc.readyState === 'complete'){ go(); } else { win.addEventListener('load', go); }
+    });
+  }
+
+  function buildPdfBlob(){
+    var frame = $('pvFrame');
+    var doc = frame.contentWindow.document;
+    var wrapEl = doc.querySelector('.wrap');
+    var pages = Array.prototype.slice.call(wrapEl ? wrapEl.children : [])
+                     .filter(function(el){
+                       var c = el.className || '';
+                       return el.offsetHeight > 0 &&
+                              (c.indexOf('cover-page') !== -1 ||
+                               c.indexOf('pv-sheet')   !== -1 ||
+                               c.indexOf('card')       !== -1);
+                     });
+    if(!pages.length) return Promise.reject(new Error('ไม่พบเนื้อหาสำหรับสร้าง PDF'));
+
+    var jsPDF = window.jspdf.jsPDF;
+    var pdf = new jsPDF({ unit:'mm', format:'a4', orientation:'portrait', compress:true });
+    var W = 210, H = 297;
+    var sheet = 0;
+
+    /* A section can be taller than one sheet (lots of photos, a long
+       checklist). Cut it into sheet-high strips instead of shrinking the
+       whole thing to fit, which is what made page 4 unreadable. */
+    function place(canvas){
+      var pxPerMm = canvas.width / W;
+      var stripPx = Math.max(1, Math.floor(H * pxPerMm));
+      /* a few mm over a sheet is just the bottom padding - crop it rather
+         than emitting a nearly-empty extra page */
+      var sheets = Math.max(1, Math.ceil(canvas.height / stripPx - 0.04));
+      var limit  = Math.min(canvas.height, sheets * stripPx);
+      var y = 0;
+      while(y < limit){
+        var hPx = Math.min(stripPx, limit - y);
+        var strip = document.createElement('canvas');
+        strip.width = canvas.width; strip.height = hPx;
+        var cx = strip.getContext('2d');
+        cx.imageSmoothingEnabled = true;
+        cx.imageSmoothingQuality = 'high';
+        cx.fillStyle = '#ffffff'; cx.fillRect(0, 0, strip.width, strip.height);
+        cx.drawImage(canvas, 0, y, canvas.width, hPx, 0, 0, canvas.width, hPx);
+        if(sheet > 0) pdf.addPage();
+        pdf.addImage(strip.toDataURL('image/jpeg', 0.95), 'JPEG',
+                     0, 0, W, hPx / pxPerMm, undefined, 'FAST');
+        sheet++; y += hPx;
+      }
+    }
+
+    var root = doc.documentElement;
+    root.classList.add('exporting');
+
+    return pages.reduce(function(chain, el, i){
+      return chain.then(function(){
+        pvSay('กำลังสร้างหน้า ' + (i + 1) + '/' + pages.length);
+        /* Mobile Safari refuses canvases past roughly 4096x4096 and returns a
+           blank one without saying so. Drop the scale only when a section is
+           long enough to get near that; the printed size is unaffected because
+           it is derived from canvas.width. */
+        var box  = el.getBoundingClientRect();
+        var wCss = Math.round(box.width);
+        var hCss = Math.round(Math.max(box.height, el.scrollHeight));
+        /* start high for sharpness and step down only until the canvas fits
+           inside what mobile Safari will actually allocate */
+        var sc = 3;
+        while(sc > 1 && (wCss * sc) * (hCss * sc) > 12000000){ sc -= 0.1; }
+        sc = Math.max(1, Math.round(sc * 10) / 10);
+
+        return window.html2canvas(el, {
+          scale: sc, useCORS: true, backgroundColor: '#ffffff', logging: false,
+          width: wCss, height: hCss,
+          /* capture exactly the element's own box - no surrounding page */
+          x: 0, y: 0, scrollX: 0, scrollY: 0,
+          windowWidth: wCss, windowHeight: hCss
+        });
+      }).then(place);
+    }, Promise.resolve()).then(function(){
+      root.classList.remove('exporting');
+      pvSay('');
+      return pdf.output('blob');
+    }).catch(function(err){
+      root.classList.remove('exporting');
+      throw err;
+    });
+  }
+
+  function sendPdf(){
+    if(!$('pvOverlay') || $('pvOverlay').style.display !== 'flex'){ openPreview(); }
+    pvSay('กำลังเตรียม...');
+
+    ensurePdfLibs()
+      .then(previewReady)
+      .then(buildPdfBlob)
+      .then(function(blob){
+        var name = reportFileName('.pdf');
+        var file = null;
+        try{ file = new File([blob], name, { type:'application/pdf' }); }catch(e){}
+
+        if(file && navigator.canShare && navigator.canShare({ files:[file] })){
+          return navigator.share({ files:[file], title:name })
+                          .then(function(){ $('statusChip').textContent = 'ส่งไฟล์ PDF แล้ว'; })
+                          .catch(function(){ /* user dismissed the sheet */ });
+        }
+        /* no share sheet here - fall back to a download */
+        var a = document.createElement('a');
+        a.href = URL.createObjectURL(blob);
+        a.download = name;
+        document.body.appendChild(a); a.click();
+        setTimeout(function(){ URL.revokeObjectURL(a.href); a.remove(); }, 1000);
+        $('statusChip').textContent = 'ดาวน์โหลดไฟล์ PDF แล้ว';
+      })
+      .catch(function(err){
+        pvSay('');
+        console.error('sendPdf', err);
+        alert('สร้างไฟล์ PDF ไม่สำเร็จ\n\n' + (err && err.message ? err.message : '') +
+              '\n\nครั้งแรกต้องต่ออินเทอร์เน็ตเพื่อโหลดตัวสร้าง PDF\n' +
+              'ระหว่างนี้ใช้ปุ่ม "พิมพ์" แทนได้ ซึ่งได้ไฟล์คมชัดกว่าด้วย');
+      });
+  }
+
+  $('sendPdfBtn').addEventListener('click', sendPdf);
+  $('pvSend').addEventListener('click', sendPdf);
+
+  $('previewBtn').addEventListener('click', openPreview);
+  $('pvZoom').addEventListener('click', function(){
+    pvFull = !pvFull;
+    $('pvZoom').textContent = pvFull ? 'ย่อพอดีจอ' : 'ขนาดเต็ม';
+    if(pvFit) pvFit();
+  });
+  $('pvClose').addEventListener('click', function(){ $('pvOverlay').style.display = 'none'; });
+  $('pvPrint').addEventListener('click', function(){
+    $('pvOverlay').style.display = 'none';
+    setTimeout(function(){ $('printBtn').click(); }, 80);
+  });
+
+  /* also cover Ctrl+P / browser menu printing, not just the button */
+  window.addEventListener('beforeprint', preparePrint);
+  /* restore the original page title after the print dialog closes */
+  window.addEventListener('afterprint', function(){
+    document.title = ORIGINAL_TITLE;
+  });
+  $('clearBtn').addEventListener('click', function(){
+    if(!confirm('ล้างข้อมูลทั้งหมดในฟอร์มนี้ใช่หรือไม่?\n\n' +
+                'ระบบจะเก็บข้อมูลชุดปัจจุบันไว้ให้ กดปุ่ม "กู้คืนสถานะ" เพื่อเรียกกลับมาได้')) return;
+    saveSnapshot();          /* the safety net for an accidental tap */
+    localStorage.removeItem(STORAGE_KEY);
+    state = {
+      fields:{},
+      templates: [],
+      checklist: [],
+      partsTable: [],
+      logs: {},
+      employees: [],
+      photos: JSON.parse(JSON.stringify(defaultPhotos)),
+      signature: null
+    };
+    fieldIds.forEach(function(id){ var el = $(id); if(el) el.value=''; });
+    var t = new Date();
+    $('reportDate').value = t.toISOString().slice(0,10);
+    $('company').value = 'McEnergy Evolution';
+    state.employees = [];
+    refreshEmployees();
+    updateContractOtherVisibility();
+    updateLocationOtherVisibility();
+    updateCustomerOtherVisibility();
+    updateEquipOtherVisibility();
+    renderChecklist(); renderPhotos();
+    var rect = canvas.getBoundingClientRect();
+    ctx.clearRect(0,0,rect.width,rect.height);
+    syncCover();
+    syncSignature();
+    $('statusChip').textContent = 'ล้างฟอร์มแล้ว · กดกู้คืนสถานะเพื่อเรียกข้อมูลกลับ';
+  });
+
+  /* auto-save on blur for text fields */
+  document.addEventListener('blur', function(e){
+    if(fieldIds.indexOf(e.target.id) !== -1){ saveDraft(); }
+  }, true);
+
+  /* ---- brand logo: stored once, applied everywhere ---- */
+  var LOGO_SRC = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAQwAAABaCAMAAAB68pj/AAAAwFBMVEUxkmZjmMv73C6Rr9NVj63265gtbrKq2KP841R6wnHT4+K94MYfaH0xfsAugcSLynv+/v4CN4sFRpn62AEJizkXkjw4okRIqkgsnEMFVqhZs0qq167Q6dMilz754AQETqD8ywFLd7NLqWuKyI5muVJrunYIY7O6y+LM2eltuoTZ5+j99sz86XTl6vO70uiTzKad0aj99LYvZ6unudcbk0NylsSOp81FbKpbsnR7wYy33MInUptqiLqc0pazxN0rW6IvYMO5AAAAQHRSTlP/////////////////////////////////////////////////////////////////////////////////////73leyQAACeRJREFUeNrtnIlW4kgUhtlx6ekpwmSBBOkQAwFEEARBEd7/rabq1poFEuyZVgP3nNa2FEh93P8uVRUK6GLCChcEFxgXGBcYFxj/H4xJMMAWBJMzhzFYuXtNWGvuLnej84RRdrUGNk2xbrfV6i8H5wYjqACJJBqYR/HxjGDcvDQUi8HAViufCYyR22gcgCFp5BBHEoxyI2rJNFq1IO8wRvtGIyuNfjHfMHZao3ECjXKeYawOoNjv97UkGj9zDKMS5+CuBhNRii6KbovAEDSK+YWxjJLY3iRUIMu5hBHkFkYkjbytDlbpbh4dIwRjEIqd2urY44Ia5NbcptZRX2WxTXtkOW8iCcH4qTiGtkh/aDDPl0hUGEXFMd5y3KdngfHYl46xn6DzhvFTOsYeofOGUe63hEYm5w6jJlVyWooYP2Eb46/j37uQuvNlYJT7AsbilIdXfxFrNu/u7q4+8vL2zCYUHNu//zqe8Vefhwz3JLegLO6IRVcCivg555Ui9bPJyp23WvNl2OscwzIMw8TWbtelj7x70j4BxmOfw9COBYxZj1mhRwdKksVT+E+LfbWVW7Z4w1tR/8jqWIIGH3u/b6vm/HkYxT6Pn8fWJ4b/CNvAwAM4BrCIiAR7hVwPQ66yGDJXnq/TMbyhCTBsNnZ//+kw+hyGpvjwcDiskH+VCr2iV8nCShFJUWHR6s7VlSHNVRzDs03qGlwO158P45FcesQxbDl1FlcsOeIcF8kAWMxXu/ISs+h2CYNleVGE/ajGjtPWZx7WCabR5n5RBxb3Xr1ef6f252NGscVhyIjxHJ36MZE8JDgG7WiDFrBgLR32ERmi7c2rb5NUIh/4N4Hx9+dmkxqH8SLG13LqUyoSXdczigSBY7BtpiLAWPFFAk1K8TV+NdfEMZzPhdHnMFZHRKLrHEeKSNCIwOjz3hZEwhs/LVrVTYKRkr9AJZ9bZwQtDkM0q7H4MJQsPCkSqLZi5RaEILHuA1GT/zAnr8K3aierOd3MdRdHYVSvseHLsH1IwmoccTzTIBHY51EH+diwjGdrPEp9z16TwDS8xZMgZQF+EPk2VZ5lTccBRpnDEBNY6wkiYTCop4ybzeYBkaDH0IJgCIarwFgp6ydvAYPRToBhQ+51AAXgEEK6NoSZbNDAMzcdE3/tdGbETXudDr34HuqRbyQe4m+G4slkWhxGkcMQoY3MW1dFYkgWTCRNsASRZIURWXwOUmB4bVMa+0XbUO1WwDDIFwbD6HAYumEwGD0yPfn8U/6mF6A+JIbfJ14eWkISbOrDjhihnvLAWTSjmSQrDLb4vHdfqIO8pcAg5vuMCFWqT13C90EqlnHDYViUBYHRoywM02JECASPzEUIC/V4NJCeoYn46euRqd92yFM+c2+iIuGegZJhVFJgAAIXgudKNIhQcDmKqTCAABMLDEt1OCZxhqECwxhOZ94tsuHKfVC6IWA4ZHbDUBVh8QBaazGdLIRIGAvWghBX60BMfR6pIiE0nj4GY6Vm8iXvEMPVZ5u1bxQGj5vwg8MdwxEtHwYgYWx48CNX7qsOr9P/8QKBV9bDEIxut8FqQ5lEC3Tqmw7wjYmE2AP6GAz4D9+hGvH1tSMwhHo83soQFmuRRAgEh8PwZcWPjefIqYBBEoQearlsBUaXFM0Uhi8kwabugACtBJFgx0AfhAEqEY9YYlsdh+GFcwtxBmxi1CMMbA6DpxuHsOiJlxEwZmL+vIwQdYbL+geQCajM0hWRmOB4ZOQZRUTSfPooDBEzQxaFYdbV6UsYhs1ChoAxU2GItAkwZHCwOIyRUAY2OVUCo8J6KWjTDOJZz0QmLD5sgMWzZJkikt+GcaDOSIQhjcMg300Vhp4AA7yBBY2ZLCQhtXZZd41h+NQNSNCYytAEI/+sM4nkU2DQFJIdBsSJUTixUhgrvtSwRbZgoXORwCuRASubSBgM93+EYcQ940QY0HvNwomVwhjIVSjT4DAsys2jL0VGMorkj8JY+6rdJsDQE2EgEgLB0x0lfBAYE7EKBanbgnKTi0Sw8DOKhMLoJsN4+Y9hzGJ/nBFGgfvDRkksBbbmAvaDTp08Q0+t/q1TRJINRji1LrDtMsMwjHg2OQQDX/lalpoSxoZHCkMkVgZjyWBQ+UFuZSIxBR3aDlcli8P7JI+kbkmB8aIubEy4n5wCA5x2I0Y32JwoDNSRbyNU4QLGLa+jlG6UwmBBo0Ac0OAtDpT8JHIbMlkrIgnb+FQYZXWPZsV/uCYw7GwwoAIV04ZiaBSDYchgR+pOCQPiZo91rF5odRy2NX5A1U8iaId5Fu0RCRwjJpKwPYRh4LolBQY4Q2MJg7sGX2WrQ6n1HunUIjAMBgMCnK8UoGZMJmgDuYAmTk9XYUBGnb5aMrFyGKATygIquBvZBZhKfVs9xCIcP2IwGnEYrIXXtsvtXNmkUEtQ0ZEdgEGDu7mZzTxTZNYIjBuaGYcz2+vpIRhTuZb3HN43CahIAAbGYUuRmPA63nGRNKvhnQJS0KbBQJHz6bRjrrYjNI7AQLNwyTWMB1DenDFTAqi6/L+O7LXOtR9tAYO53r1wFTNFJGEWMRiNRBhoG2eB34H7zJ4h6i7KwkNJMLg4oFowVBhyzduOwFhoJn15GZTeJZ0UkURz7KCrbpxpjQMwUOCyVdDaVlkht68VFsdhsHRHhL1xZGrtqDDQq8mWQB0UgoGrbQYjdj6jJy6AvZBDf5bJfJyVxSkW7BaLwW8djhk5tv16fKvFsadTW+QW9RdTNbFKGK8FbqzDqttgs9k7q/KeHoRdHcyqX9uiMKhUvBgMNKfLXdjS70ArfU8Wajmu7Bs6cRgDttylaa20c4/V78PCId49UspxmUd5RnlGcRjIZSw0Le3ko0RR+up+AYvbXAevysoEEh3rOgnGqNUVrfxR35ARo/TlhTFSFmJIyFC3S8IdaxgGKit38x458ff0jViwPSBr6tw4MyvqGKGONQIDVZTzNYv06PkdWPCNUW5W6P6ZcGKN3G+injfapkXPK/Q9rKew6KFYYt0cgjERh/JwaVhLdI7xd2OB4+aaLupa/m34F5HEGr0tK2gJFtjmu8PR8/uwoHnDyXIeqIASaMgj9atIlq2SAypH1oK/txWiuWivhW9sfVmpmQUOqOSVRfwm38k8flvr24u7hdLjARzjLqcsku6F3ybd5gunB8b0FFcVnQ+MpDvA6ZHyEpziyi2L5I+MmMScY8GjZ55ZHPowkSD0YSJsTR9YPKGzg4G18hIVyVXeWRz7AKJgG7o5iUTPfLNI+Wiq3fZN3PxcwizG6IxhkGC6C1jtmXsW2T/O7gxYZIZx9auUexZZYVR/lRC6wKBWOgcWGWFUr9AFBrPxebDIBqOKLjDOzi4wLjCS7V9+X5TAI7ZRxAAAAABJRU5ErkJggg==';
+  var TRU_LOGO_SRC = 'data:image/png;base64,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';
+
+  /* the form is shared by two companies - the logo and every printed company
+     name follow the "Company" dropdown in section 01 */
+  var BRANDS = {
+    'McEnergy Evolution': {
+      cls: 'brand-mce',
+      logo: LOGO_SRC,
+      short: 'McEnergy Evolution',
+      legal: 'McEnergy Evolution Co.,Ltd.',
+      legalSpaced: 'McEnergy Evolution Co., Ltd.'
+    },
+    'TruKOOLING Advance': {
+      cls: 'brand-tru',
+      logo: TRU_LOGO_SRC,
+      short: 'TruKOOLING Advance',
+      legal: 'TruKOOLING Advance Co.,Ltd.',
+      legalSpaced: 'TruKOOLING Advance Co., Ltd.'
+    }
+  };
+
+  function applyBrand(){
+    var el = $('company');
+    var b  = BRANDS[el ? el.value : ''] || BRANDS['McEnergy Evolution'];
+    document.body.classList.remove('brand-mce', 'brand-tru');
+    document.body.classList.add(b.cls);
+    Array.prototype.forEach.call(document.querySelectorAll('img[data-logo]'), function(img){
+      if(img.getAttribute('src') !== b.logo){ img.src = b.logo; }
+      img.alt = b.short + ' logo';
+    });
+    function put(id, txt){ var n = $(id); if(n){ n.textContent = txt; } }
+    put('brandName',  b.short);
+    put('lhCompany',  b.legal);
+    put('cvCompany',  b.legalSpaced);
+    put('cvFootCo',   b.legalSpaced);
+    put('pfCompany',  b.legalSpaced);
+    put('footNoteCo', b.legal);
+  }
+  applyBrand();
+
+  /* ---- installable / offline app ---- */
+  if('serviceWorker' in navigator && location.protocol.indexOf('http') === 0){
+    window.addEventListener('load', function(){
+      navigator.serviceWorker.register('sw.js').catch(function(){ /* opened without a server - fine */ });
+    });
+  }
+
+  var deferredPrompt = null;
+  window.addEventListener('beforeinstallprompt', function(e){
+    e.preventDefault();
+    deferredPrompt = e;
+    $('installBtn').style.display = 'inline-flex';
+  });
+  $('installBtn').addEventListener('click', function(){
+    if(!deferredPrompt) return;
+    deferredPrompt.prompt();
+    deferredPrompt.userChoice.then(function(){
+      deferredPrompt = null;
+      $('installBtn').style.display = 'none';
+    });
+  });
+  window.addEventListener('appinstalled', function(){
+    deferredPrompt = null;
+    $('installBtn').style.display = 'none';
+  });
+
+  /* ---- init ---- */
+  loadDraft();
+  applyFieldValues();
+  renderChecklist();
+  renderPhotos();
+  resizeCanvas();
+  syncCover();
+  syncSignature();
+  applyBrand();
+  updateRestoreBtn();
+})();
+
+</script>
+
+</body>
+</html>
