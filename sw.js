@@ -1,8 +1,8 @@
 /* McEnergy Service & Maintenance Report — service worker
    ------------------------------------------------------
-   Bump CACHE_VERSION every time index.html changes, otherwise phones that
-   already installed the app keep serving the old form from their cache. */
-var CACHE_VERSION = 'mce-report-v19';
+   Bump CACHE_VERSION every time index.html changes (1.0.1 -> 1.0.2 -> ...),
+   otherwise phones that installed the app keep serving the old form. */
+var CACHE_VERSION = 'mce-report-1.10.2';
 
 var APP_SHELL = [
   './',
