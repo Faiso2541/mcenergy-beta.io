@@ -355,6 +355,65 @@
   }
   .ct-del:hover{background:var(--danger);color:#fff;}
   .ct-sheet + .ct-sheet{margin-top:26px;padding-top:22px;border-top:2px dashed var(--lav-line);}
+  /* ---------- กล่องแจ้งผลหลังส่งรายงานสำเร็จ ---------- */
+  .ok-overlay{
+    position:fixed;inset:0;background:rgba(13,27,42,.45);z-index:120;
+    display:none;align-items:center;justify-content:center;padding:20px;
+  }
+  .ok-overlay.on{display:flex;}
+  .ok-card{
+    background:#fff;border-radius:14px;padding:18px 20px 16px;width:100%;max-width:330px;
+    box-shadow:0 12px 34px rgba(13,27,42,.22);
+  }
+  .ok-head{display:flex;align-items:center;gap:10px;border-bottom:1px solid var(--line);padding-bottom:11px;}
+  .ok-head b{font-size:16px;font-weight:700;color:var(--navy);}
+  .ok-ico{position:relative;display:inline-block;width:26px;height:26px;flex:0 0 auto;}
+  .ok-ico svg{display:block;}
+  .ok-ring{
+    position:absolute;inset:0;border-radius:50%;border:2px solid #22c55e;
+    transform:scale(0);opacity:0;
+  }
+  .ok-kv{
+    display:grid;grid-template-columns:52px 1fr;gap:5px 12px;
+    font-size:13.5px;color:var(--ink);margin-top:12px;
+  }
+  .ok-kv b{font-weight:700;color:var(--ink-faint);font-size:12.5px;}
+  .ok-kv span{word-break:break-word;}
+  .ok-note{font-size:11.5px;color:var(--ink-faint);margin-top:9px;line-height:1.45;}
+  .ok-note:empty{display:none;}
+  .ok-line{height:3px;border-radius:2px;background:#22c55e;margin-top:13px;width:0;}
+  .ok-foot{display:flex;justify-content:flex-end;margin-top:13px;}
+  /* ใช้สีชมพูชุดเดียวกับปุ่ม "ส่ง Report" ให้เป็นสีของการกระทำหลัก */
+  .ok-btn{
+    background:#E4568E;color:#fff;border:0;border-radius:8px;
+    padding:9px 24px;font:inherit;font-size:14px;font-weight:700;
+    min-width:104px;cursor:pointer;
+  }
+  .ok-btn:hover{background:#C93F76;}
+  .ok-btn:active{transform:translateY(1px);}
+
+  /* เล่นรอบเดียวตอนเปิดกล่อง */
+  .ok-overlay.on .ok-ck{stroke-dasharray:30;stroke-dashoffset:30;animation:okDraw .55s ease-out .18s forwards;}
+  .ok-overlay.on .ok-ico svg{animation:okPop .45s cubic-bezier(.2,1.5,.4,1) both;}
+  .ok-overlay.on .ok-ring{animation:okRing .9s ease-out .15s;}
+  .ok-overlay.on .ok-card{animation:okIn .34s cubic-bezier(.2,.9,.25,1) both;}
+  .ok-overlay.on .okr1{animation:okRow .4s ease-out .30s both;}
+  .ok-overlay.on .okr2{animation:okRow .4s ease-out .42s both;}
+  .ok-overlay.on .okr3{animation:okRow .4s ease-out .54s both;}
+  .ok-overlay.on .ok-line{animation:okBar .55s ease-out .66s forwards;}
+
+  @keyframes okIn{from{transform:translateY(16px) scale(.96);opacity:0;}to{transform:none;opacity:1;}}
+  @keyframes okPop{from{transform:scale(0);}70%{transform:scale(1.18);}to{transform:scale(1);}}
+  @keyframes okRing{from{transform:scale(.4);opacity:.85;}to{transform:scale(2.9);opacity:0;}}
+  @keyframes okDraw{to{stroke-dashoffset:0;}}
+  @keyframes okRow{from{transform:translateY(8px);opacity:0;}to{transform:none;opacity:1;}}
+  @keyframes okBar{to{width:100%;}}
+  @media (prefers-reduced-motion: reduce){
+    .ok-overlay.on *{animation:none !important;}
+    .ok-overlay.on .ok-ck{stroke-dashoffset:0;}
+    .ok-overlay.on .ok-line{width:100%;}
+  }
+
   .mp-ref{font-weight:700;color:var(--navy);text-align:center;}
   /* ช่องคำนวณ ใช้ขนาดและน้ำหนักตัวอักษรชุดเดียวกับ input ในตาราง
      ไม่งั้นตัวเลขจะใหญ่กว่าช่องอื่นเวลาพิมพ์ */
@@ -1432,6 +1491,31 @@
   </div>
   <div class="pv-stage" id="pvStage"><div class="pv-fit" id="pvFit"><iframe id="pvFrame" title="ตัวอย่างรายงาน"></iframe></div></div>
 </div>
+
+  <div class="ok-overlay" id="okOverlay" aria-hidden="true">
+    <div class="ok-card" role="dialog" aria-labelledby="okTitle">
+      <div class="ok-head">
+        <span class="ok-ico">
+          <span class="ok-ring"></span>
+          <svg width="26" height="26" viewBox="0 0 24 24" aria-hidden="true">
+            <circle cx="12" cy="12" r="11" fill="#dcfce7"></circle>
+            <path class="ok-ck" d="M7 12.5l3 3 6.5-6.5" stroke="#15803d" stroke-width="2.4"
+                  fill="none" stroke-linecap="round" stroke-linejoin="round"></path>
+          </svg>
+        </span>
+        <b id="okTitle">ส่งรายงานเสร็จสิ้น</b>
+      </div>
+      <div class="ok-kv">
+        <b class="okr1">ลูกค้า</b><span class="okr1" id="okCust">-</span>
+        <b class="okr2">ไฟล์</b><span class="okr2" id="okFile">-</span>
+        <b class="okr3">เวลา</b><span class="okr3" id="okTime">-</span>
+      </div>
+      <div class="ok-note" id="okNote"></div>
+      <div class="ok-line"></div>
+      <div class="ok-foot"><button type="button" class="ok-btn" id="okClose">ตกลง</button></div>
+    </div>
+  </div>
+
 
 <div class="modal-overlay" id="iosModal" style="display:none;">
   <div class="modal-box">
@@ -4695,6 +4779,44 @@
     });
   }
 
+  /* กล่องแจ้งผลหลังส่งสำเร็จ - แทนกล่องเตือนของเบราว์เซอร์
+     ที่ขึ้นชื่อโดเมนนำหน้าและดูเหมือนข้อความผิดพลาด */
+  function showSendOk(fileName){
+    var ov = $('okOverlay');
+    if(!ov){ return; }
+    var d = new Date();
+    var pad = function(n){ return (n < 10 ? '0' : '') + n; };
+
+    $('okCust').textContent = customerName() || '-';
+    $('okFile').textContent = String(fileName || '').replace(/\.pdf$/i, '');
+    $('okTime').textContent = pad(d.getHours()) + ':' + pad(d.getMinutes()) + ' น.';
+
+    /* เริ่มอนิเมชั่นใหม่ทุกครั้ง ไม่งั้นส่งฉบับที่สองจะไม่เล่น */
+    ov.classList.remove('on');
+    void ov.offsetWidth;
+    ov.classList.add('on');
+    ov.setAttribute('aria-hidden', 'false');
+    var b = $('okClose');
+    if(b){ setTimeout(function(){ try{ b.focus(); }catch(e){} }, 260); }
+  }
+
+  function hideSendOk(){
+    var ov = $('okOverlay');
+    if(!ov) return;
+    ov.classList.remove('on');
+    ov.setAttribute('aria-hidden', 'true');
+  }
+
+  if($('okClose')){ $('okClose').addEventListener('click', hideSendOk); }
+  if($('okOverlay')){
+    $('okOverlay').addEventListener('click', function(e){
+      if(e.target === this){ hideSendOk(); }
+    });
+  }
+  document.addEventListener('keydown', function(e){
+    if(e.key === 'Escape' && $('okOverlay') && $('okOverlay').classList.contains('on')){ hideSendOk(); }
+  });
+
   function sendReport(){
     if(!navigator.onLine){
       alert('ปุ่มนี้ต้องต่ออินเทอร์เน็ต\n\nระหว่างนี้ใช้ปุ่ม "ส่งเป็นไฟล์ PDF" แทนได้');
@@ -4722,12 +4844,7 @@
       .then(function(out){
         pvSay('');
         $('statusChip').textContent = 'ส่ง Report ขึ้น Drive แล้ว · ' + fileName;
-        if(out && out.blind){
-          alert('ส่งไฟล์ขึ้น Google Drive แล้ว\n\n' + fileName +
-                '\n\n(เบราว์เซอร์ไม่ยอมให้อ่านคำตอบกลับ จึงยืนยันด้วยการเปิดโฟลเดอร์ดูอีกที)');
-        } else {
-          alert('ส่ง Report เรียบร้อย\n\n' + fileName + '\n\nไฟล์อยู่ในโฟลเดอร์ Google Drive และขึ้นบนหน้าเว็บลูกค้าแล้ว');
-        }
+        showSendOk(fileName);
       })
       .catch(function(err){
         pvSay('');
