@@ -77,6 +77,11 @@
   .btn-save:hover{background:var(--green-deep);border-color:var(--green-deep);}
   .btn-restore{background:var(--paper);border-color:var(--green);color:var(--green-deep);}
   .btn-restore:hover{background:#E6F5EC;border-color:var(--green-deep);}
+  /* ปุ่มดูตัวอย่างเป็นทางเข้าหลักก่อนส่งงาน จึงให้เด่นด้วยสีเหลือง */
+  .btn-preview{background:#F5B301;border-color:#F5B301;color:#16264A;font-weight:700;}
+  .btn-preview:hover{background:#DDA000;border-color:#DDA000;}
+  /* ปุ่มที่ย้ายไปอยู่ในหน้าดูตัวอย่างแล้ว */
+  .is-moved{display:none !important;}
   .btn-pink{background:#E4568E;border-color:#E4568E;color:#fff;}
   .btn-pink:hover{background:#C93F76;border-color:#C93F76;}
   .btn-pink:disabled{opacity:.6;}
@@ -1174,10 +1179,12 @@
       <button class="btn" id="openFileBtn" type="button">เปิดงานที่ค้าง</button>
       <button class="btn" id="saveFileBtn" type="button">เก็บงานไว้ทำต่อ</button>
       <button class="btn" id="shareBtn" type="button">แชร์</button>
-      <button class="btn" id="previewBtn" type="button">ดูตัวอย่าง</button>
-      <button class="btn btn-primary" id="sendPdfBtn" type="button">ส่งเป็นไฟล์ PDF</button>
-      <button class="btn btn-pink" id="sendReportBtn" type="button" title="สร้าง PDF แล้วอัปขึ้นโฟลเดอร์ Google Drive ส่วนกลางอัตโนมัติ">ส่ง Report</button>
-      <button class="btn" id="printBtn" type="button" title="สั่งพิมพ์ด้วยระบบของเบราว์เซอร์ ได้ตัวหนังสือคมชัดที่สุด">พิมพ์</button>
+      <button class="btn btn-preview" id="previewBtn" type="button">ดูตัวอย่าง</button>
+      <!-- สามปุ่มนี้ย้ายไปอยู่ในหน้าดูตัวอย่างแล้ว เพื่อบังคับให้ช่างตรวจงานก่อนส่ง
+           คงไว้ในหน้าแต่ซ่อนไว้ เพราะมีโค้ดผูกเหตุการณ์กับปุ่มพวกนี้อยู่ -->
+      <button class="btn btn-primary is-moved" id="sendPdfBtn" type="button">ส่งเป็นไฟล์ PDF</button>
+      <button class="btn btn-pink is-moved" id="sendReportBtn" type="button" title="สร้าง PDF แล้วอัปขึ้นโฟลเดอร์ Google Drive ส่วนกลางอัตโนมัติ">ส่ง Report</button>
+      <button class="btn is-moved" id="printBtn" type="button" title="สั่งพิมพ์ด้วยระบบของเบราว์เซอร์ ได้ตัวหนังสือคมชัดที่สุด">พิมพ์</button>
       <input type="file" id="openFileInput" accept="application/json,.json" style="display:none;">
     </div>
   </div>
