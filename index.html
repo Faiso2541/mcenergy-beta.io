@@ -357,7 +357,9 @@
   .ct-sheet + .ct-sheet{margin-top:26px;padding-top:22px;border-top:2px dashed var(--lav-line);}
   /* ---------- กล่องแจ้งผลหลังส่งรายงานสำเร็จ ---------- */
   .ok-overlay{
-    position:fixed;inset:0;background:rgba(13,27,42,.45);z-index:120;
+    /* ต้องสูงกว่าหน้าต่างดูตัวอย่าง (z-index:200) ไม่งั้นกล่องจะไปอยู่ข้างหลัง
+       แล้วต้องปิดหน้าตัวอย่างก่อนถึงจะเห็น */
+    position:fixed;inset:0;background:rgba(13,27,42,.45);z-index:300;
     display:none;align-items:center;justify-content:center;padding:20px;
   }
   .ok-overlay.on{display:flex;}
