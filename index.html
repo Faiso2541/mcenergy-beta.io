@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="th">
 <head>
@@ -317,12 +318,16 @@
     background:var(--lav-bg);color:var(--navy);font-size:10.5px;font-weight:700;
     text-align:center;padding:6px 6px;border:1px solid var(--lav-line);white-space:nowrap;
   }
+  /* หัวตารางของ General condition ช่องแคบ ต้องยอมตัดบรรทัด
+     ไม่งั้นข้อความยาวอย่าง Overload Protect จะล้นไปทับช่องข้าง ๆ */
+  .ct-table.mp-gen th{white-space:normal;line-height:1.2;padding:5px 3px;word-break:break-word;}
   .ct-table td{border:1px solid var(--line);padding:2px 3px;text-align:center;}
   .ct-table input{
     border:none;background:transparent;padding:6px 4px;font-size:13px;width:100%;
     text-align:center;border-radius:5px;min-width:52px;
   }
   .ct-table input:focus{background:var(--page);box-shadow:none;}
+  .ct-table td.mp-dt{font-size:13px;color:var(--ink);font-weight:400;}
   .ct-table td.ct-ch{
     font-weight:700;color:var(--navy);font-size:12.5px;padding:6px 10px;
     white-space:normal;word-break:break-word;line-height:1.25;
@@ -350,6 +355,10 @@
   }
   .ct-del:hover{background:var(--danger);color:#fff;}
   .ct-sheet + .ct-sheet{margin-top:26px;padding-top:22px;border-top:2px dashed var(--lav-line);}
+  .mp-ref{font-weight:700;color:var(--navy);text-align:center;}
+  /* ช่องคำนวณ ใช้ขนาดและน้ำหนักตัวอักษรชุดเดียวกับ input ในตาราง
+     ไม่งั้นตัวเลขจะใหญ่กว่าช่องอื่นเวลาพิมพ์ */
+  .mp-dt{text-align:center;background:#F6F7FB;}
   .ct-water{margin-top:14px;}
   .ct-table td.ct-unit{font-size:12px;color:var(--ink-soft);padding:6px 10px;white-space:normal;}
   .ct-foot{display:grid;grid-template-columns:auto 1fr;gap:18px;align-items:start;margin-top:18px;}
@@ -1026,6 +1035,7 @@
       font-size:7.5pt;color:#000 !important;text-align:center;min-width:0 !important;
     }
     .ct-table input::placeholder{color:#000 !important;opacity:1 !important;}
+    .ct-table td.mp-dt{font-size:7.5pt !important;font-weight:400 !important;color:#000 !important;}
     .ct-table select{
       border:none !important;background:transparent !important;padding:0 !important;
       font-size:7.5pt;color:#000 !important;text-align:center;text-align-last:center;
@@ -1525,6 +1535,16 @@
       </div>
     </button>
 
+    <button type="button" class="modal-opt" data-tpl="logmp">
+      <div class="t">Log sheet Service Motor pump</div>
+      <div class="d">งานตรวจสอบและบำรุงรักษา Motor pump — สโคปงาน 9 รายการ + ตารางบันทึกค่า (Measurement, General condition)</div>
+      <div class="legend">
+        <span style="background:#E6F5EC;color:#1F7248;">ปกติ</span>
+        <span style="background:#FBEAEA;color:#C94F4F;">เฝ้าระวัง</span>
+        <span style="background:#FDF3D8;color:#8A6D0E;">ควร Overhaul</span>
+      </div>
+    </button>
+
     <button type="button" class="modal-opt" data-tpl="delivery">
       <div class="t">ส่งของ</div>
       <div class="d">รายการอะไหล่ / สินค้าที่จัดส่ง — กรอกเป็นตาราง</div>
@@ -1688,6 +1708,26 @@
         { t:'เช็คค่าอุณหภูมิน้ำเข้าออก Cooling Tower', n:2 },
         { t:'เช็คการทำงานของ Pump feed, สาย feed และปริมาณเคมีในถัง', n:2 },
         { t:'เช็คระบบ Drain', n:1 }
+      ]
+    },
+    logmp: {
+      name: 'Log sheet Service Motor pump',
+      mode: 'mp',
+      statuses: [
+        { key:'normal',   label:'ปกติ',          bg:'#E6F5EC', fg:'#1F7248', border:'#2E9E63' },
+        { key:'watch',    label:'เฝ้าระวัง',      bg:'#FBEAEA', fg:'#C94F4F', border:'#C94F4F' },
+        { key:'overhaul', label:'ควร Overhaul',  bg:'#FDF3D8', fg:'#8A6D0E', border:'#E0B400' }
+      ],
+      items: [
+        'ตรวจสอบสภาพทั่วไปและทำความสะอาดตัวเครื่อง',
+        'ตรวจสอบเสียงและการสั่นสะเทือนของตัวเครื่องขณะเครื่องทำงาน',
+        'ตรวจสอบแรงดันไฟฟ้าและกระแส Motor ขณะเครื่องทำงาน',
+        'ตรวจสอบอุณหภูมิ Motor ขณะเครื่องทำงาน',
+        'ตรวจสอบสภาพ Seal เพลา และ Packing เครื่อง',
+        'ตรวจสอบสภาพสายไฟ Control จุดต่อสายไฟภายในตู้ Control Panel',
+        'ตรวจสอบแรงดันด้านดูด (Suction Pressure)',
+        'ตรวจสอบแรงดันด้านจ่าย (Discharge Pressure)',
+        'ตรวจสอบสภาพฐานยึด Motor และ Pump'
       ]
     },
     delivery: {
@@ -1854,6 +1894,7 @@
       partsTable: state.partsTable,
       logs: state.logs,
       ct: state.ct,
+      mp: state.mp,
       photoTpl: state.photoTpl,
       signature: state.signature
     };
@@ -2681,6 +2722,168 @@
     '</div>';
   }
 
+  /* ---- Motor pump log sheet ----
+     ตารางเดียวกว้างเกินหน้ากระดาษ A4 แนวตั้ง จึงตัดกลุ่ม Vibration
+     ลงมาไว้ตารางล่าง ใช้แถวชุดเดียวกัน อ้างอิงกันด้วย Ref No. */
+  var MP_ROWS = 3;
+
+  var MP_MAIN = [
+    { k:'ref',    h:'Ref No.'           },
+    { k:'model',  h:'Unit Model'        },
+    { k:'serial', h:'Serial No.'        },
+    { k:'fla',    h:'FLA/kW'            },
+    { k:'a1',     h:'Ph.1', g:'Reading Amp' },
+    { k:'a2',     h:'Ph.2', g:'Reading Amp' },
+    { k:'a3',     h:'Ph.3', g:'Reading Amp' },
+    { k:'temp',   h:'Motor Temp'        },
+    { k:'suct',   h:'Suct P. Psi'       },
+    { k:'disch',  h:'Disch P. Psi'      },
+    { k:'dt',     h:'Pressuer Drop DT'  }
+  ];
+
+  /* ค่าการสั่นสะเทือน - หัวคอลัมน์ตามแบบฟอร์มที่ได้รับมา */
+  var MP_VIB = [
+    { k:'deA',  h:'A' }, { k:'deV',  h:'V' }, { k:'deH',  h:'H' },
+    { k:'ndeA', h:'A' }, { k:'ndeH1', h:'H' }, { k:'ndeH2', h:'H' }
+  ];
+
+  /* หัวข้อที่ติ๊ก OK / NOT */
+  var MP_GEN = [
+    { k:'gVib',  h:'Vibration'        },
+    { k:'gNoise', h:'Noise'           },
+    { k:'gTemp', h:'Motor temp'       },
+    { k:'gFoun', h:'Foundation'       },
+    { k:'gOver', h:'Overload Protect' },
+    { k:'gSeal', h:'Mag Seal'         }
+  ];
+
+  function emptyMpRow(){
+    var o = {};
+    MP_MAIN.concat(MP_VIB).concat(MP_GEN).forEach(function(c){ o[c.k] = ''; });
+    return o;
+  }
+  function emptyMpSheet(){
+    var r = [], i;
+    for(i = 0; i < MP_ROWS; i++){ r.push(emptyMpRow()); }
+    return { rows:r, comments:'', verifiedBy:'' };
+  }
+  /* ร่างงานรุ่นก่อนเก็บ state.mp เป็นอาร์เรย์เฉย ๆ จึงต้องแปลงให้เข้ารูปใหม่ */
+  function normalizeMp(d){
+    if(!d) return null;
+    if(Object.prototype.toString.call(d) === '[object Array]'){
+      return { rows: d.length ? d : emptyMpSheet().rows, comments:'', verifiedBy:'' };
+    }
+    return { rows: (d.rows && d.rows.length) ? d.rows : emptyMpSheet().rows,
+             comments: d.comments || '', verifiedBy: d.verifiedBy || '' };
+  }
+  function mpSheet(){
+    if(!state.mp || !state.mp.rows || !state.mp.rows.length){ state.mp = emptyMpSheet(); }
+    return state.mp;
+  }
+  function mpRows(){ return mpSheet().rows; }
+
+  /* Pressuer Drop DT = Suct P. - Disch P. คิดให้อัตโนมัติ ไม่ต้องกรอกเอง */
+  function mpDt(r){
+    var a = parseFloat(r.suct), b = parseFloat(r.disch);
+    if(isNaN(a) || isNaN(b)) return '';
+    var v = Math.round((a - b) * 100) / 100;
+    return String(v);
+  }
+
+  function mpInput(i, k, v){
+    return '<input type="text" data-mp="' + i + '" data-k="' + k +
+           '" value="' + escapeAttr(v || '') + '" placeholder="-">';
+  }
+  function mpTick(i, k, on, val){
+    return '<button type="button" class="ct-tick mp-tick' + (on ? ' on' : '') +
+           '" data-cttick="' + val + '" data-i="' + i + '" data-k="' + k + '">' +
+           (on ? '\u2713' : '') + '</button>';
+  }
+
+  function mpMeasHtml(rows){
+    var top = '', sub = '', i, j, c, span;
+    for(i = 0; i < MP_MAIN.length; i++){
+      c = MP_MAIN[i];
+      if(c.g){
+        span = 1;
+        while(i + span < MP_MAIN.length && MP_MAIN[i + span].g === c.g){ span++; }
+        top += '<th colspan="' + span + '">' + escapeHtml(c.g) + '</th>';
+        for(j = 0; j < span; j++){ sub += '<th>' + escapeHtml(MP_MAIN[i + j].h) + '</th>'; }
+        i += span - 1;
+      } else {
+        top += '<th rowspan="2">' + escapeHtml(c.h) + '</th>';
+      }
+    }
+    var body = rows.map(function(r, ri){
+      return '<tr>' + MP_MAIN.map(function(col){
+        if(col.k === 'dt'){
+          return '<td class="mp-dt" data-mpdt="' + ri + '">' + escapeHtml(mpDt(r)) + '</td>';
+        }
+        return '<td>' + mpInput(ri, col.k, r[col.k]) + '</td>';
+      }).join('') +
+      '<td class="ct-act"><button type="button" class="ct-del mp-del" data-i="' + ri + '">ลบ</button></td></tr>';
+    }).join('');
+
+    /* Serial No. กว้างเท่า Unit Model ตามแบบฟอร์มต้นฉบับ */
+    var group = '<col style="width:9%"><col style="width:13%"><col style="width:13%">' +
+                '<col style="width:8%">' +
+                '<col style="width:7%"><col style="width:7%"><col style="width:7%">' +
+                '<col style="width:8%">' +
+                '<col style="width:10%"><col style="width:10%"><col style="width:8%">' +
+                '<col class="ct-act">';
+
+    return '<div class="ct-title">Measurement</div>' +
+      '<div class="ct-box"><table class="ct-table mp-meas"><colgroup>' + group + '</colgroup><thead>' +
+        '<tr>' + top + '<th rowspan="2" class="ct-act"></th></tr><tr>' + sub + '</tr>' +
+      '</thead><tbody>' + body + '</tbody></table></div>' +
+      '<button type="button" class="add-row mp-add">+ เพิ่มแถว Motor pump</button>';
+  }
+
+  function mpGenHtml(rows){
+    /* หัวตาราง 3 ชั้น: Vibration คลุม DE/NDE ส่วนหัวข้อ OK-NOT คลุมสองแถวบน */
+    var r1 = '<th rowspan="3">Ref No.</th><th colspan="6">Vibration</th>' +
+      MP_GEN.map(function(c){
+        return '<th colspan="2" rowspan="2">' + escapeHtml(c.h) + '</th>';
+      }).join('');
+    var r2 = '<th colspan="3">DE</th><th colspan="3">NDE</th>';
+    var r3 = MP_VIB.map(function(c){ return '<th>' + escapeHtml(c.h) + '</th>'; }).join('') +
+      MP_GEN.map(function(){ return '<th>OK</th><th>NOT</th>'; }).join('');
+
+    var body = rows.map(function(r, ri){
+      return '<tr><td>' + mpInput(ri, 'ref', r.ref) + '</td>' +
+        MP_VIB.map(function(c){ return '<td>' + mpInput(ri, c.k, r[c.k]) + '</td>'; }).join('') +
+        MP_GEN.map(function(c){
+          return '<td class="ct-tk">' + mpTick(ri, c.k, r[c.k] === 'ok',  'ok')  + '</td>' +
+                 '<td class="ct-tk">' + mpTick(ri, c.k, r[c.k] === 'not', 'not') + '</td>';
+        }).join('') + '</tr>';
+    }).join('');
+
+    var group = '<col style="width:10%">' +
+      MP_VIB.map(function(){ return '<col style="width:5%">'; }).join('') +
+      MP_GEN.map(function(){ return '<col style="width:5%"><col style="width:5%">'; }).join('');
+
+    return '<div class="ct-title">General condition</div>' +
+      '<div class="ct-box"><table class="ct-table ct-gen mp-gen"><colgroup>' + group + '</colgroup><thead>' +
+        '<tr>' + r1 + '</tr><tr>' + r2 + '</tr><tr>' + r3 + '</tr>' +
+      '</thead><tbody>' + body + '</tbody></table></div>';
+  }
+
+  function mpBlockHtml(){
+    var sh = mpSheet();
+    return '<div class="ct-wrap on mp-wrap">' +
+      '<div class="log-head"><div class="lg-t">Motor Pump Log Sheet</div>' +
+        '<div class="lg-s">บันทึกค่าการทำงานของ Motor pump — กรอกเฉพาะช่องที่มีค่า</div></div>' +
+      mpMeasHtml(sh.rows) +
+      mpGenHtml(sh.rows) +
+      '<div class="field full ct-note"><label>Comments</label>' +
+        '<textarea data-mpt="comments" placeholder="หมายเหตุ / สิ่งที่ตรวจพบ...">' +
+        escapeHtml(sh.comments || '') + '</textarea></div>' +
+      '<div class="log-foot"><div class="field"><label>Verified by</label>' +
+        '<input type="text" data-mpt="verifiedBy" value="' + escapeAttr(sh.verifiedBy || '') +
+        '" placeholder="ชื่อผู้ตรวจสอบ"></div></div>' +
+    '</div>';
+  }
+
   function ctBlockHtml(){
     var sheets = ctSheets();
     return '<div class="ct-wrap on">' +
@@ -2691,6 +2894,16 @@
     '</div>';
   }
 
+  /* จำนวนแถวสองตารางต้องเท่ากัน และ Ref.No. ใช้ค่าจากตาราง Measurement เป็นหลัก */
+  function ctSyncRefs(ct){
+    if(!ct) return;
+    if(!ct.meas) ct.meas = [];
+    if(!ct.gen)  ct.gen  = [];
+    while(ct.gen.length < ct.meas.length){ ct.gen.push(emptyGenRow()); }
+    while(ct.gen.length > ct.meas.length){ ct.gen.pop(); }
+    ct.meas.forEach(function(m, i){ ct.gen[i].ref = m.ref || ''; });
+  }
+
   /* which tower sheet an element belongs to */
   function ctOf(el){
     var box = el.closest ? el.closest('.ct-sheet') : null;
@@ -2699,7 +2912,7 @@
   }
 
   /* ---- checklist (several templates at once) ---- */
-  var TPL_ORDER = ['service','project','tube','ahu','delivery','logwc','logac','logtrane','logmag','logct'];
+  var TPL_ORDER = ['service','project','tube','ahu','delivery','logwc','logac','logtrane','logmag','logct','logmp'];
 
   function tplSelected(k){ return state.templates.indexOf(k) !== -1; }
   function selectedTemplates(){ return TPL_ORDER.filter(tplSelected); }
@@ -2743,6 +2956,7 @@
       state.logs[k0] = normalizeLogList(d.logSheets || d.logSheet);
     }
     state.ct = d.ct ? normalizeCt(d.ct) : null;
+    state.mp = normalizeMp(d.mp);
     state.photoTpl = d.photoTpl || null;
     ensureTemplateData();
   }
@@ -2767,7 +2981,11 @@
       if(t.mode === 'log' && (!state.logs[k] || !state.logs[k].length)){
         state.logs[k] = [emptyLogSheet(k)];
       }
-      if(t.mode === 'ct' && (!state.ct || !state.ct.length)){ state.ct = [emptyCtSheet()]; }
+      if(t.mode === 'ct'){
+        if(!state.ct || !state.ct.length){ state.ct = [emptyCtSheet()]; }
+        state.ct.forEach(ctSyncRefs);
+      }
+      if(t.mode === 'mp'){ mpSheet(); }
     });
     state.checklist = state.checklist.filter(function(it){
       return !it.tpl || tplSelected(it.tpl);
@@ -2777,6 +2995,7 @@
     });
     if(!tplSelected('delivery')){ state.partsTable = []; }
     if(!tplSelected('logct')){ state.ct = null; }
+    if(!tplSelected('logmp')){ state.mp = null; }
   }
 
   function updateTplUI(){
@@ -2904,6 +3123,7 @@
       }
       if(t.mode === 'log'){ html += logBlockHtml(k); }
       if(t.mode === 'ct'){  html += ctBlockHtml(); }
+      if(t.mode === 'mp'){  html += mpBlockHtml(); }
       return html + '</div>';
     }).join('');
 
@@ -2968,6 +3188,29 @@
       if(state.partsTable[pi]){ state.partsTable[pi][pk] = el.value; }
       return;
     }
+    /* motor pump table */
+    var mpT = el.getAttribute('data-mpt');
+    if(mpT){ mpSheet()[mpT] = el.value; return; }
+    var mpI = el.getAttribute('data-mp');
+    if(mpI !== null){
+      var mpRow = mpRows()[+mpI];
+      if(mpRow){
+        var mpK = el.getAttribute('data-k');
+        mpRow[mpK] = el.value;
+        /* คิด DT ใหม่ทันทีโดยไม่ต้องวาดตารางทั้งหมด จะได้ไม่หลุดโฟกัส */
+        if(mpK === 'suct' || mpK === 'disch'){
+          var dtCell = document.querySelector('[data-mpdt="' + mpI + '"]');
+          if(dtCell){ dtCell.textContent = mpDt(mpRow); }
+        }
+        /* Ref No. มีสองที่ ให้ตามกันทันที */
+        if(mpK === 'ref'){
+          Array.prototype.forEach.call(
+            document.querySelectorAll('[data-mp="' + mpI + '"][data-k="ref"]'),
+            function(f){ if(f !== el){ f.value = el.value; } });
+        }
+      }
+      return;
+    }
     /* cooling tower tables */
     var ctSec = el.getAttribute('data-ct');
     if(ctSec){
@@ -2979,8 +3222,23 @@
         ct.water[el.getAttribute('data-k')] = el.value;
         return;
       }
-      var ctRow = ct[ctSec] && ct[ctSec][+el.getAttribute('data-i')];
-      if(ctRow){ ctRow[el.getAttribute('data-k')] = el.value; }
+      var ctIdx = +el.getAttribute('data-i');
+      var ctRow = ct[ctSec] && ct[ctSec][ctIdx];
+      if(ctRow){
+        var ctK = el.getAttribute('data-k');
+        ctRow[ctK] = el.value;
+        /* Ref.No. มีอยู่สองตาราง ให้ค่าตามกันโดยไม่ต้องวาดใหม่ทั้งหน้า */
+        if(ctK === 'ref' && (ctSec === 'meas' || ctSec === 'gen')){
+          var other = ctSec === 'meas' ? 'gen' : 'meas';
+          if(ct[other] && ct[other][ctIdx]){ ct[other][ctIdx].ref = el.value; }
+          var box = el.closest ? el.closest('.ct-sheet') : null;
+          if(box){
+            Array.prototype.forEach.call(
+              box.querySelectorAll('[data-ct="' + other + '"][data-i="' + ctIdx + '"][data-k="ref"]'),
+              function(f){ f.value = el.value; });
+          }
+        }
+      }
       return;
     }
 
@@ -3016,6 +3274,17 @@
     if(!btn) return;
 
     /* cooling tower: OK / NOT ticks, add and delete rows */
+    if(btn.classList.contains('mp-tick')){
+      var mRow = mpRows()[+btn.getAttribute('data-i')];
+      if(mRow){
+        var mk = btn.getAttribute('data-k');
+        var mv = btn.getAttribute('data-cttick');
+        mRow[mk] = (mRow[mk] === mv) ? '' : mv;
+        renderChecklist();
+        saveDraft(true);
+      }
+      return;
+    }
     if(btn.classList.contains('ct-tick')){
       var tCt = ctOf(btn);
       var tRow = tCt && tCt.gen[+btn.getAttribute('data-i')];
@@ -3026,6 +3295,23 @@
         renderChecklist();
         saveDraft(true);
       }
+      return;
+    }
+    if(btn.classList.contains('mp-add')){
+      mpRows().push(emptyMpRow());
+      renderChecklist();
+      saveDraft(true);
+      return;
+    }
+    if(btn.classList.contains('mp-del')){
+      var mpRs = mpRows();
+      if(mpRs.length > 1){
+        mpRs.splice(+btn.getAttribute('data-i'), 1);
+      } else {
+        mpRs[0] = emptyMpRow();
+      }
+      renderChecklist();
+      saveDraft(true);
       return;
     }
     if(btn.classList.contains('ct-sheet-add')){
@@ -3047,10 +3333,15 @@
       var addSec = btn.getAttribute('data-ct');
       var aCt = ctOf(btn);
       if(aCt){
-        aCt[addSec].push(
-          addSec === 'meas' ? emptyMeasRow() :
-          addSec === 'appr' ? { ch:'CH#' + (aCt.appr.length + 1), approach:'', rla:'' } :
-          emptyGenRow());
+        if(addSec === 'appr'){
+          aCt.appr.push({ ch:'CH#' + (aCt.appr.length + 1), approach:'', rla:'' });
+        } else {
+          /* Measurement กับ General condition เป็นเครื่องชุดเดียวกัน
+             เพิ่มทีเดียวให้ครบทั้งสองตาราง จะได้ไม่ต้องกด 2 ที่และเลขแถวตรงกันเสมอ */
+          aCt.meas.push(emptyMeasRow());
+          aCt.gen.push(emptyGenRow());
+          ctSyncRefs(aCt);
+        }
         renderChecklist();
         saveDraft(true);
       }
@@ -3059,8 +3350,14 @@
     if(btn.classList.contains('ct-del')){
       var delSec = btn.getAttribute('data-ct');
       var dCt = ctOf(btn);
-      if(dCt && dCt[delSec].length > 1){
-        dCt[delSec].splice(+btn.getAttribute('data-i'), 1);
+      if(dCt){
+        var dIdx = +btn.getAttribute('data-i');
+        if(delSec === 'appr'){
+          if(dCt.appr.length > 1){ dCt.appr.splice(dIdx, 1); }
+        } else if(dCt.meas.length > 1){
+          dCt.meas.splice(dIdx, 1);
+          if(dCt.gen.length > dIdx){ dCt.gen.splice(dIdx, 1); }
+        }
         renderChecklist();
         saveDraft(true);
       }
@@ -3547,6 +3844,7 @@
       partsTable: state.partsTable,
       logs: state.logs,
       ct: state.ct,
+      mp: state.mp,
       photoTpl: state.photoTpl,
       employees: state.employees,
       photos: state.photos,
@@ -3968,6 +4266,16 @@
             }
             /* the cooling tower tables are a sheet of their own */
             var cw = blk.querySelector('.ct-wrap');
+            /* ตารางปั๊มไม่มี .ct-sheet ย่อย จึงย้ายทั้งก้อนเป็นหนึ่งหน้า
+               ถ้าปล่อยให้ตกไปเข้าเงื่อนไขของ cooling tower จะถูกลบทิ้งทั้งอัน */
+            if(cw && cw.classList.contains('mp-wrap')){
+              var mPage = document.createElement('div');
+              mPage.className = 'card';
+              mPage.appendChild(cw);
+              anchorEl.parentNode.insertBefore(mPage, anchorEl.nextSibling);
+              anchorEl = mPage;
+              cw = null;
+            }
             if(cw){
               var cHead = cw.querySelector('.log-head');
               Array.prototype.forEach.call(cw.querySelectorAll('.ct-sheet'), function(sh){
