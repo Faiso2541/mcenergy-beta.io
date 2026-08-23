@@ -1487,7 +1487,7 @@
   </div>
 
   <!-- SECTION 3: PHOTO REPORT -->
-  <div class="card">
+  <div class="card" id="photoCard">
     <div class="sec-bar">Photo record — ภาพถ่ายหน้างาน</div>
     <p class="sec-note">คลิกช่องภาพเพื่ออัปโหลด</p>
     <div id="photoGrid"></div>
@@ -3868,7 +3868,13 @@
 
   /* ---- top actions ---- */
   /* ---- omit empty detail blocks from the printed PDF ---- */
-  var OPTIONAL_FIELDS = ['summary','parts'];
+  /* Fields the engineer may legitimately leave empty. An empty one prints as a
+     label above a bare ruled line, which reads as "someone forgot to fill this
+     in" - so the whole block is left out of the preview and the PDF. The form
+     on screen always shows them; only paper is affected. */
+  var OPTIONAL_FIELDS = ['summary','parts',
+                         'tagNo','modelNo','serialNo','startDate',
+                         'reportNo','reportRev'];
 
   function markBlankBlocks(){
     var filled = {};
@@ -3877,7 +3883,8 @@
       if(!el) return;
       var has = el.value.trim() !== '';
       filled[id] = has;
-      var block = el.closest('.field');
+      /* section fields sit in .field, the letterhead boxes in .lh-meta-row */
+      var block = el.closest('.field, .lh-meta-row');
       if(block){
         if(has){ block.classList.remove('is-blank'); }
         else   { block.classList.add('is-blank'); }
@@ -3888,6 +3895,14 @@
     if(pc){
       if(filled.summary || filled.parts){ pc.classList.remove('is-blank'); }
       else                              { pc.classList.add('is-blank'); }
+    }
+    /* section 03 is nothing but picture slots - a report with no pictures
+       should not carry a page holding an empty frame and a heading */
+    var phc = $('photoCard');
+    if(phc){
+      var anyPhoto = (state.photos || []).some(function(p){ return !!p.img; });
+      if(anyPhoto){ phc.classList.remove('is-blank'); }
+      else        { phc.classList.add('is-blank'); }
     }
   }
 
@@ -4758,7 +4773,8 @@
         }
       }
 
-      var sheets = 1 + body.querySelectorAll('.card').length;   /* cover + sections */
+      /* sections the report left out are not pages - do not count them */
+      var sheets = 1 + body.querySelectorAll('.card:not(.is-blank)').length;   /* cover + sections */
       $('pvPages').textContent = 'ประมาณ ' + sheets + ' หน้า';
 
       var doc = '<!DOCTYPE html><html lang="th"><head><meta charset="utf-8">' +
