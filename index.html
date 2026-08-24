@@ -1,5 +1,6 @@
 
 
+
 <!DOCTYPE html>
 <html lang="th">
 <head>
@@ -786,7 +787,7 @@
       border-radius:0;margin:0 -15mm 8mm;
       /* padding, not margin: a top margin collapses out of the page box and
          the letterhead ends up jammed against the edge of the sheet */
-      padding-top:16mm;
+      padding-top:12mm;
     }
     .lh-cell{border-right:.6pt solid #C9CDE0;padding:5mm 8mm;}
     .lh-title h1{font-size:17pt;letter-spacing:.01em;}
@@ -797,7 +798,7 @@
 
     .card{
       border:none;box-shadow:none;break-inside:auto;
-      padding:16mm 0 15mm;margin:0;border-radius:0;
+      padding:12mm 0 19mm;margin:0;border-radius:0;
     }
     /* keep photos crisp when the printer/PDF downsamples them */
     .photo-slot img{image-rendering:auto;}
@@ -817,7 +818,7 @@
     .signoff-card > .grid > .field:nth-child(2){grid-column:2;grid-row:1;}
     /* when the file was produced - quiet, at the foot of the last page */
     .create-time{
-      display:block !important;position:absolute;left:0;bottom:14mm;
+      display:block !important;position:absolute;left:0;bottom:19mm;
       font-size:7.5pt;color:#A7ADBE !important;letter-spacing:.04em;
     }
     .card > .field.full textarea{min-height:52mm;}
@@ -917,7 +918,7 @@
     /* six to a sheet - the next batch starts on a new page */
     .photo-page{break-inside:avoid;}
     .photo-page + .photo-page{
-      break-before:page;margin-top:0;padding-top:6mm;border-top:none;
+      break-before:page;margin-top:0;padding-top:12mm;border-top:none;
     }
     .photo-card{break-inside:avoid;border:.6pt solid #B9BFD2;border-radius:0;}
     .photo-meta{padding:2.5mm 3mm;}
@@ -932,7 +933,7 @@
     /* ---- document footer, repeated on every page ---- */
     .print-foot{
       display:flex !important;
-      position:fixed;left:15mm;right:15mm;bottom:8mm;
+      position:fixed;left:15mm;right:15mm;bottom:12mm;
       align-items:baseline;justify-content:space-between;gap:6mm;
       padding-top:2.2mm;border-top:.6pt solid #C2C7DC;
       font-size:7.5pt;line-height:1.3;color:#5A6178;
@@ -984,7 +985,7 @@
     .sig-field.is-empty .sig-wrap{height:26mm;}
 
     /* ---- log sheet in print ---- */
-    .log-wrap.on{display:block !important;break-before:page;padding-top:8mm;}
+    .log-wrap.on{display:block !important;break-before:page;padding-top:12mm;}
     .log-head{margin:0 0 4mm;}
     .log-head .lg-t{font-size:11pt;}
     .log-head .lg-s{font-size:8pt;}
@@ -1007,7 +1008,7 @@
     .log-note{margin-top:5mm;break-inside:avoid;}
     .ls-add,.ls-del{display:none !important;}
     .log-block + .log-block{
-      break-before:page;margin-top:0;padding-top:8mm;border-top:none;
+      break-before:page;margin-top:0;padding-top:12mm;border-top:none;
     }
     .chk-group{
       font-size:9.5pt;font-weight:700;color:#16264A;letter-spacing:.04em;
@@ -1047,7 +1048,7 @@
     .ls-meta .field{gap:.6mm;}
     .ls-meta input[type=text]{font-size:9pt;padding:.5mm 0 !important;}
     /* trim the top of the page, and keep clear of the footer at the bottom */
-    .card:has(.log-wrap.on){padding-top:8mm !important;padding-bottom:20mm !important;}
+    .card:has(.log-wrap.on){padding-top:12mm !important;padding-bottom:19mm !important;}
     .log-grid{gap:3mm;}
     /* the books with a wide reading table give it more of the sheet */
     .log-dense .log-grid{grid-template-columns:minmax(0,.78fr) minmax(0,1.7fr);}
@@ -1143,7 +1144,7 @@
 
     /* ---- cooling tower sheet ---- */
     /* the same top margin the other log sheets get */
-    .card:has(.ct-wrap.on){padding-top:8mm !important;padding-bottom:20mm !important;}
+    .card:has(.ct-wrap.on){padding-top:12mm !important;padding-bottom:19mm !important;}
     .ct-wrap{break-before:page;padding-top:0;}
     .ct-wrap .log-head{margin-top:0;}
     .ct-sheet{break-inside:auto;}
