@@ -1194,10 +1194,17 @@
        จึงบีบตัวอักษรและระยะในเซลล์เฉพาะตารางนี้ */
     .hb-wrap{break-inside:avoid;}
     .card:has(.hb-wrap.on){padding-top:8mm !important;padding-bottom:24mm !important;}
-    /* ทำแผ่นให้สูงเต็มหน้า แล้วดัน Comments กับ Verified by ไปชิดล่าง */
-    /* กันไว้สองชั้น เผื่อชั้นใดชั้นหนึ่งไม่ได้เป็นตัวกำหนดความสูง */
-    .hb-wrap{display:flex;flex-direction:column;min-height:262mm;}
-    .hb-sheet{break-inside:avoid;display:flex;flex-direction:column;flex:1;min-height:262mm;}
+    /* ทำแผ่นให้สูงเต็มหน้า แล้วดัน Comments กับ Verified by ไปชิดล่าง
+       เดิมใส่ min-height:262mm ไว้ทั้ง .hb-wrap และ .hb-sheet ตั้งใจกันสองชั้น
+       แต่ .hb-sheet อยู่ข้างใน .hb-wrap และมี .log-head คั่นอยู่ด้านบน
+       ความสูงจึงถูกบวกกัน = log-head 5.5mm + 262mm = 267.5mm
+       ขณะที่หน้ากระดาษเหลือที่ให้ 297 - 8 (padding บน) - 24 (padding ล่าง) = 265mm
+       เกินไป 2.5mm ท้ายกระดาษเลยล้นทับ footer
+
+       แก้โดยให้ .hb-sheet เป็นตัวกำหนดความสูงตัวเดียว และหักที่ของ log-head ออก
+       258 + 5.5 = 263.5mm พอดีในกรอบ 265mm เหลือเผื่อไว้ 1.5mm */
+    .hb-wrap{display:flex;flex-direction:column;min-height:0;}
+    .hb-sheet{break-inside:avoid;display:flex;flex-direction:column;flex:1;min-height:258mm;}
     .hb-wrap .log-head{margin-bottom:2mm;}
     .hb-grid{grid-template-columns:minmax(0,.78fr) minmax(0,1.7fr) !important;gap:3mm !important;}
     .hb-wrap .ls-meta{margin-bottom:2.5mm;}
