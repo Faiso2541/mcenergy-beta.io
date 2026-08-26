@@ -1,6 +1,4 @@
 
-
-
 <!DOCTYPE html>
 <html lang="th">
 <head>
@@ -285,49 +283,6 @@
     background:var(--paper);border-radius:14px;max-width:520px;width:100%;
     padding:22px 24px;max-height:88vh;overflow-y:auto;
   }
-  /* ---- the one dialog that stops a report going out ----
-     narrower than the picker modals: it carries a sentence, not a list */
-  .alert-box{
-    background:var(--paper);border-radius:14px;max-width:420px;width:100%;padding:22px;
-  }
-  .alert-top{display:flex;align-items:flex-start;gap:12px;margin-bottom:16px;}
-  .alert-icon{
-    width:38px;height:38px;border-radius:10px;background:#FBEAEA;flex:0 0 auto;
-    display:flex;align-items:center;justify-content:center;
-    font-family:'Sora';font-weight:700;font-size:21px;color:var(--danger);line-height:1;
-  }
-  .alert-eyebrow{
-    font-size:12px;font-weight:700;color:var(--danger);
-    letter-spacing:.09em;text-transform:uppercase;margin:0;
-  }
-  .alert-title{
-    font-family:'Sora';font-weight:700;font-size:15.5px;color:var(--ink);
-    line-height:1.5;margin:3px 0 0;
-  }
-  .alert-panel{background:var(--page);border-radius:10px;padding:12px 14px;margin-bottom:16px;}
-  .alert-panel-row{
-    display:flex;justify-content:space-between;font-size:13px;
-    color:var(--ink-soft);margin-bottom:9px;
-  }
-  .alert-panel-row b{color:var(--ink);font-weight:700;}
-  .alert-bar{height:6px;background:var(--line);border-radius:3px;overflow:hidden;}
-  .alert-bar > span{display:block;height:100%;background:var(--danger);border-radius:3px;}
-  .alert-detail{
-    margin:10px 0 0;font-size:12.5px;color:var(--ink-soft);
-    line-height:1.6;white-space:pre-line;
-  }
-  .alert-acts{display:flex;gap:9px;}
-  .alert-acts .alert-close{
-    flex:0 0 auto;background:var(--paper);border:1px solid var(--line);color:var(--ink-soft);
-    border-radius:9px;padding:10px 16px;font-size:14px;font-weight:600;
-  }
-  .alert-acts .alert-close:hover{border-color:var(--ink-faint);}
-  .alert-acts .alert-go{
-    flex:1;background:var(--navy);border:none;color:#fff;
-    border-radius:9px;padding:10px;font-size:14px;font-weight:600;
-  }
-  .alert-acts .alert-go:hover{background:var(--navy-soft);}
-
   .modal-head{font-family:'Sora';font-weight:700;font-size:16px;color:var(--navy);margin-bottom:4px;}
   .modal-sub{font-size:12.5px;color:var(--ink-faint);margin-bottom:16px;}
   .modal-opt{
@@ -470,6 +425,41 @@
   /* ช่องคำนวณ ใช้ขนาดและน้ำหนักตัวอักษรชุดเดียวกับ input ในตาราง
      ไม่งั้นตัวเลขจะใหญ่กว่าช่องอื่นเวลาพิมพ์ */
   .mp-dt{text-align:center;background:#F6F7FB;}
+  .hb-info{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:8px 14px;margin:10px 0 14px;}
+  .hb-info label{display:flex;flex-direction:column;gap:3px;font-size:12px;color:var(--ink-faint);font-weight:700;}
+  .hb-info input{border:1px solid var(--line);border-radius:7px;padding:7px 9px;font:inherit;font-size:13px;font-weight:400;color:var(--ink);}
+  .hb-table td.hb-lbl{text-align:left;padding-left:8px;}
+  .hb-table td.hb-grp{text-align:left;padding-left:8px;font-weight:700;background:#FAFBFF;
+                      white-space:normal;line-height:1.25;}
+  .hb-table td.hb-unit{width:44px;color:var(--ink-faint);font-size:11.5px;}
+  .hb-sheet + .hb-sheet{margin-top:26px;padding-top:22px;border-top:2px dashed var(--lav-line);}
+  .hb-table td.hb-dt{text-align:center;background:#F6F7FB;font-size:13px;color:var(--ink);}
+  .hb-table select.hb-sel{border:none;background:transparent;font:inherit;font-size:12.5px;
+                          width:100%;text-align:center;text-align-last:center;padding:5px 2px;}
+  .hb-meta{grid-template-columns:1fr 1fr 1fr;}
+  /* กล่องหมายเหตุสูงพอ 3 บรรทัด ไม่กินพื้นที่หน้ากระดาษเกินจำเป็น */
+  /* หมายเหตุของแผ่นนี้เอาแค่ 2 บรรทัด ไม่ให้ดันตารางตกหน้าสอง */
+  .hb-wrap .ct-note textarea{min-height:0;height:auto;}
+  .hb-wrap .ct-note{margin-top:10px;}
+  .hb-table tr.hb-sec td{background:var(--lav-bg);color:var(--navy);font-weight:700;
+                         text-align:center;font-size:13.5px;letter-spacing:.02em;padding:7px 4px;}
+  .hb-table td.hb-date{text-align:center;}
+  /* ค่าที่ยอมรับได้ เป็นค่าอ้างอิง จึงใช้สีอ่อนกว่าค่าที่วัดได้จริง */
+  .hb-table td.hb-rng{background:#FAFBFF;}
+  .hb-table td.hb-rng input{color:var(--ink-soft);}
+  .hb-table th.num{text-align:center;font-size:11px;letter-spacing:.03em;}
+  /* ช่องวันที่กับเวลาเดิมเตี้ยกว่าแถวข้อมูล ทำให้หัวตารางดูลอย
+     จัดให้สูงเท่ากันและตัวหนังสือขนาดเดียวกับค่าที่กรอก */
+  .hb-table thead th{padding:7px 5px;}
+  .hb-table input.hb-when{font-size:13px;padding:5px 4px;width:100%;
+                          border:none;background:transparent;text-align:center;}
+  /* วางแบบเดียวกับ Log sheet air cool / water cool
+     กล่องค่าออกแบบอยู่ซ้าย ตารางกรอกค่าอยู่ขวา */
+  .hb-grid{grid-template-columns:minmax(0,.78fr) minmax(0,1.7fr);}
+  .hb-main{min-width:0;}
+  @media (max-width: 900px){ .hb-grid{grid-template-columns:1fr;} }
+  .hb-table th.hb-lead{background:var(--lav-bg);}
+  .hb-when{border:none;background:transparent;font:inherit;font-size:11.5px;text-align:center;width:100%;}
   .ct-water{margin-top:14px;}
   .ct-table td.ct-unit{font-size:12px;color:var(--ink-soft);padding:6px 10px;white-space:normal;}
   .ct-foot{display:grid;grid-template-columns:auto 1fr;gap:18px;align-items:start;margin-top:18px;}
@@ -544,23 +534,6 @@
     box-shadow:0 1px 4px rgba(0,0,0,.28);
   }
   .photo-slot .photo-x:hover{background:#A83A3A;}
-  /* An empty slot on the general photo page can be thrown away: a job with two
-     pictures should not be held back by four frames nobody wanted. Slots that
-     a form laid out belong to its work steps, so they never get this button. */
-  .photo-drop{
-    position:absolute;right:8px;bottom:8px;border:1px solid var(--line);
-    background:#fff;color:var(--ink-faint);border-radius:6px;
-    padding:3px 8px;font-size:11px;font-weight:600;line-height:1;opacity:.75;
-  }
-  .photo-drop:hover{opacity:1;border-color:var(--danger);color:var(--danger);}
-  /* marked only after a blocked attempt, never while the user is still working */
-  .photo-slot.is-missing{
-    outline:2px solid #D93A3A;outline-offset:-2px;border-radius:10px;background:#FDF1F1;
-  }
-  .photo-slot.is-missing .empty{color:#B32020;}
-  @keyframes missingPulse{0%,100%{box-shadow:0 0 0 0 rgba(217,58,58,0);}
-                          40%   {box-shadow:0 0 0 6px rgba(217,58,58,.22);}}
-  .photo-slot.is-missing.pulse{animation:missingPulse .9s ease-out 2;}
   .photo-meta{padding:9px 12px 11px;display:flex;flex-direction:column;gap:3px;}
   .ph-label-row{display:flex;align-items:baseline;gap:6px;}
   .ph-num{font-size:11px;font-weight:700;color:#2C5FAE;flex:0 0 auto;white-space:nowrap;}
@@ -769,7 +742,7 @@
     body{font-size:11.5pt;color:#000;-webkit-print-color-adjust:exact;print-color-adjust:exact;}
     .wrap{max-width:none;margin:0;padding:0 15mm;}
 
-    .topbar,.btn-install,.add-row,.add-photo-btn,.photo-x,.photo-drop,.photo-remove,.sig-toolbar,.foot-note,
+    .topbar,.btn-install,.add-row,.add-photo-btn,.photo-x,.photo-remove,.sig-toolbar,.foot-note,
     .chk-status button:not(.sel),.tpl-picker,.modal-overlay,.chk-del,.cover-hint{display:none !important;}
 
     /* ---- cover: full-bleed first page ----
@@ -787,7 +760,7 @@
       border-radius:0;margin:0 -15mm 8mm;
       /* padding, not margin: a top margin collapses out of the page box and
          the letterhead ends up jammed against the edge of the sheet */
-      padding-top:12mm;
+      padding-top:16mm;
     }
     .lh-cell{border-right:.6pt solid #C9CDE0;padding:5mm 8mm;}
     .lh-title h1{font-size:17pt;letter-spacing:.01em;}
@@ -798,7 +771,10 @@
 
     .card{
       border:none;box-shadow:none;break-inside:auto;
-      padding:12mm 0 19mm;margin:0;border-radius:0;
+      /* ระยะขอบ: บน 8mm / ล่าง 24mm เท่ากันทุกหน้า ทุกฟอร์ม
+         แถบท้ายหน้าอยู่ที่ 16mm จากขอบล่างและสูงราว 8mm
+         เนื้อหาจึงต้องจบที่ 24mm เพื่อไม่ให้ทับกัน */
+      padding:8mm 0 24mm;margin:0;border-radius:0;
     }
     /* keep photos crisp when the printer/PDF downsamples them */
     .photo-slot img{image-rendering:auto;}
@@ -818,7 +794,7 @@
     .signoff-card > .grid > .field:nth-child(2){grid-column:2;grid-row:1;}
     /* when the file was produced - quiet, at the foot of the last page */
     .create-time{
-      display:block !important;position:absolute;left:0;bottom:19mm;
+      display:block !important;position:absolute;left:0;bottom:14mm;
       font-size:7.5pt;color:#A7ADBE !important;letter-spacing:.04em;
     }
     .card > .field.full textarea{min-height:52mm;}
@@ -918,7 +894,7 @@
     /* six to a sheet - the next batch starts on a new page */
     .photo-page{break-inside:avoid;}
     .photo-page + .photo-page{
-      break-before:page;margin-top:0;padding-top:12mm;border-top:none;
+      break-before:page;margin-top:0;padding-top:6mm;border-top:none;
     }
     .photo-card{break-inside:avoid;border:.6pt solid #B9BFD2;border-radius:0;}
     .photo-meta{padding:2.5mm 3mm;}
@@ -933,7 +909,7 @@
     /* ---- document footer, repeated on every page ---- */
     .print-foot{
       display:flex !important;
-      position:fixed;left:15mm;right:15mm;bottom:12mm;
+      position:fixed;left:15mm;right:15mm;bottom:16mm;
       align-items:baseline;justify-content:space-between;gap:6mm;
       padding-top:2.2mm;border-top:.6pt solid #C2C7DC;
       font-size:7.5pt;line-height:1.3;color:#5A6178;
@@ -985,7 +961,7 @@
     .sig-field.is-empty .sig-wrap{height:26mm;}
 
     /* ---- log sheet in print ---- */
-    .log-wrap.on{display:block !important;break-before:page;padding-top:12mm;}
+    .log-wrap.on{display:block !important;break-before:page;padding-top:8mm;}
     .log-head{margin:0 0 4mm;}
     .log-head .lg-t{font-size:11pt;}
     .log-head .lg-s{font-size:8pt;}
@@ -1008,7 +984,7 @@
     .log-note{margin-top:5mm;break-inside:avoid;}
     .ls-add,.ls-del{display:none !important;}
     .log-block + .log-block{
-      break-before:page;margin-top:0;padding-top:12mm;border-top:none;
+      break-before:page;margin-top:0;padding-top:8mm;border-top:none;
     }
     .chk-group{
       font-size:9.5pt;font-weight:700;color:#16264A;letter-spacing:.04em;
@@ -1048,7 +1024,7 @@
     .ls-meta .field{gap:.6mm;}
     .ls-meta input[type=text]{font-size:9pt;padding:.5mm 0 !important;}
     /* trim the top of the page, and keep clear of the footer at the bottom */
-    .card:has(.log-wrap.on){padding-top:12mm !important;padding-bottom:19mm !important;}
+    .card:has(.log-wrap.on){padding-top:8mm !important;padding-bottom:24mm !important;}
     .log-grid{gap:3mm;}
     /* the books with a wide reading table give it more of the sheet */
     .log-dense .log-grid{grid-template-columns:minmax(0,.78fr) minmax(0,1.7fr);}
@@ -1142,13 +1118,44 @@
       min-height:12mm !important;height:12mm;
     }
 
+    /* ---- hybrid chiller sheet ----
+       ตารางยาว 33 แถว ถ้าใช้ระยะปกติจะล้นไปหน้าสอง
+       จึงบีบตัวอักษรและระยะในเซลล์เฉพาะตารางนี้ */
+    .hb-wrap{break-inside:avoid;}
+    .card:has(.hb-wrap.on){padding-top:8mm !important;padding-bottom:24mm !important;}
+    /* ทำแผ่นให้สูงเต็มหน้า แล้วดัน Comments กับ Verified by ไปชิดล่าง */
+    /* กันไว้สองชั้น เผื่อชั้นใดชั้นหนึ่งไม่ได้เป็นตัวกำหนดความสูง */
+    .hb-wrap{display:flex;flex-direction:column;min-height:262mm;}
+    .hb-sheet{break-inside:avoid;display:flex;flex-direction:column;flex:1;min-height:262mm;}
+    .hb-wrap .log-head{margin-bottom:2mm;}
+    .hb-grid{grid-template-columns:minmax(0,.78fr) minmax(0,1.7fr) !important;gap:3mm !important;}
+    .hb-wrap .ls-meta{margin-bottom:2.5mm;}
+    .hb-table th,.hb-table td{padding:.75mm .6mm !important;line-height:1.25;}
+    .hb-table td.hb-lbl,.hb-table td.hb-grp{font-size:7.8pt !important;}
+    .hb-table td.hb-unit{font-size:6.8pt !important;}
+    .hb-table td.hb-dt{font-size:8.4pt !important;}
+    .hb-table input,.hb-table select{font-size:8.4pt !important;padding:0 !important;}
+    .hb-table tr.hb-sec td{font-size:8.6pt !important;padding:1mm !important;letter-spacing:.02em;}
+    .hb-table th.hb-lead{font-size:7.4pt !important;}
+    .hb-table thead th{padding:1.2mm .6mm !important;}
+    .hb-table input.hb-when{font-size:8.4pt !important;padding:0 !important;}
+    /* margin-top:auto ดันบล็อกท้ายไปชิดขอบล่างของแผ่น */
+    .hb-wrap .ct-note{margin-top:auto !important;padding-top:5mm;}
+    .hb-wrap .ct-note textarea,.hb-wrap .ct-note .pv-text{
+      min-height:10mm !important;height:10mm !important;font-size:8.5pt !important;
+    }
+    .hb-wrap .log-foot{margin-top:3mm !important;margin-bottom:0 !important;}
+    .hb-add,.hb-del{display:none !important;}
+
     /* ---- cooling tower sheet ---- */
     /* the same top margin the other log sheets get */
-    .card:has(.ct-wrap.on){padding-top:12mm !important;padding-bottom:19mm !important;}
+    .card:has(.ct-wrap.on){padding-top:8mm !important;padding-bottom:24mm !important;}
     .ct-wrap{break-before:page;padding-top:0;}
     .ct-wrap .log-head{margin-top:0;}
     .ct-sheet{break-inside:auto;}
     .ct-sheet + .ct-sheet{break-before:page;padding-top:0;}
+    .hb-sheet + .hb-sheet{break-before:page;padding-top:0;margin-top:0;border-top:0;}
+    .hb-add,.hb-del{display:none !important;}
     .ct-sheet-add,.ct-sheet-del{display:none !important;}
     .ct-title{font-size:9.5pt;margin:4mm 0 1.5mm;break-after:avoid;}
     .ct-box{border:none !important;border-radius:0 !important;overflow:visible !important;}
@@ -1488,7 +1495,7 @@
   </div>
 
   <!-- SECTION 3: PHOTO REPORT -->
-  <div class="card" id="photoCard">
+  <div class="card">
     <div class="sec-bar">Photo record — ภาพถ่ายหน้างาน</div>
     <p class="sec-note">คลิกช่องภาพเพื่ออัปโหลด</p>
     <div id="photoGrid"></div>
@@ -1622,29 +1629,6 @@
   </div>
 </div>
 
-<div class="modal-overlay" id="alertModal" style="display:none;">
-  <div class="alert-box" role="alertdialog" aria-labelledby="alertTitle">
-    <div class="alert-top">
-      <div class="alert-icon" aria-hidden="true">!</div>
-      <div>
-        <p class="alert-eyebrow">แจ้งเตือน</p>
-        <p class="alert-title" id="alertTitle">—</p>
-      </div>
-    </div>
-    <div class="alert-panel" id="alertPanel">
-      <div class="alert-panel-row" id="alertCountRow">
-        <span id="alertPanelLabel">ความคืบหน้า</span><b id="alertPanelCount">—</b>
-      </div>
-      <div class="alert-bar" id="alertBarWrap"><span id="alertBar" style="width:0%;"></span></div>
-      <p class="alert-detail" id="alertDetail"></p>
-    </div>
-    <div class="alert-acts">
-      <button type="button" class="alert-close" id="alertClose">ปิด</button>
-      <button type="button" class="alert-go" id="alertGo">ตกลง</button>
-    </div>
-  </div>
-</div>
-
 <div class="modal-overlay" id="tplModal" style="display:none;">
   <div class="modal-box">
     <div class="modal-head">เลือกแบบฟอร์มตรวจสอบ</div>
@@ -1720,6 +1704,17 @@
         <span style="background:#E6F5EC;color:#1F7248;">ปกติ</span>
         <span style="background:#FBEAEA;color:#C94F4F;">เฝ้าระวัง</span>
         <span style="background:#FDF3D8;color:#8A6D0E;">ควร Overhaul</span>
+      </div>
+    </button>
+
+    <button type="button" class="modal-opt" data-tpl="loghb">
+      <div class="t">Log sheet hybrid chiller</div>
+      <div class="d">Plate Tube Evaporative Air Cooled Chiller — สโคปงาน 13 รายการชุดเดียวกับ RTHD + ตารางบันทึกค่า 3 ช่วงเวลา</div>
+      <div class="legend">
+        <span style="background:#E6F5EC;color:#1F7248;">ปกติ</span>
+        <span style="background:#FDF3D8;color:#8A6D0E;">เฝ้าระวัง</span>
+        <span style="background:#FBEAEA;color:#C94F4F;">ชำรุด</span>
+        <span style="background:#E6F0FB;color:#1D5FA8;">ควรเปลี่ยน</span>
       </div>
     </button>
 
@@ -1888,6 +1883,17 @@
         { t:'เช็คระบบ Drain', n:1 }
       ]
     },
+    loghb: {
+      name: 'Log sheet hybrid chiller',
+      mode: 'hb',
+      statuses: [
+        { key:'normal',  label:'ปกติ',        bg:'#E6F5EC', fg:'#1F7248', border:'#2E9E63' },
+        { key:'watch',   label:'เฝ้าระวัง',    bg:'#FDF3D8', fg:'#8A6D0E', border:'#E0B400' },
+        { key:'broken',  label:'ชำรุด',        bg:'#FBEAEA', fg:'#C94F4F', border:'#C94F4F' },
+        { key:'replace', label:'ควรเปลี่ยน',   bg:'#E6F0FB', fg:'#1D5FA8', border:'#378ADD' }
+      ],
+      items: []
+    },
     logmp: {
       name: 'Log sheet Service Motor pump',
       mode: 'mp',
@@ -2020,6 +2026,24 @@
   TEMPLATES.logtrane.items      = TEMPLATES.logwc.items.slice();
   TEMPLATES.logtrane.photoSteps = TEMPLATES.logwc.photoSteps;
 
+  /* hybrid chiller: สโคปงานเฉพาะของตัวเอง (สถานะกำหนดไว้ในนิยามฟอร์มแล้ว) */
+  TEMPLATES.loghb.items = [
+    'ตรวจสอบสภาพฉนวนและทำความสะอาดตัวเครื่อง',
+    'ตรวจสอบและฉีดล้างทำความสะอาด Infill ด้วยเครื่องฉีดน้ำแรงดันสูง',
+    'ตรวจสอบการทำงานของพัดลมระบายความร้อน',
+    'วัดกระแส Compressor และ Motor ขณะ Run',
+    'ตรวจสอบแรงดันของสารทำความเย็นและน้ำมัน',
+    'ตรวจสอบการรั่วของสารทำความเย็นและน้ำมัน',
+    'ตรวจสอบอุณหภูมิเข้าออก Cooler',
+    'ตรวจสอบการทำงานของ Cooling Pump',
+    'ตรวจสอบและบันทึกค่าการทำงานของเครื่อง',
+    'ตรวจสอบค่า Super head และ Sub cooling',
+    'ตรวจสอบเสียงและการสั่นสะเทือนขณะเครื่องทำงาน',
+    'ตรวจสอบสภาพสายไฟ Control จุดต่อสายไฟภายในตู้ Chiller Control Panel'
+  ];
+  /* หน้ารูปภาพ 6 ช่อง ใช้คำบรรยายเดียวกันทุกช่อง */
+  TEMPLATES.loghb.photoSteps = [{ t:'รูปภาพการปฏิบัติงาน', n:6 }];
+
   /* a fresh report opens with one full printed page of photo slots */
   var defaultPhotos = [
     { caption: '', img: null },
@@ -2073,6 +2097,7 @@
       logs: state.logs,
       ct: state.ct,
       mp: state.mp,
+      hb: state.hb,
       photoTpl: state.photoTpl,
       signature: state.signature
     };
@@ -2900,6 +2925,264 @@
     '</div>';
   }
 
+  /* ---- Hybrid chiller log sheet ----
+     ตารางบันทึกค่าแบบหลายช่วงเวลา: หัวเรื่องเครื่องหนึ่งชุด
+     แล้วอ่านค่าชุดเดิมซ้ำหลายรอบ แต่ละรอบเป็นหนึ่งคอลัมน์ */
+  var HB_COLS = 2;
+
+  /* ชุดเดียวกับหัวตารางของ Log sheet RTHD / water cool
+     ส่วนชื่อเครื่องกับ Tag no. ไปอยู่บรรทัดข้างป้าย Log sheet เหมือนกัน */
+  /* ตารางค่าออกแบบข้างตารางบันทึกค่า ใช้รายการชุดเดียวกับ Log sheet air cool */
+  var HB_DESIGN = ['Refrigerant','Tons','Total Amp','Outdoor air (C/F)','Control mode',
+                   'Leaving Set Point (C/F)','Comp#1 RLA','Comp#2 RLA','Comp#3 RLA',
+                   'Fan motor FLA','Sat. Evap T','Sat. Evap P','Sat. Cond T','Sat. Cond P'];
+
+  var HB_HEAD = [
+    { k:'brand',  h:'Brand' },
+    { k:'model',  h:'Model' },
+    { k:'serial', h:'Serial No.' }
+  ];
+
+  var HB_SECTIONS = [
+    { title:'System report', rows:[
+      { k:'startup', h:'Running Mode',        u:'',   opts:['Running','Chiller Off'], r:'Running' },
+      { k:'lwtemp',  h:'Leaving water evap',  u:'\u00B0C', r:'7' },
+      { k:'rwtemp',  h:'Entering water evap', u:'\u00B0C', r:'12' },
+      /* Delta T คิดให้เอง = Entering - Leaving ไม่ต้องกรอก */
+      { k:'dt',      h:'Delta T',             u:'\u00B0C', calc:{ a:'rwtemp', b:'lwtemp', r:'5' } },
+      { k:'cwtemp',  h:'Cooling water temp',  u:'\u00B0C', r:'<38' },
+      { k:'envtemp', h:'Ambient air temp',    u:'\u00B0C', r:'40' },
+      { k:'c1hrs',   h:'Comp #1 Run (Hrs)',   u:'hr' },
+      { k:'c2hrs',   h:'Comp #2 Run (Hrs)',   u:'hr' },
+      { k:'c3hrs',   h:'Comp #3 Run (Hrs)',   u:'hr' },
+      { k:'dis1',    h:'Comp discharge temp', u:'\u00B0C', r:'<70' },
+      { k:'liq1',    h:'Liquid line temp',    u:'\u00B0C', r:'<40' },
+      { k:'sh1',     h:'Discharge superheat', u:'\u00B0C', r:'<20' }
+    ]},
+    { title:'Compressors and motors report.', grouped:true, rows:[
+      { k:'cp1l1', g:'Comp # 1',      h:'Phase L1 . Amp', r:'<60' },
+      { k:'cp1l2', g:'Comp # 1',      h:'Phase L2 . Amp', r:'<60' },
+      { k:'cp1l3', g:'Comp # 1',      h:'Phase L3 . Amp', r:'<60' },
+      { k:'cp2l1', g:'Comp # 2',      h:'Phase L1 . Amp', r:'<60' },
+      { k:'cp2l2', g:'Comp # 2',      h:'Phase L2 . Amp', r:'<60' },
+      { k:'cp2l3', g:'Comp # 2',      h:'Phase L3 . Amp', r:'<60' },
+      { k:'cp3l1', g:'Comp # 3',      h:'Phase L1 . Amp', r:'<60' },
+      { k:'cp3l2', g:'Comp # 3',      h:'Phase L2 . Amp', r:'<60' },
+      { k:'cp3l3', g:'Comp # 3',      h:'Phase L3 . Amp', r:'<60' },
+      { k:'tf1l1', g:'Tower Fan # 1', h:'Phase L1 . Amp', r:'<60' },
+      { k:'tf1l2', g:'Tower Fan # 1', h:'Phase L2 . Amp', r:'<60' },
+      { k:'tf1l3', g:'Tower Fan # 1', h:'Phase L3 . Amp', r:'<60' },
+      { k:'tf2l1', g:'Tower Fan # 2', h:'Phase L1 . Amp', r:'<10' },
+      { k:'tf2l2', g:'Tower Fan # 2', h:'Phase L2 . Amp', r:'<10' },
+      { k:'tf2l3', g:'Tower Fan # 2', h:'Phase L3 . Amp', r:'<10' },
+      { k:'cpml1', g:'Cooling Pump',  h:'Phase L1 . Amp', r:'<8' },
+      { k:'cpml2', g:'Cooling Pump',  h:'Phase L2 . Amp', r:'<8' },
+      { k:'cpml3', g:'Cooling Pump',  h:'Phase L3 . Amp', r:'<8' }
+    ]},
+    { title:'voltage.', rows:[
+      { k:'volt', h:'Voltage', u:'V' }
+    ]},
+    { title:'System pressure ( gauges )', rows:[
+      { k:'hp1', h:'Ckt 1 High Pressure', u:'kPa', r:'2000-2700' },
+      { k:'lp1', h:'Ckt 1 Low Pressure',  u:'kPa', r:'750-900' }
+    ]}
+  ];
+
+  function emptyHbSheet(){
+    var cols = [], i;
+    for(i = 0; i < HB_COLS; i++){ cols.push({ date:'', time:'' }); }
+    return { unit:'', brand:'', model:'', serial:'', date:'',
+             cols: cols, vals: {}, range: {}, design: {}, comments:'', verifiedBy:'' };
+  }
+  /* ร่างงานเก่าอาจยังไม่มีคีย์ครบ จึงเทียบกับโครงว่างก่อนใช้ */
+  function normalizeHb(d){
+    var o = emptyHbSheet();
+    if(!d) return o;
+    HB_HEAD.forEach(function(c){ if(typeof d[c.k] === 'string'){ o[c.k] = d[c.k]; } });
+    if(typeof d.unit === 'string'){ o.unit = d.unit; }
+    if(typeof d.date === 'string'){ o.date = d.date; }
+    /* ร่างงานเก่าเก็บวันที่ไว้ในคอลัมน์แรก ย้ายขึ้นมาเป็นของทั้งแผ่น */
+    if(!o.date && d.cols && d.cols[0] && d.cols[0].date){ o.date = d.cols[0].date; }
+    /* ร่างงานเก่าเก็บ Model number / Serial number / Tag number ไว้คนละชื่อคีย์ */
+    if(!o.model  && typeof d.model  === 'string'){ o.model  = d.model; }
+    if(!o.serial && typeof d.serial === 'string'){ o.serial = d.serial; }
+    if(!o.unit   && typeof d.tag    === 'string'){ o.unit   = d.tag; }
+    if(d.cols && d.cols.length){
+      /* ร่างงานเก่าอาจเก็บไว้คนละจำนวนช่อง ตัดหรือเติมให้เท่า HB_COLS เสมอ */
+      o.cols = d.cols.slice(0, HB_COLS).map(function(c){
+        return { date:(c && c.date) || '', time:(c && c.time) || '' };
+      });
+      while(o.cols.length < HB_COLS){ o.cols.push({ date:'', time:'' }); }
+    }
+    o.vals = d.vals || {};
+    o.design = d.design || {};
+    o.range = d.range || {};
+    o.comments = d.comments || '';
+    o.verifiedBy = d.verifiedBy || '';
+    return o;
+  }
+  /* เก็บเป็นอาร์เรย์เพื่อรองรับหลายแผ่น ร่างงานเก่าเก็บเป็นก้อนเดียวจึงแปลงให้ */
+  function hbSheets(){
+    if(!state.hb){ state.hb = [emptyHbSheet()]; }
+    if(Object.prototype.toString.call(state.hb) !== '[object Array]'){
+      state.hb = [normalizeHb(state.hb)];
+    }
+    if(!state.hb.length){ state.hb = [emptyHbSheet()]; }
+    return state.hb;
+  }
+  /* แผ่นที่ช่องกรอกนั้นสังกัดอยู่ */
+  function hbOf(el){
+    var box = el && el.closest ? el.closest('.hb-sheet') : null;
+    var all = hbSheets();
+    if(!box) return all[0];
+    return all[+box.getAttribute('data-s')] || all[0];
+  }
+
+  function hbVal(sh, k, i){
+    var a = sh.vals[k];
+    return (a && a[i]) || '';
+  }
+  function hbInput(k, i, v){
+    return '<input type="text" data-hb="' + k + '" data-i="' + i +
+           '" value="' + escapeAttr(v || '') + '" placeholder="-">';
+  }
+  /* แถวที่เลือกจากรายการ เช่น Running Mode */
+  function hbSelect(k, i, v, opts){
+    return '<select class="hb-sel" data-hb="' + k + '" data-i="' + i + '">' +
+      '<option value=""></option>' +
+      opts.map(function(o){
+        return '<option value="' + escapeAttr(o) + '"' +
+               (v === o ? ' selected' : '') + '>' + escapeHtml(o) + '</option>';
+      }).join('') + '</select>';
+  }
+  /* Delta T = ค่าแถว a ลบแถว b ของคอลัมน์เดียวกัน */
+  function hbCalc(sh, r, i){
+    var a = parseFloat(hbVal(sh, r.calc.a, i));
+    var b = parseFloat(hbVal(sh, r.calc.b, i));
+    if(isNaN(a) || isNaN(b)) return '';
+    return String(Math.round((a - b) * 100) / 100);
+  }
+
+  function hbDesignHtml(sh){
+    return '<div class="log-box"><table class="log-table">' +
+        '<thead><tr><th colspan="2">Full load design condition</th></tr></thead>' +
+        '<tbody>' + HB_DESIGN.map(function(t, i){
+          return '<tr><td class="lbl">' + escapeHtml(t) + '</td>' +
+                 '<td class="val"><input type="text" data-hbd="' + i + '" value="' +
+                 escapeAttr(sh.design && sh.design[i] ? sh.design[i] : '') +
+                 '" placeholder="-"></td></tr>';
+        }).join('') + '</tbody>' +
+      '</table></div>';
+  }
+
+  function hbBlockHtml(){
+    var sheets = hbSheets();
+    return '<div class="ct-wrap on mp-wrap hb-wrap">' +
+      '<div class="log-head"><div class="lg-t">Hybrid Chiller Log Sheet</div>' +
+        '<div class="lg-s">Plate Tube Evaporative Air Cooled Chiller \u2014 บันทึกค่าได้ ' +
+        HB_COLS + ' ช่วงเวลาต่อแผ่น</div></div>' +
+      sheets.map(function(sh, si){ return hbSheetHtml(sh, si, sheets.length); }).join('') +
+      '<button type="button" class="add-row hb-add">+ เพิ่มแผ่น Hybrid chiller</button>' +
+    '</div>';
+  }
+
+  function hbSheetHtml(sh, si, total){
+    var many = total > 1;
+    var n = sh.cols.length;
+
+    /* หัวตารางและแถว Date / Time จัดแบบเดียวกับ Log sheet air cool */
+    var head =
+      '<thead><tr>' +
+        '<th colspan="3" class="hb-lead">Chiller Report</th>' +
+        '<th class="num">Acceptable Range</th>' +
+        READ_HEADS.slice(0, n).map(function(h){
+          return '<th class="num">' + h + '</th>';
+        }).join('') +
+      '</tr></thead>';
+
+    /* วันที่ใช้ร่วมกันทั้งแผ่น (ตรวจวันเดียวกัน) ส่วนเวลาแยกตามรอบที่อ่านค่า */
+    var when =
+      '<tr><td colspan="2" class="hb-lbl">Date</td><td class="hb-unit"></td>' +
+        '<td class="hb-rng"></td>' +
+        '<td colspan="' + n + '" class="hb-date"><input type="date" class="hb-when" ' +
+        'data-hbt="date" value="' + escapeAttr(sh.date || '') + '"></td></tr>' +
+      '<tr><td colspan="2" class="hb-lbl">Time</td><td class="hb-unit"></td>' +
+        '<td class="hb-rng"></td>' +
+        sh.cols.map(function(c, i){
+          return '<td><input type="time" class="hb-when" data-hbc="time" data-i="' + i +
+                 '" value="' + escapeAttr(c.time) + '"></td>';
+        }).join('') + '</tr>';
+
+    var body = when;
+    HB_SECTIONS.forEach(function(sec){
+      body += '<tr class="hb-sec"><td colspan="' + (4 + n) + '">' + escapeHtml(sec.title) + '</td></tr>';
+      var lastG = null;
+      sec.rows.forEach(function(r){
+        var cells = '';
+        if(sec.grouped){
+          if(r.g !== lastG){
+            var span = sec.rows.filter(function(x){ return x.g === r.g; }).length;
+            cells += '<td rowspan="' + span + '" class="hb-grp">' + escapeHtml(r.g) + '</td>';
+            lastG = r.g;
+          }
+          cells += '<td colspan="2" class="hb-lbl">' + escapeHtml(r.h) + '</td>';
+        } else {
+          cells += '<td colspan="2" class="hb-lbl">' + escapeHtml(r.h) + '</td>' +
+                   '<td class="hb-unit">' + escapeHtml(r.u || '') + '</td>';
+        }
+        /* ช่องค่าที่ยอมรับได้ กรอกครั้งเดียวใช้ร่วมทุกรอบ */
+        /* ค่าที่ยอมรับได้: ใช้ค่ามาตรฐานของแถวนั้นถ้ายังไม่เคยแก้ */
+        var rngV = (sh.range && sh.range[r.k] !== undefined) ? sh.range[r.k] : (r.r || '');
+        cells += '<td class="hb-rng"><input type="text" data-hbr="' + r.k + '" value="' +
+                 escapeAttr(rngV) + '" placeholder="-"></td>';
+        for(var i = 0; i < n; i++){
+          if(r.calc){
+            cells += '<td class="hb-dt" data-hbdt="' + si + '-' + r.k + '-' + i + '">' +
+                     escapeHtml(hbCalc(sh, r, i)) + '</td>';
+          } else if(r.opts){
+            cells += '<td>' + hbSelect(r.k, i, hbVal(sh, r.k, i), r.opts) + '</td>';
+          } else {
+            cells += '<td>' + hbInput(r.k, i, hbVal(sh, r.k, i)) + '</td>';
+          }
+        }
+        body += '<tr>' + cells + '</tr>';
+      });
+    });
+
+    /* หัวตารางใช้โครงเดียวกับ Log sheet RTHD / water cool */
+    var info = '<div class="ls-meta hb-meta">' + HB_HEAD.map(function(c){
+      return '<div class="field"><label>' + escapeHtml(c.h) + '</label>' +
+             '<input type="text" data-hbh="' + c.k + '" value="' + escapeAttr(sh[c.k] || '') +
+             '" placeholder="' + escapeHtml(c.h) + '..."></div>';
+    }).join('') + '</div>';
+
+    return '<div class="hb-sheet" data-s="' + si + '">' +
+      '<div class="log-sheet-bar">' +
+        '<span class="ls-no">Log sheet ' + (si + 1) + (many ? ' / ' + total : '') + '</span>' +
+        '<input type="text" class="ls-tag" data-hbt="unit" value="' + escapeAttr(sh.unit || '') +
+          '" placeholder="ระบุเครื่อง / Tag no. / วันที่ ของแผ่นนี้...">' +
+        (many ? '<button type="button" class="ls-del hb-del">ลบแผ่นนี้</button>' : '') +
+      '</div>' +
+      info +
+      '<div class="log-grid hb-grid">' +
+      '<div class="log-col">' + hbDesignHtml(sh) + '</div>' +
+      '<div class="log-col log-col-r">' +
+      '<div class="ct-box hb-main"><table class="ct-table hb-table"><colgroup>' +
+        /* ช่องกรอกค่ากินพื้นที่ครึ่งตาราง ที่เหลือเป็นชื่อรายการ */
+        '<col style="width:80px"><col><col style="width:30px">' +
+        '<col style="width:13%">' +
+        sh.cols.map(function(){ return '<col style="width:22%">'; }).join('') +
+      '</colgroup>' + head + '<tbody>' + body + '</tbody></table></div>' +
+      '</div></div>' +
+      '<div class="field full ct-note"><label>Comments</label>' +
+        '<textarea rows="2" data-hbt="comments" placeholder="หมายเหตุ / สิ่งที่ตรวจพบ...">' +
+        escapeHtml(sh.comments || '') + '</textarea></div>' +
+      '<div class="log-foot"><div class="field"><label>Verified by</label>' +
+        '<input type="text" data-hbt="verifiedBy" value="' + escapeAttr(sh.verifiedBy || '') +
+        '" placeholder="ชื่อผู้ตรวจสอบ"></div></div>' +
+    '</div>';
+  }
+
   /* ---- Motor pump log sheet ----
      ตารางเดียวกว้างเกินหน้ากระดาษ A4 แนวตั้ง จึงตัดกลุ่ม Vibration
      ลงมาไว้ตารางล่าง ใช้แถวชุดเดียวกัน อ้างอิงกันด้วย Ref No. */
@@ -3090,7 +3373,7 @@
   }
 
   /* ---- checklist (several templates at once) ---- */
-  var TPL_ORDER = ['service','project','tube','ahu','delivery','logwc','logac','logtrane','logmag','logct','logmp'];
+  var TPL_ORDER = ['service','project','tube','ahu','delivery','logwc','logac','logtrane','logmag','logct','logmp','loghb'];
 
   function tplSelected(k){ return state.templates.indexOf(k) !== -1; }
   function selectedTemplates(){ return TPL_ORDER.filter(tplSelected); }
@@ -3135,6 +3418,10 @@
     }
     state.ct = d.ct ? normalizeCt(d.ct) : null;
     state.mp = normalizeMp(d.mp);
+    state.hb = d.hb
+      ? (Object.prototype.toString.call(d.hb) === '[object Array]'
+          ? d.hb.map(normalizeHb) : [normalizeHb(d.hb)])
+      : null;
     state.photoTpl = d.photoTpl || null;
     ensureTemplateData();
   }
@@ -3164,6 +3451,7 @@
         state.ct.forEach(ctSyncRefs);
       }
       if(t.mode === 'mp'){ mpSheet(); }
+      if(t.mode === 'hb'){ hbSheets(); }
     });
     state.checklist = state.checklist.filter(function(it){
       return !it.tpl || tplSelected(it.tpl);
@@ -3174,6 +3462,7 @@
     if(!tplSelected('delivery')){ state.partsTable = []; }
     if(!tplSelected('logct')){ state.ct = null; }
     if(!tplSelected('logmp')){ state.mp = null; }
+    if(!tplSelected('loghb')){ state.hb = null; }
   }
 
   function updateTplUI(){
@@ -3302,6 +3591,7 @@
       if(t.mode === 'log'){ html += logBlockHtml(k); }
       if(t.mode === 'ct'){  html += ctBlockHtml(); }
       if(t.mode === 'mp'){  html += mpBlockHtml(); }
+      if(t.mode === 'hb'){  html += hbBlockHtml(); }
       return html + '</div>';
     }).join('');
 
@@ -3364,6 +3654,48 @@
     if(pk && el.closest('.parts-table')){
       var pi = +el.getAttribute('data-i');
       if(state.partsTable[pi]){ state.partsTable[pi][pk] = el.value; }
+      return;
+    }
+    /* hybrid chiller table */
+    var hbT = el.getAttribute('data-hbt');
+    if(hbT){ hbOf(el)[hbT] = el.value; return; }
+    var hbH = el.getAttribute('data-hbh');
+    if(hbH){ hbOf(el)[hbH] = el.value; return; }
+    var hbR = el.getAttribute('data-hbr');
+    if(hbR){
+      var hbRs = hbOf(el);
+      if(!hbRs.range){ hbRs.range = {}; }
+      hbRs.range[hbR] = el.value;
+      return;
+    }
+    var hbD = el.getAttribute('data-hbd');
+    if(hbD !== null){
+      var hbDs = hbOf(el);
+      if(!hbDs.design){ hbDs.design = {}; }
+      hbDs.design[hbD] = el.value;
+      return;
+    }
+    var hbC = el.getAttribute('data-hbc');
+    if(hbC){
+      var hbCol = hbOf(el).cols[+el.getAttribute('data-i')];
+      if(hbCol){ hbCol[hbC] = el.value; }
+      return;
+    }
+    var hbK = el.getAttribute('data-hb');
+    if(hbK){
+      var hbS = hbOf(el);
+      var hbI = +el.getAttribute('data-i');
+      if(!hbS.vals[hbK]){ hbS.vals[hbK] = []; }
+      hbS.vals[hbK][hbI] = el.value;
+      /* คิด Delta T ใหม่ทันทีโดยไม่วาดตารางใหม่ จะได้ไม่หลุดโฟกัส */
+      if(hbK === 'rwtemp' || hbK === 'lwtemp'){
+        var hbBox2 = el.closest ? el.closest('.hb-sheet') : null;
+        var hbSi = hbBox2 ? hbBox2.getAttribute('data-s') : '0';
+        var dtCell = document.querySelector('[data-hbdt="' + hbSi + '-dt-' + hbI + '"]');
+        if(dtCell){
+          dtCell.textContent = hbCalc(hbS, { calc:{ a:'rwtemp', b:'lwtemp' } }, hbI);
+        }
+      }
       return;
     }
     /* motor pump table */
@@ -3470,6 +3802,21 @@
         var tk = btn.getAttribute('data-k');
         var tv = btn.getAttribute('data-cttick');
         tRow[tk] = (tRow[tk] === tv) ? '' : tv;
+        renderChecklist();
+        saveDraft(true);
+      }
+      return;
+    }
+    if(btn.classList.contains('hb-add')){
+      hbSheets().push(emptyHbSheet());
+      renderChecklist();
+      saveDraft(true);
+      return;
+    }
+    if(btn.classList.contains('hb-del')){
+      var hbBox = btn.closest('.hb-sheet');
+      if(hbBox && hbSheets().length > 1 && confirm('ลบแผ่นนี้ใช่หรือไม่?')){
+        state.hb.splice(+hbBox.getAttribute('data-s'), 1);
         renderChecklist();
         saveDraft(true);
       }
@@ -3717,13 +4064,9 @@
       }
       var card = document.createElement('div');
       card.className = 'photo-card';
-      /* an empty slot the engineer never wanted can be dropped - but only on
-         the general photo page, never on slots a form laid out */
-      var canDrop = !state.photoTpl;
       var slotInner = p.img
         ? '<img src="'+p.img+'" alt="photo '+(i+1)+'"><button type="button" class="photo-x" data-i="'+i+'" title="ลบรูปนี้">&times;</button>'
-        : '<div class="empty"><svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="8.5" cy="10.5" r="1.5"/><path d="M21 15l-5-5-9 9"/></svg><span>คลิกเพื่อเลือกรูป</span></div>' +
-          (canDrop ? '<button type="button" class="photo-drop" data-i="'+i+'" title="เอาช่องนี้ออก">ลบช่องนี้</button>' : '');
+        : '<div class="empty"><svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="8.5" cy="10.5" r="1.5"/><path d="M21 15l-5-5-9 9"/></svg><span>คลิกเพื่อเลือกรูป</span></div>';
       /* the caption is the whole story of the photo, so it gets the full width
          and wraps as far as it needs to - no "PHOTO n" tag in front of it */
       var meta = '<div class="photo-meta step">' +
@@ -3745,13 +4088,6 @@
     el.style.height = (el.scrollHeight + 2) + 'px';
   }
   $('photoGrid').addEventListener('click', function(e){
-    var dBtn = e.target.closest('.photo-drop');
-    if(dBtn){
-      state.photos.splice(+dBtn.getAttribute('data-i'), 1);
-      renderPhotos();
-      saveDraft(true);
-      return;
-    }
     var xBtn = e.target.closest('.photo-x');
     if(xBtn){
       var xi = +xBtn.getAttribute('data-i');
@@ -3869,13 +4205,7 @@
 
   /* ---- top actions ---- */
   /* ---- omit empty detail blocks from the printed PDF ---- */
-  /* Fields the engineer may legitimately leave empty. An empty one prints as a
-     label above a bare ruled line, which reads as "someone forgot to fill this
-     in" - so the whole block is left out of the preview and the PDF. The form
-     on screen always shows them; only paper is affected. */
-  var OPTIONAL_FIELDS = ['summary','parts',
-                         'tagNo','modelNo','serialNo','startDate',
-                         'reportNo','reportRev'];
+  var OPTIONAL_FIELDS = ['summary','parts'];
 
   function markBlankBlocks(){
     var filled = {};
@@ -3884,8 +4214,7 @@
       if(!el) return;
       var has = el.value.trim() !== '';
       filled[id] = has;
-      /* section fields sit in .field, the letterhead boxes in .lh-meta-row */
-      var block = el.closest('.field, .lh-meta-row');
+      var block = el.closest('.field');
       if(block){
         if(has){ block.classList.remove('is-blank'); }
         else   { block.classList.add('is-blank'); }
@@ -3897,191 +4226,7 @@
       if(filled.summary || filled.parts){ pc.classList.remove('is-blank'); }
       else                              { pc.classList.add('is-blank'); }
     }
-    /* section 03 is nothing but picture slots - a report with no pictures
-       should not carry a page holding an empty frame and a heading */
-    var phc = $('photoCard');
-    if(phc){
-      var anyPhoto = (state.photos || []).some(function(p){ return !!p.img; });
-      if(anyPhoto){ phc.classList.remove('is-blank'); }
-      else        { phc.classList.add('is-blank'); }
-    }
   }
-
-  /* ================= checks before a report leaves the form =================
-     Nothing below touches printing or the PDF - it only decides whether the
-     preview opens at all. Every check refuses in the same dialog, which says
-     what is missing and carries a button that goes straight there.
-     opts: { title, count:{done,total,label}, detail, go:{label,fn} }         */
-  var alertGoFn = null;
-
-  function closeAlertModal(){
-    $('alertModal').style.display = 'none';
-    alertGoFn = null;
-  }
-
-  function showAlertModal(opts){
-    $('alertTitle').textContent = opts.title || '';
-
-    /* the progress bar belongs to the picture check; the others have nothing
-       to count, so their box carries the sentence on its own */
-    var hasCount = !!opts.count;
-    $('alertCountRow').style.display = hasCount ? '' : 'none';
-    $('alertBarWrap').style.display  = hasCount ? '' : 'none';
-    if(hasCount){
-      var done = opts.count.done, total = opts.count.total;
-      var pct  = total > 0 ? Math.round((done / total) * 100) : 0;
-      $('alertPanelLabel').textContent = opts.count.label || 'ความคืบหน้า';
-      $('alertPanelCount').textContent = done + ' / ' + total + ' ช่อง';
-      $('alertBar').style.width = pct + '%';
-    }
-    $('alertDetail').textContent   = opts.detail || '';
-    $('alertDetail').style.display = opts.detail ? '' : 'none';
-    $('alertPanel').style.display  = (hasCount || opts.detail) ? '' : 'none';
-
-    var go = opts.go || null;
-    $('alertGo').textContent = (go && go.label) ? go.label : 'ตกลง';
-    alertGoFn = (go && go.fn) ? go.fn : null;
-
-    $('alertModal').style.display = 'flex';
-  }
-
-  $('alertClose').addEventListener('click', closeAlertModal);
-  $('alertGo').addEventListener('click', function(){
-    var fn = alertGoFn;
-    closeAlertModal();
-    if(fn){ fn(); }
-  });
-  $('alertModal').addEventListener('click', function(e){
-    if(e.target.id === 'alertModal'){ closeAlertModal(); }
-  });
-  document.addEventListener('keydown', function(e){
-    if(e.key === 'Escape' && $('alertModal').style.display === 'flex'){ closeAlertModal(); }
-  });
-
-  /* ---- a report with no inspection form is not a report ----
-     Everything in section 02 hangs off the form the engineer picks, so an
-     unpicked form means the scope list, the checklists and the log tables are
-     all missing at once. */
-  function templateGuard(){
-    if((state.templates || []).length) return true;
-
-    showAlertModal({
-      title:  'เลือกแบบฟอร์มรายงาน',
-      detail: 'รายงานนี้ยังไม่ได้เลือกแบบฟอร์มตรวจสอบ จึงยังไม่มีสโคปงานและตารางบันทึกค่า\n' +
-              'เลือกอย่างน้อยหนึ่งแบบฟอร์มก่อน จึงจะดูตัวอย่างหรือส่งรายงานได้',
-      go: { label: 'เลือกแบบฟอร์ม', fn: function(){
-        var picker = $('openTplModal');
-        if(picker){ picker.scrollIntoView({ behavior:'smooth', block:'center' }); }
-        setTimeout(openTplModal, 260);
-      }}
-    });
-    $('statusChip').textContent = 'ยังไม่ได้เลือกแบบฟอร์มรายงาน';
-    return false;
-  }
-
-  /* ---- a form that brings no work steps of its own needs them written in ----
-     Most forms arrive with their scope already listed, so there is nothing to
-     ask about. Service / Repair does not: the engineer writes what was done
-     that day, and an empty list means the report says nothing about the work.
-     Only forms shipping an empty `items` array are checked, so a new form
-     added later is covered without touching this code. */
-  function scopeGuard(){
-    var missing = (state.templates || []).filter(function(k){
-      var t = TEMPLATES[k];
-      if(!t || t.mode === 'table') return false;
-      if((t.items || []).length) return false;          /* has its own steps */
-      return !state.checklist.some(function(it){
-        return it.tpl === k && (it.text || '').trim() !== '';
-      });
-    });
-
-    if(!missing.length) return true;
-
-    var names = missing.map(function(k){ return TEMPLATES[k].name; }).join(', ');
-    showAlertModal({
-      title:  'ระบุหัวข้อการทำงาน',
-      detail: 'แบบฟอร์ม ' + names + ' ยังไม่มีรายการตรวจสอบสักรายการ\n' +
-              'กด "+ เพิ่มรายการตรวจสอบ (Other)" แล้วพิมพ์งานที่ทำ อย่างน้อยหนึ่งรายการ',
-      go: { label: 'ไปที่ Scope of work', fn: function(){
-        var blk = document.querySelector('.scope-block[data-t="' + missing[0] + '"]');
-        if(blk){ blk.scrollIntoView({ behavior:'smooth', block:'center' }); }
-      }}
-    });
-    $('statusChip').textContent = 'ยังไม่ได้ระบุหัวข้อการทำงาน';
-    return false;
-  }
-
-  /* ---- the report will not go out with picture slots still empty ----
-     Two different jobs are being guarded, so they get two rules:
-
-     · A form that lays out its own slots (tube cleaning, AHU/FCU) is a record
-       of a sequence of work steps. A gap means a step went unphotographed, so
-       every slot has to be filled.
-
-     · The general Photo Record is optional evidence. Taking no pictures at all
-       is a valid report. But once one picture is in, the empty frames beside
-       it are visibly unfinished, so the rest have to be filled - or dropped
-       with the button on the slot.                                          */
-  function photoStatus(){
-    var list  = state.photos || [];
-    var empty = [];
-    list.forEach(function(p, i){ if(!p.img){ empty.push(i); } });
-
-    if(!empty.length) return { ok:true, empty:[] };
-
-    var byTemplate = !!state.photoTpl;
-    if(!byTemplate && empty.length === list.length){
-      return { ok:true, empty:[] };            /* no pictures at all - allowed */
-    }
-    return { ok:false, empty:empty, byTemplate:byTemplate, total:list.length };
-  }
-
-  function photoGuard(){
-    var st = photoStatus();
-
-    Array.prototype.forEach.call(
-      document.querySelectorAll('.photo-slot.is-missing'),
-      function(el){ el.classList.remove('is-missing','pulse'); });
-
-    if(st.ok) return true;
-
-    var nums  = st.empty.map(function(i){ return i + 1; });
-    var shown = nums.slice(0, 12).join(', ') + (nums.length > 12 ? ' …' : '');
-    var filledCount = st.total - st.empty.length;
-
-    /* mark them all, so closing the dialog leaves a trail to follow */
-    st.empty.forEach(function(i){
-      var slot = document.querySelector('.photo-slot[data-i="' + i + '"]');
-      if(slot){ slot.classList.add('is-missing','pulse'); }
-    });
-
-    var why = st.byTemplate
-      ? 'แบบฟอร์มที่เลือกไว้กำหนดช่องรูปตามขั้นตอนงาน ต้องใส่ให้ครบทุกช่อง'
-      : 'ถ้าไม่แนบรูปเลยก็ส่งได้ แต่เมื่อใส่แล้วต้องใส่ให้ครบ\n' +
-        'ถ้าไม่ต้องการช่องที่เหลือ กด "ลบช่องนี้" ที่มุมช่องว่างได้';
-
-    showAlertModal({
-      title:  'ใส่รูปให้ครบตามที่ระบบกำหนด',
-      count:  { done: filledCount, total: st.total, label: 'ความคืบหน้า' },
-      detail: 'ยังว่าง: ช่องที่ ' + shown + '\n' + why,
-      go: { label: 'ไปที่ช่องที่ ' + nums[0], fn: function(){
-        var firstSlot = document.querySelector('.photo-slot.is-missing');
-        if(firstSlot){ firstSlot.scrollIntoView({ behavior:'smooth', block:'center' }); }
-      }}
-    });
-
-    $('statusChip').textContent = 'ยังใส่รูปไม่ครบ · เหลืออีก ' + st.empty.length + ' ช่อง';
-    return false;
-  }
-
-  /* Every way out of the form runs the same checks, in the order the page is
-     filled in: pick a form, write its work steps, then the pictures. Following
-     the page order means the dialog always points forward, never back past
-     something the engineer has already scrolled by. */
-  function readyGuard(){
-    return templateGuard() && scopeGuard() && photoGuard();
-  }
-  /* ======================= end of the pre-send checks ====================== */
 
   /* the moment the PDF was made, printed small at the foot of the last page */
   function stampCreateTime(){
@@ -4225,6 +4370,7 @@
       logs: state.logs,
       ct: state.ct,
       mp: state.mp,
+      hb: state.hb,
       photoTpl: state.photoTpl,
       employees: state.employees,
       photos: state.photos,
@@ -4473,7 +4619,6 @@
   });
 
   $('printBtn').addEventListener('click', function(){
-    if(!readyGuard()) return;
     preparePrint();
     if(iosStandalone()){
       alert('ไอคอนนี้เปิดแบบไม่มีแถบ Safari จึงไม่มีปุ่มแชร์ให้สั่งพิมพ์\n\n' +
@@ -4526,7 +4671,6 @@
   var pvFull = false;    /* false = shrink to fit the screen, true = 1:1 */
 
   function openPreview(){
-    if(!readyGuard()) return;
     preparePrint();
     var frame = $('pvFrame');
     $('pvOverlay').style.display = 'flex';
@@ -4774,8 +4918,7 @@
         }
       }
 
-      /* sections the report left out are not pages - do not count them */
-      var sheets = 1 + body.querySelectorAll('.card:not(.is-blank)').length;   /* cover + sections */
+      var sheets = 1 + body.querySelectorAll('.card').length;   /* cover + sections */
       $('pvPages').textContent = 'ประมาณ ' + sheets + ' หน้า';
 
       var doc = '<!DOCTYPE html><html lang="th"><head><meta charset="utf-8">' +
@@ -4966,7 +5109,6 @@
   }
 
   function sendPdf(){
-    if(!readyGuard()) return;
     if(!$('pvOverlay') || $('pvOverlay').style.display !== 'flex'){ openPreview(); }
     pvSay('กำลังเตรียม...');
 
@@ -5118,7 +5260,6 @@
   });
 
   function sendReport(){
-    if(!readyGuard()) return;
     if(!navigator.onLine){
       alert('ปุ่มนี้ต้องต่ออินเทอร์เน็ต\n\nระหว่างนี้ใช้ปุ่ม "ส่งเป็นไฟล์ PDF" แทนได้');
       return;
