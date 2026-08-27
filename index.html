@@ -591,6 +591,8 @@
   /* An empty slot on the general photo page can be thrown away: a job with two
      pictures should not be held back by four frames nobody wanted. Slots that
      a form laid out belong to its work steps, so they never get this button. */
+  .photo-bulk{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin:0 0 14px;}
+  .photo-bulk-note{font-size:12.5px;color:var(--ink-soft);}
   .photo-drop{
     position:absolute;right:8px;bottom:8px;border:1px solid var(--line);
     background:#fff;color:var(--ink-faint);border-radius:6px;
@@ -813,7 +815,7 @@
     body{font-size:11.5pt;color:#000;-webkit-print-color-adjust:exact;print-color-adjust:exact;}
     .wrap{max-width:none;margin:0;padding:0 15mm;}
 
-    .topbar,.btn-install,.add-row,.add-photo-btn,.photo-x,.photo-drop,.photo-remove,.sig-toolbar,.foot-note,
+    .topbar,.btn-install,.add-row,.add-photo-btn,.photo-bulk,.photo-x,.photo-drop,.photo-remove,.sig-toolbar,.foot-note,
     .chk-status button:not(.sel),.tpl-picker,.modal-overlay,.chk-del,.cover-hint{display:none !important;}
 
     /* ---- cover: full-bleed first page ----
@@ -1575,7 +1577,12 @@
   <!-- SECTION 3: PHOTO REPORT -->
   <div class="card" id="photoCard">
     <div class="sec-bar">Photo record — ภาพถ่ายหน้างาน</div>
-    <p class="sec-note">คลิกช่องภาพเพื่ออัปโหลด</p>
+    <p class="sec-note">เลือกทีเดียวหลายรูปได้ ระบบจะไล่ใส่ช่องว่างให้เอง — หรือคลิกทีละช่องก็ได้</p>
+    <div class="photo-bulk">
+      <button class="btn btn-primary" id="bulkPhotoBtn" type="button">เลือกรูปทีเดียวหลายรูป</button>
+      <span class="photo-bulk-note" id="bulkPhotoNote"></span>
+      <input type="file" accept="image/*" multiple id="bulkPhotoInput" style="display:none;">
+    </div>
     <div id="photoGrid"></div>
     <button class="add-photo-btn" id="addPhotoBtn" type="button" style="margin-top:16px;width:100%;">+ เพิ่มรูปภาพ</button>
   </div>
@@ -4115,7 +4122,7 @@
         '</div>';
       card.innerHTML =
         '<div class="photo-slot" data-i="'+i+'">'+slotInner+
-          '<input type="file" accept="image/*" data-i="'+i+'" class="photo-input" style="display:none;">' +
+          '<input type="file" accept="image/*" multiple data-i="'+i+'" class="photo-input" style="display:none;">' +
         '</div>' + meta;
       grid.appendChild(card);
     });
@@ -4147,18 +4154,103 @@
       slot.querySelector('.photo-input').click();
     }
   });
-  $('photoGrid').addEventListener('change', function(e){
-    if(e.target.classList.contains('photo-input')){
-      var i = +e.target.getAttribute('data-i');
-      var file = e.target.files[0];
-      if(!file) return;
+  /* ---- putting a batch of pictures into the slots ----
+     Tapping twelve frames one at a time, waiting for the picker each time, is
+     the slowest part of writing up a tube cleaning. The picker can hand back
+     the whole set at once, so it does: the batch lands in the empty slots in
+     the order the picker gave them, untouched.
+
+     A form's slots are a fixed list, so a batch bigger than the gaps stops at
+     the last one and says how many were left over rather than inventing extra
+     frames that belong to no work step. The general photo page has no such
+     shape, so it simply grows.                                              */
+  /* `tapped` is the slot the engineer actually pressed, or null for the button
+     above the grid. That slot takes the first picture even when it already
+     holds one - pressing a filled frame has always meant "replace this" and
+     still does. Every slot after it has to be empty to be used. */
+  function fillPhotoSlots(fileList, tapped){
+    var files = Array.prototype.slice.call(fileList || []).filter(function(f){
+      return f && f.type && f.type.indexOf('image/') === 0;
+    });
+    if(!files.length) return;
+
+    /* No sorting. The pictures go in exactly the order the picker handed them
+       over, so what the engineer saw when choosing is what lands in the slots. */
+
+    /* the slots this batch will go into, decided before any file is read */
+    var start   = (typeof tapped === 'number' && tapped >= 0) ? tapped : 0;
+    var targets = [];
+    for(var i = start; i < state.photos.length && targets.length < files.length; i++){
+      if(i === start && typeof tapped === 'number'){ targets.push(i); continue; }
+      if(!state.photos[i].img){ targets.push(i); }
+    }
+    var overflow = 0;
+    if(targets.length < files.length){
+      if(state.photoTpl){
+        overflow = files.length - targets.length;      /* fixed list - no room */
+        files = files.slice(0, targets.length);
+      } else {
+        while(targets.length < files.length){
+          state.photos.push({ caption:'', img:null });
+          targets.push(state.photos.length - 1);
+        }
+      }
+    }
+    if(!files.length){
+      bulkNote('ช่องรูปเต็มแล้ว ' + overflow + ' รูปที่เลือกมาจึงยังไม่ได้ใส่');
+      return;
+    }
+
+    var done = 0, total = files.length;
+    bulkNote('กำลังใส่รูป 0 / ' + total + '…');
+
+    /* one at a time: a dozen phone photos read all at once is a lot of memory
+       for a phone browser, and the count would jump about as they finished */
+    (function next(n){
+      if(n >= total){
+        renderPhotos();
+        saveDraft(true);
+        bulkNote(overflow
+          ? ('ใส่แล้ว ' + total + ' รูป · อีก ' + overflow + ' รูปไม่มีช่องว่างรองรับ')
+          : ('ใส่รูปแล้ว ' + total + ' รูป'));
+        return;
+      }
       var reader = new FileReader();
       reader.onload = function(ev){
-        state.photos[i].img = ev.target.result;
-        renderPhotos();
+        state.photos[targets[n]].img = ev.target.result;
+        done++;
+        bulkNote('กำลังใส่รูป ' + done + ' / ' + total + '…');
+        next(n + 1);
       };
-      reader.readAsDataURL(file);
+      reader.onerror = function(){ next(n + 1); };      /* skip a bad file, keep going */
+      reader.readAsDataURL(files[n]);
+    })(0);
+  }
+
+  var bulkNoteTimer = null;
+  function bulkNote(msg){
+    var el = $('bulkPhotoNote');
+    if(!el) return;
+    el.textContent = msg || '';
+    clearTimeout(bulkNoteTimer);
+    if(msg && msg.indexOf('…') === -1){
+      bulkNoteTimer = setTimeout(function(){ el.textContent = ''; }, 6000);
     }
+  }
+
+  $('photoGrid').addEventListener('change', function(e){
+    if(e.target.classList.contains('photo-input')){
+      /* start at the slot that was tapped: picking one picture behaves exactly
+         as before, picking several carries on into the slots below it */
+      fillPhotoSlots(e.target.files, +e.target.getAttribute('data-i'));
+      e.target.value = '';
+    }
+  });
+
+  $('bulkPhotoBtn').addEventListener('click', function(){ $('bulkPhotoInput').click(); });
+  $('bulkPhotoInput').addEventListener('change', function(e){
+    fillPhotoSlots(e.target.files, null);
+    e.target.value = '';
   });
   $('photoGrid').addEventListener('input', function(e){
     if(e.target.classList.contains('cap-full')){ fitCaption(e.target); }
