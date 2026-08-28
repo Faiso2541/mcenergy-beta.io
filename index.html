@@ -285,28 +285,21 @@
   }
   .modal-head{font-family:'Sora';font-weight:700;font-size:16px;color:var(--navy);margin-bottom:4px;}
   .modal-sub{font-size:12.5px;color:var(--ink-faint);margin-bottom:16px;}
-  /* การ์ดเลือกแบบฟอร์ม เรียง 2 คอลัมน์ มีไอคอนประจำแต่ละงาน */
-  .modal-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:4px;}
-  @media (max-width:560px){ .modal-grid{grid-template-columns:1fr;} }
   .modal-opt{
-    position:relative;display:block;width:100%;text-align:left;
-    border:1px solid var(--line);border-radius:10px;
-    padding:12px 14px;margin:0;background:var(--page);cursor:pointer;transition:.15s;
+    display:block;width:100%;text-align:left;border:1px solid var(--line);border-radius:10px;
+    padding:14px 16px;margin-bottom:10px;background:var(--page);cursor:pointer;transition:.15s;
   }
   .modal-opt:hover{border-color:var(--navy-soft);background:var(--paper);}
   .modal-opt.on{border-color:var(--green);background:#F2FBF6;}
-  .modal-opt .ic{display:block;color:var(--navy);opacity:.7;margin-bottom:9px;}
-  .modal-opt .ic svg{width:21px;height:21px;display:block;}
-  .modal-opt.on .ic{color:var(--green-deep);opacity:1;}
-  /* เครื่องหมายถูกมุมขวาบน โผล่เมื่อเลือกแล้ว */
-  .modal-opt.on::after{
-    content:'\2713';position:absolute;top:10px;right:12px;
-    width:17px;height:17px;border-radius:50%;background:var(--green);color:#fff;
-    font-size:11px;line-height:17px;text-align:center;font-weight:700;
+  .modal-opt .t{font-family:'Sora';font-weight:700;font-size:14px;color:var(--navy);margin-bottom:4px;}
+  .modal-opt .t::before{
+    content:'';display:inline-block;vertical-align:-2px;margin-right:8px;
+    width:16px;height:16px;border:1.5px solid var(--ink-faint);border-radius:5px;
   }
-  .modal-opt .t{display:block;font-family:'Sora';font-weight:700;font-size:13.5px;
-                color:var(--navy);margin-bottom:3px;line-height:1.3;}
-
+  .modal-opt.on .t::before{
+    content:'\2713';background:var(--green);border-color:var(--green);color:#fff;
+    font-size:11px;line-height:15px;text-align:center;font-weight:700;
+  }
   .chk-group{
     font-family:'Sora';font-weight:700;font-size:12px;color:var(--navy);
     letter-spacing:.04em;margin:14px 0 2px;
@@ -428,26 +421,6 @@
     .ok-overlay.on .ok-line{width:100%;}
   }
 
-  /* ---------- กล่องเตือนเมื่อกรอกไม่ครบ ---------- */
-  .warn-card{background:#fff;border-radius:12px;width:100%;max-width:360px;overflow:hidden;
-             box-shadow:0 12px 34px rgba(13,27,42,.22);}
-  .warn-head{background:#FDF3D8;padding:12px 18px;display:flex;align-items:center;gap:10px;}
-  .warn-head b{font-size:16px;font-weight:700;color:var(--navy);}
-  .warn-body{padding:14px 18px 16px;}
-  .warn-body ul{margin:0;padding-left:18px;}
-  .warn-body li{font-size:13.5px;color:var(--ink);line-height:1.55;margin-bottom:4px;}
-  .warn-body li::marker{color:var(--danger);}
-  .warn-foot{display:flex;justify-content:flex-end;margin-top:14px;}
-
-  /* จุดที่ต้องแก้ - กรอบแดงพร้อมจุดเตือน หายเองใน 6 วินาที */
-  .need-fix{position:relative;outline:2px solid var(--danger);outline-offset:3px;border-radius:8px;
-            animation:needPulse 1s ease-in-out 3;}
-  .need-fix::after{
-    content:'';position:absolute;top:-7px;right:-7px;width:12px;height:12px;border-radius:50%;
-    background:var(--danger);box-shadow:0 0 0 3px rgba(201,79,79,.22);z-index:2;
-  }
-  @keyframes needPulse{0%,100%{outline-color:var(--danger);}50%{outline-color:rgba(201,79,79,.25);}}
-
   .mp-ref{font-weight:700;color:var(--navy);text-align:center;}
   /* ช่องคำนวณ ใช้ขนาดและน้ำหนักตัวอักษรชุดเดียวกับ input ในตาราง
      ไม่งั้นตัวเลขจะใหญ่กว่าช่องอื่นเวลาพิมพ์ */
@@ -494,8 +467,8 @@
   .ct-appr .ct-table{min-width:0;}
   .scope-block .log-wrap{display:block;margin-top:22px;}
   .scope-block .add-row{margin-top:10px;}
-  .modal-opt .d{display:block;font-size:11.5px;color:var(--ink-soft);line-height:1.4;}
-  .modal-opt .legend{display:none;}
+  .modal-opt .d{font-size:12px;color:var(--ink-soft);line-height:1.5;}
+  .modal-opt .legend{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px;}
   .modal-opt .legend span{font-size:10.5px;font-weight:600;padding:3px 8px;border-radius:5px;}
   .modal-actions{display:flex;gap:10px;margin-top:14px;}
   .modal-actions .btn{flex:1;justify-content:center;padding:11px 14px;font-size:13.5px;}
@@ -551,11 +524,6 @@
   /* contain, not cover: a portrait shot or a screenshot must never be cropped */
   .photo-slot img{width:100%;height:100%;object-fit:contain;object-position:center;
     display:block;background:#fff;}
-  /* ช่องที่ยังไม่ใส่รูป - ขอบแดง พื้นแดงอ่อน */
-  .photo-card.is-empty{border-color:#E9A8A8;}
-  .photo-card.is-empty .photo-slot{background:#FDF0F0;border-bottom-color:#F0D0D0;}
-  .photo-card.is-empty .photo-slot .empty{color:#C94F4F;}
-  .photo-card.is-empty:hover{border-color:#C94F4F;}
   .photo-slot .empty{display:flex;flex-direction:column;align-items:center;gap:6px;color:var(--ink-faint);font-size:12px;}
   .photo-slot .empty svg{opacity:.55;}
   /* a red square with a cross - unmistakable as "remove this photo" */
@@ -774,9 +742,6 @@
     body{font-size:11.5pt;color:#000;-webkit-print-color-adjust:exact;print-color-adjust:exact;}
     .wrap{max-width:none;margin:0;padding:0 15mm;}
 
-    /* สีเตือนช่องว่างเป็นตัวช่วยตอนกรอกเท่านั้น ไม่ต้องติดไปในไฟล์ที่พิมพ์ */
-    .photo-card.is-empty{border-color:var(--line) !important;}
-    .photo-card.is-empty .photo-slot{background:#fff !important;}
     .topbar,.btn-install,.add-row,.add-photo-btn,.photo-x,.photo-remove,.sig-toolbar,.foot-note,
     .chk-status button:not(.sel),.tpl-picker,.modal-overlay,.chk-del,.cover-hint{display:none !important;}
 
@@ -806,10 +771,10 @@
 
     .card{
       border:none;box-shadow:none;break-inside:auto;
-      /* ระยะขอบ: บน 8mm / ล่าง 34mm ทุกหน้า ทุกฟอร์ม
-         แถบท้ายหน้าอยู่ 16mm สูงราว 8mm (ขอบบนของแถบ = 24mm)
-         เว้นอีก 10mm เหนือเส้นแถบ เนื้อหาจึงจบที่ 34mm */
-      padding:8mm 0 34mm;margin:0;border-radius:0;
+      /* ระยะขอบ: บน 8mm / ล่าง 24mm เท่ากันทุกหน้า ทุกฟอร์ม
+         แถบท้ายหน้าอยู่ที่ 16mm จากขอบล่างและสูงราว 8mm
+         เนื้อหาจึงต้องจบที่ 24mm เพื่อไม่ให้ทับกัน */
+      padding:8mm 0 24mm;margin:0;border-radius:0;
     }
     /* keep photos crisp when the printer/PDF downsamples them */
     .photo-slot img{image-rendering:auto;}
@@ -1016,10 +981,7 @@
     }
     .log-table tr{break-inside:avoid;}
     .log-foot{gap:5mm 8mm;margin-top:5mm;break-inside:avoid;}
-    /* แผ่นสูงเต็มพื้นที่ใช้งาน แล้วดันบล็อก Comments + Verified by ไปชิดล่าง
-       ทำให้ทุกฟอร์มมีฐานอยู่ที่เดียวกันคือ 10mm เหนือเส้นแถบท้ายหน้า */
-    .log-sheet,.ct-sheet{display:flex;flex-direction:column;min-height:255mm;}
-    .log-note{margin-top:auto !important;padding-top:4mm;break-inside:avoid;}
+    .log-note{margin-top:5mm;break-inside:avoid;}
     .ls-add,.ls-del{display:none !important;}
     .log-block + .log-block{
       break-before:page;margin-top:0;padding-top:8mm;border-top:none;
@@ -1062,7 +1024,7 @@
     .ls-meta .field{gap:.6mm;}
     .ls-meta input[type=text]{font-size:9pt;padding:.5mm 0 !important;}
     /* trim the top of the page, and keep clear of the footer at the bottom */
-    .card:has(.log-wrap.on){padding-top:8mm !important;padding-bottom:34mm !important;}
+    .card:has(.log-wrap.on){padding-top:8mm !important;padding-bottom:24mm !important;}
     .log-grid{gap:3mm;}
     /* the books with a wide reading table give it more of the sheet */
     .log-dense .log-grid{grid-template-columns:minmax(0,.78fr) minmax(0,1.7fr);}
@@ -1075,10 +1037,9 @@
       color:#000 !important;text-align:center;display:block;width:100%;
       min-height:3.1mm;overflow:hidden;white-space:nowrap;
     }
-    /* เดิมตัดข้อความทิ้งเงียบ ๆ ถ้าพิมพ์ยาว ตอนนี้ให้ขึ้นบรรทัดใหม่แทน */
     .ls-tag.pv-text{
       display:block;text-align:left;border-bottom:.6pt solid #9AA0B4;
-      min-height:6mm;white-space:normal;word-break:break-word;line-height:1.25;
+      min-height:6mm;white-space:nowrap;overflow:hidden;line-height:1.25;
     }
     /* html2canvas draws a textarea on one clipped line, so the PDF builder
        swaps them for plain text - these rules make that text wrap and grow
@@ -1101,9 +1062,8 @@
     }
     .log-note{margin-top:2.5mm;}
     .log-note label{font-size:7.5pt;}
-    /* ความสูงขั้นต่ำเท่านั้น กล่องยืดตามข้อความ ไม่ทะลุไปทับของข้างล่าง */
-    .log-note textarea,.log-note .pv-text{
-      min-height:14mm !important;height:auto !important;font-size:9pt !important;
+    .log-note textarea{
+      min-height:14mm !important;height:14mm;font-size:9pt !important;
       padding:.8mm 0 !important;line-height:1.3;
     }
     .log-foot{margin-top:2.5mm;gap:4mm;break-inside:avoid;}
@@ -1155,18 +1115,18 @@
       font-size:8.5pt !important;line-height:1.15;min-height:3.4mm;
     }
     .log-dense .log-note textarea,.log-dense .log-note .pv-text{
-      min-height:12mm !important;height:auto !important;
+      min-height:12mm !important;height:12mm;
     }
 
     /* ---- hybrid chiller sheet ----
        ตารางยาว 33 แถว ถ้าใช้ระยะปกติจะล้นไปหน้าสอง
        จึงบีบตัวอักษรและระยะในเซลล์เฉพาะตารางนี้ */
     .hb-wrap{break-inside:avoid;}
-    .card:has(.hb-wrap.on){padding-top:8mm !important;padding-bottom:34mm !important;}
+    .card:has(.hb-wrap.on){padding-top:8mm !important;padding-bottom:24mm !important;}
     /* ทำแผ่นให้สูงเต็มหน้า แล้วดัน Comments กับ Verified by ไปชิดล่าง */
     /* กันไว้สองชั้น เผื่อชั้นใดชั้นหนึ่งไม่ได้เป็นตัวกำหนดความสูง */
-    .hb-wrap{display:flex;flex-direction:column;min-height:255mm;}
-    .hb-sheet{break-inside:avoid;display:flex;flex-direction:column;flex:1;min-height:255mm;}
+    .hb-wrap{display:flex;flex-direction:column;min-height:262mm;}
+    .hb-sheet{break-inside:avoid;display:flex;flex-direction:column;flex:1;min-height:262mm;}
     .hb-wrap .log-head{margin-bottom:2mm;}
     .hb-grid{grid-template-columns:minmax(0,.78fr) minmax(0,1.7fr) !important;gap:3mm !important;}
     .hb-wrap .ls-meta{margin-bottom:2.5mm;}
@@ -1182,14 +1142,14 @@
     /* margin-top:auto ดันบล็อกท้ายไปชิดขอบล่างของแผ่น */
     .hb-wrap .ct-note{margin-top:auto !important;padding-top:5mm;}
     .hb-wrap .ct-note textarea,.hb-wrap .ct-note .pv-text{
-      min-height:10mm !important;height:auto !important;font-size:8.5pt !important;
+      min-height:10mm !important;height:10mm !important;font-size:8.5pt !important;
     }
     .hb-wrap .log-foot{margin-top:3mm !important;margin-bottom:0 !important;}
     .hb-add,.hb-del{display:none !important;}
 
     /* ---- cooling tower sheet ---- */
     /* the same top margin the other log sheets get */
-    .card:has(.ct-wrap.on){padding-top:8mm !important;padding-bottom:34mm !important;}
+    .card:has(.ct-wrap.on){padding-top:8mm !important;padding-bottom:24mm !important;}
     .ct-wrap{break-before:page;padding-top:0;}
     .ct-wrap .log-head{margin-top:0;}
     .ct-sheet{break-inside:auto;}
@@ -1242,10 +1202,10 @@
       white-space:normal;word-break:break-word;
     }
     .ct-foot{display:grid;grid-template-columns:70mm 1fr;gap:8mm;margin-top:5mm;break-inside:avoid;}
-    .ct-note{margin-top:auto !important;padding-top:4mm;break-inside:avoid;}
+    .ct-note{margin-top:6mm;break-inside:avoid;}
     .ct-note label{font-size:7.5pt;}
     .ct-note textarea,.ct-note .pv-text{
-      min-height:20mm !important;height:auto !important;font-size:9.5pt !important;
+      min-height:32mm !important;height:32mm;font-size:9.5pt !important;
     }
 
     /* the extra job-description box must not push the sheet onto page 2 */
@@ -1372,7 +1332,7 @@
   </div>
 
   <!-- SECTION 1: INFORMATION -->
-  <div class="card" id="infoCard">
+  <div class="card">
     <div class="sec-bar">Information</div>
 
     <div class="field" style="margin-bottom:16px;max-width:320px;">
@@ -1540,7 +1500,6 @@
     <p class="sec-note">คลิกช่องภาพเพื่ออัปโหลด</p>
     <div id="photoGrid"></div>
     <button class="add-photo-btn" id="addPhotoBtn" type="button" style="margin-top:16px;width:100%;">+ เพิ่มรูปภาพ</button>
-    <input type="file" id="bulkPhotoInput" accept="image/*" multiple style="display:none;">
   </div>
 
   <!-- SECTION 4: SUMMARY -->
@@ -1611,23 +1570,6 @@
   <div class="pv-stage" id="pvStage"><div class="pv-fit" id="pvFit"><iframe id="pvFrame" title="ตัวอย่างรายงาน"></iframe></div></div>
 </div>
 
-  <div class="ok-overlay warn-overlay" id="warnOverlay" aria-hidden="true">
-    <div class="warn-card" role="dialog" aria-labelledby="warnTitle">
-      <div class="warn-head">
-        <svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true">
-          <path d="M12 3.5 22 20H2z" fill="#E0B400"></path>
-          <path d="M12 10v4" stroke="#fff" stroke-width="1.9" stroke-linecap="round"></path>
-          <circle cx="12" cy="17" r="1.1" fill="#fff"></circle>
-        </svg>
-        <b id="warnTitle">กรุณาเลือกแบบฟอร์ม</b>
-      </div>
-      <div class="warn-body">
-        <ul id="warnList"></ul>
-        <div class="warn-foot"><button type="button" class="ok-btn" id="warnClose">ตกลง</button></div>
-      </div>
-    </div>
-  </div>
-
   <div class="ok-overlay" id="okOverlay" aria-hidden="true">
     <div class="ok-card" role="dialog" aria-labelledby="okTitle">
       <div class="ok-head">
@@ -1692,68 +1634,133 @@
     <div class="modal-head">เลือกแบบฟอร์มตรวจสอบ</div>
     <p class="modal-sub">แตะเพื่อเลือก — เลือกได้หลายแบบฟอร์มในงานเดียว แตะซ้ำเพื่อเอาออก · สถานะแต่ละรายการติ๊กได้มากกว่าหนึ่ง</p>
 
-    <div class="modal-grid">
-      <button type="button" class="modal-opt" data-tpl="service">
-        <span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 5.5a4.2 4.2 0 0 0-5.5 5.3L6 17.3a2.1 2.1 0 0 0 3 3l6.5-6.5A4.2 4.2 0 0 0 20.7 8l-2.9 2.9-2.4-.6-.6-2.4z"/></svg></span>
-        <span class="t">Service / Repair</span>
-        <span class="d">งานซ่อม เขียนรายการเอง</span>
-      </button>
-      <button type="button" class="modal-opt" data-tpl="project">
-        <span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 20V11l4.5 2.5V11L12 13.5V11l4.5 2.5V20z"/><path d="M17 13V5h4v8"/><path d="M3 20h18"/></svg></span>
-        <span class="t">Project Plant</span>
-        <span class="d">ติดตั้งระบบ · 6 รายการ</span>
-      </button>
-      <button type="button" class="modal-opt" data-tpl="tube">
-        <span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="8" width="18" height="9" rx="4.5"/><path d="M8 8v9M12 8v9M16 8v9"/></svg></span>
-        <span class="t">Clean tube chiller</span>
-        <span class="d">งานล้าง · 9 ขั้น · 12 รูป</span>
-      </button>
-      <button type="button" class="modal-opt" data-tpl="ahu">
-        <span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M7 5v14M11 5v14M15 5v14"/></svg></span>
-        <span class="t">Clean AHU &amp; FCU</span>
-        <span class="d">งานล้าง · 11 ขั้น · 12 รูป</span>
-      </button>
-      <button type="button" class="modal-opt" data-tpl="logwc">
-        <span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3s6 6.6 6 10.4A6 6 0 0 1 6 13.4C6 9.6 12 3 12 3z"/></svg></span>
-        <span class="t">Log sheet water cool</span>
-        <span class="d">บันทึกค่า · 13 รายการ</span>
-      </button>
-      <button type="button" class="modal-opt" data-tpl="logac">
-        <span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v18M4.2 7.5l15.6 9M19.8 7.5l-15.6 9"/></svg></span>
-        <span class="t">Log sheet air cool</span>
-        <span class="d">บันทึกค่า · 12 รายการ</span>
-      </button>
-      <button type="button" class="modal-opt" data-tpl="logtrane">
-        <span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 20V9.5L12 4l8 5.5V20z"/><path d="M9.5 20v-6h5v6"/></svg></span>
-        <span class="t">Log sheet TRANE RTHD</span>
-        <span class="d">บันทึกค่า · มี Acceptable Range</span>
-      </button>
-      <button type="button" class="modal-opt" data-tpl="logmag">
-        <span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="8.5"/><circle cx="12" cy="12" r="4"/><circle cx="12" cy="12" r="1"/></svg></span>
-        <span class="t">Magnetic bearing chiller</span>
-        <span class="d">บันทึกค่า · Magnetic Bearing</span>
-      </button>
-      <button type="button" class="modal-opt" data-tpl="loghb">
-        <span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M3 9.5h18M3 15h18M9.5 9.5V20"/></svg></span>
-        <span class="t">Log sheet hybrid chiller</span>
-        <span class="d">บันทึกค่า · 12 รายการ · 2 ช่วงเวลา</span>
-      </button>
-      <button type="button" class="modal-opt" data-tpl="logct">
-        <span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6.5 20 8 8h8l1.5 12z"/><rect x="7" y="4" width="10" height="4" rx="1"/><path d="M9.5 14h5"/></svg></span>
-        <span class="t">Log sheet Cooling Tower</span>
-        <span class="d">บันทึกค่า · 9 รายการ</span>
-      </button>
-      <button type="button" class="modal-opt" data-tpl="logmp">
-        <span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="9.5" cy="12" r="5.5"/><rect x="16" y="9" width="5" height="6" rx="1.5"/><path d="M3 20h18"/></svg></span>
-        <span class="t">Service Motor pump</span>
-        <span class="d">บันทึกค่า · 9 รายการ</span>
-      </button>
-      <button type="button" class="modal-opt" data-tpl="delivery">
-        <span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3 4 7v10l8 4 8-4V7z"/><path d="m4 7 8 4 8-4M12 11v10"/></svg></span>
-        <span class="t">ส่งของ</span>
-        <span class="d">ตารางอะไหล่ที่จัดส่ง</span>
-      </button>
-    </div>
+    <button type="button" class="modal-opt" data-tpl="service">
+      <div class="t">Service / Repair</div>
+      <div class="d">เพิ่มรายการเองตามงานที่ทำ แล้วติ๊กสถานะแต่ละรายการ</div>
+      <div class="legend">
+        <span style="background:#E6F5EC;color:#1F7248;">ปกติ</span>
+        <span style="background:#FBEAEA;color:#C94F4F;">ชำรุด</span>
+        <span style="background:#FDF3D8;color:#8A6D0E;">เฝ้าระวัง</span>
+        <span style="background:#E6F0FB;color:#1D5FA8;">เสนอราคา</span>
+        <span style="background:#FDEBDD;color:#B35A1B;">รอซ่อม</span>
+      </div>
+    </button>
+
+    <button type="button" class="modal-opt" data-tpl="project">
+      <div class="t">Project Plant</div>
+      <div class="d">ความคืบหน้างานติดตั้งระบบ 6 รายการ</div>
+      <div class="legend">
+        <span style="background:#E6F5EC;color:#1F7248;">เสร็จสิ้น</span>
+        <span style="background:#FBEAEA;color:#C94F4F;">เกินกำหนด</span>
+        <span style="background:#E6F0FB;color:#1D5FA8;">ตามแผนงาน</span>
+      </div>
+    </button>
+
+    <button type="button" class="modal-opt" data-tpl="tube">
+      <div class="t">Log Report Clean tube chiller</div>
+      <div class="d">งานล้างทำความสะอาด Tube Chiller — สโคปงาน 9 ขั้นตอน พร้อมเตรียมช่องรูปภาพ 12 รูป ใส่คำอธิบายใต้รูปให้อัตโนมัติ</div>
+      <div class="legend">
+        <span style="background:#E6F5EC;color:#1F7248;">เสร็จสิ้น</span>
+        <span style="background:#E6F0FB;color:#1D5FA8;">อยู่ระหว่างดำเนินการ</span>
+        <span style="background:#FBEAEA;color:#C94F4F;">ไม่ได้ทำ</span>
+      </div>
+    </button>
+
+    <button type="button" class="modal-opt" data-tpl="ahu">
+      <div class="t">Log Report Clean AHU &amp; FCU</div>
+      <div class="d">งานล้างทำความสะอาด AHU / FCU — สโคปงาน 11 ขั้นตอน พร้อมเตรียมช่องรูปภาพ 12 รูป ใส่คำอธิบายใต้รูปให้อัตโนมัติ</div>
+      <div class="legend">
+        <span style="background:#E6F5EC;color:#1F7248;">เสร็จสิ้น</span>
+        <span style="background:#FDF3D8;color:#8A6D0E;">ไม่เกี่ยวข้อง</span>
+      </div>
+    </button>
+
+    <button type="button" class="modal-opt" data-tpl="logmag">
+      <div class="t">Log sheet Magnetic bearing chiller</div>
+      <div class="d">สโคปงานชุดเดียวกับ water cool + ตารางบันทึกค่า Magnetic Bearing (Unit status, Compr Running Status, Refrig, Motor Amp., Speed / Bearing, Operating Hours)</div>
+      <div class="legend">
+        <span style="background:#E6F5EC;color:#1F7248;">ปกติ</span>
+        <span style="background:#FDF3D8;color:#8A6D0E;">เฝ้าระวัง</span>
+        <span style="background:#FBEAEA;color:#C94F4F;">ชำรุด</span>
+        <span style="background:#E6F0FB;color:#1D5FA8;">ควรเปลี่ยน</span>
+      </div>
+    </button>
+
+    <button type="button" class="modal-opt" data-tpl="logct">
+      <div class="t">Log sheet Cooling Tower</div>
+      <div class="d">สโคปงาน 9 รายการ + ตารางบันทึกค่า Cooling Tower (Measurement, General condition, Cond Approach / RLA%)</div>
+      <div class="legend">
+        <span style="background:#E6F5EC;color:#1F7248;">ปกติ</span>
+        <span style="background:#FDF3D8;color:#8A6D0E;">เฝ้าระวัง</span>
+        <span style="background:#FBEAEA;color:#C94F4F;">ชำรุด</span>
+        <span style="background:#E6F0FB;color:#1D5FA8;">ควรเปลี่ยน</span>
+      </div>
+    </button>
+
+    <button type="button" class="modal-opt" data-tpl="logmp">
+      <div class="t">Log sheet Service Motor pump</div>
+      <div class="d">งานตรวจสอบและบำรุงรักษา Motor pump — สโคปงาน 9 รายการ + ตารางบันทึกค่า (Measurement, General condition)</div>
+      <div class="legend">
+        <span style="background:#E6F5EC;color:#1F7248;">ปกติ</span>
+        <span style="background:#FBEAEA;color:#C94F4F;">เฝ้าระวัง</span>
+        <span style="background:#FDF3D8;color:#8A6D0E;">ควร Overhaul</span>
+      </div>
+    </button>
+
+    <button type="button" class="modal-opt" data-tpl="loghb">
+      <div class="t">Log sheet hybrid chiller</div>
+      <div class="d">Plate Tube Evaporative Air Cooled Chiller — สโคปงาน 13 รายการชุดเดียวกับ RTHD + ตารางบันทึกค่า 3 ช่วงเวลา</div>
+      <div class="legend">
+        <span style="background:#E6F5EC;color:#1F7248;">ปกติ</span>
+        <span style="background:#FDF3D8;color:#8A6D0E;">เฝ้าระวัง</span>
+        <span style="background:#FBEAEA;color:#C94F4F;">ชำรุด</span>
+        <span style="background:#E6F0FB;color:#1D5FA8;">ควรเปลี่ยน</span>
+      </div>
+    </button>
+
+    <button type="button" class="modal-opt" data-tpl="delivery">
+      <div class="t">ส่งของ</div>
+      <div class="d">รายการอะไหล่ / สินค้าที่จัดส่ง — กรอกเป็นตาราง</div>
+      <div class="legend">
+        <span style="background:#EDEFF7;color:#16264A;">Name part</span>
+        <span style="background:#EDEFF7;color:#16264A;">Part No.</span>
+        <span style="background:#EDEFF7;color:#16264A;">Description</span>
+        <span style="background:#EDEFF7;color:#16264A;">Qty</span>
+      </div>
+    </button>
+
+    <button type="button" class="modal-opt" data-tpl="logwc">
+      <div class="t">Log sheet water cool</div>
+      <div class="d">สโคปงานตรวจสอบ 13 รายการ + ตารางบันทึกค่า Water Cooled Chiller (Design condition, Set point, ค่าที่อ่านได้ 3 ครั้ง)</div>
+      <div class="legend">
+        <span style="background:#E6F5EC;color:#1F7248;">ปกติ</span>
+        <span style="background:#FDF3D8;color:#8A6D0E;">เฝ้าระวัง</span>
+        <span style="background:#FBEAEA;color:#C94F4F;">ชำรุด</span>
+        <span style="background:#E6F0FB;color:#1D5FA8;">ควรเปลี่ยน</span>
+      </div>
+    </button>
+
+    <button type="button" class="modal-opt" data-tpl="logac">
+      <div class="t">Log sheet air cool</div>
+      <div class="d">สโคปงานตรวจสอบ 12 รายการ + ตารางบันทึกค่า Air Cooled Chiller (Design condition, Unit status, Comp #1-#3, ค่าที่อ่านได้ 3 ครั้ง)</div>
+      <div class="legend">
+        <span style="background:#E6F5EC;color:#1F7248;">ปกติ</span>
+        <span style="background:#FDF3D8;color:#8A6D0E;">เฝ้าระวัง</span>
+        <span style="background:#FBEAEA;color:#C94F4F;">ชำรุด</span>
+        <span style="background:#E6F0FB;color:#1D5FA8;">ควรเปลี่ยน</span>
+      </div>
+    </button>
+
+    <button type="button" class="modal-opt" data-tpl="logtrane">
+      <div class="t">Log sheet TRANE RTHD</div>
+      <div class="d">สโคปงานตรวจสอบชุดเดียวกับ water cool + ตารางบันทึกค่า TRANE RTHD พร้อมช่วงค่าที่ยอมรับได้ (Acceptable Range)</div>
+      <div class="legend">
+        <span style="background:#E6F5EC;color:#1F7248;">ปกติ</span>
+        <span style="background:#FDF3D8;color:#8A6D0E;">เฝ้าระวัง</span>
+        <span style="background:#FBEAEA;color:#C94F4F;">ชำรุด</span>
+        <span style="background:#E6F0FB;color:#1D5FA8;">ควรเปลี่ยน</span>
+      </div>
+    </button>
 
     <div class="modal-actions">
       <button type="button" class="btn btn-primary" id="modalCloseBtn">เสร็จสิ้น</button>
@@ -3550,7 +3557,7 @@
     var rows = [];
     state.checklist.forEach(function(item, i){
       if((item.tpl || '') !== k) return;
-      rows.push('<div class="chk-row" data-row="' + i + '">' +
+      rows.push('<div class="chk-row">' +
         '<input type="text" data-i="'+i+'" class="chk-text" value="'+escapeAttr(item.text)+'" placeholder="รายการตรวจสอบ...">' +
         '<div class="chk-status">' + statusBtnsHtml(item, i, statuses) + '</div>' +
         '<button type="button" class="chk-del" data-i="'+i+'">ลบ</button>' +
@@ -4056,8 +4063,7 @@
         wrap.appendChild(page);
       }
       var card = document.createElement('div');
-      /* ช่องที่ยังไม่ใส่รูปให้เห็นชัดว่ายังขาด จะได้ไม่ลืมก่อนส่งงาน */
-      card.className = 'photo-card' + (p.img ? '' : ' is-empty');
+      card.className = 'photo-card';
       var slotInner = p.img
         ? '<img src="'+p.img+'" alt="photo '+(i+1)+'"><button type="button" class="photo-x" data-i="'+i+'" title="ลบรูปนี้">&times;</button>'
         : '<div class="empty"><svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="8.5" cy="10.5" r="1.5"/><path d="M21 15l-5-5-9 9"/></svg><span>คลิกเพื่อเลือกรูป</span></div>';
@@ -4069,7 +4075,7 @@
         '</div>';
       card.innerHTML =
         '<div class="photo-slot" data-i="'+i+'">'+slotInner+
-          '<input type="file" accept="image/*" multiple data-i="'+i+'" class="photo-input" style="display:none;">' +
+          '<input type="file" accept="image/*" data-i="'+i+'" class="photo-input" style="display:none;">' +
         '</div>' + meta;
       grid.appendChild(card);
     });
@@ -4094,38 +4100,17 @@
       slot.querySelector('.photo-input').click();
     }
   });
-  /* เลือกได้หลายรูปพร้อมกัน รูปแรกลงช่องที่กด ที่เหลือไล่ลงช่องว่างถัดไป
-     ถ้าช่องไม่พอก็สร้างช่องใหม่ให้เอง */
-  function placePhotos(startIdx, files){
-    var list = Array.prototype.slice.call(files);
-    if(!list.length) return;
-
-    var slots = [], i;
-    if(startIdx !== null && startIdx >= 0){ slots.push(startIdx); }
-    for(i = 0; i < state.photos.length && slots.length < list.length; i++){
-      if(i !== startIdx && !state.photos[i].img){ slots.push(i); }
-    }
-    while(slots.length < list.length){
-      state.photos.push({ caption:'', img:null });
-      slots.push(state.photos.length - 1);
-    }
-
-    var left = list.length;
-    list.forEach(function(f, n){
-      var reader = new FileReader();
-      reader.onload = function(ev){
-        state.photos[slots[n]].img = ev.target.result;
-        if(--left === 0){ renderPhotos(); saveDraft(true); }
-      };
-      reader.onerror = function(){ if(--left === 0){ renderPhotos(); } };
-      reader.readAsDataURL(f);
-    });
-  }
-
   $('photoGrid').addEventListener('change', function(e){
     if(e.target.classList.contains('photo-input')){
-      placePhotos(+e.target.getAttribute('data-i'), e.target.files);
-      e.target.value = '';
+      var i = +e.target.getAttribute('data-i');
+      var file = e.target.files[0];
+      if(!file) return;
+      var reader = new FileReader();
+      reader.onload = function(ev){
+        state.photos[i].img = ev.target.result;
+        renderPhotos();
+      };
+      reader.readAsDataURL(file);
     }
   });
   $('photoGrid').addEventListener('input', function(e){
@@ -4135,24 +4120,10 @@
       state.photos[i].caption = e.target.value;
     }
   });
-  /* ปุ่มเพิ่มรูป: เปิดหน้าต่างเลือกไฟล์ให้เลือกทีละหลายรูปได้เลย
-     ไม่ต้องกดสร้างช่องว่างทีละช่องเหมือนเดิม */
   $('addPhotoBtn').addEventListener('click', function(){
-    var inp = $('bulkPhotoInput');
-    if(inp){ inp.value = ''; inp.click(); }
+    state.photos.push({ caption:'', img:null });
+    renderPhotos();
   });
-  if($('bulkPhotoInput')){
-    $('bulkPhotoInput').addEventListener('change', function(e){
-      var files = e.target.files;
-      if(!files || !files.length){
-        state.photos.push({ caption:'', img:null });
-        renderPhotos();
-        return;
-      }
-      placePhotos(null, files);
-      e.target.value = '';
-    });
-  }
 
   /* ---- signature pad ---- */
   var canvas = $('sigPad');
@@ -4236,23 +4207,7 @@
   /* ---- omit empty detail blocks from the printed PDF ---- */
   var OPTIONAL_FIELDS = ['summary','parts'];
 
-  /* ช่องในหมวด Information ที่ไม่ได้กรอก ไม่ต้องพิมพ์ลงไฟล์
-     ทำให้รายงานสั้นลงและไม่มีหัวข้อว่าง ๆ ให้สับสน */
-  function markBlankInfoFields(){
-    var card = $('infoCard');
-    if(!card) return;
-    Array.prototype.forEach.call(card.querySelectorAll('.field'), function(f){
-      /* ช่องที่ซ่อนอยู่แล้ว (เช่นช่อง Other ที่ยังไม่ได้เลือก) ข้ามไป */
-      var ctl = f.querySelector('input,select,textarea');
-      if(!ctl){ return; }
-      var v = String(ctl.value == null ? '' : ctl.value).trim();
-      if(v){ f.classList.remove('is-blank'); }
-      else  { f.classList.add('is-blank'); }
-    });
-  }
-
   function markBlankBlocks(){
-    markBlankInfoFields();
     var filled = {};
     OPTIONAL_FIELDS.forEach(function(id){
       var el = $(id);
@@ -5349,106 +5304,7 @@
   $('sendPdfBtn').addEventListener('click', sendPdf);
   $('pvSend').addEventListener('click', sendPdf);
 
-  /* ---- ตรวจความครบก่อนเปิดหน้าตัวอย่าง ----
-     กันไม่ให้ส่งงานที่ยังกรอกไม่เสร็จ เพราะแก้ทีหลังยากเมื่อไฟล์ขึ้น Drive แล้ว */
-  /* คืนทั้งข้อความและตัวชี้จุดที่ต้องไปแก้ */
-  function reportProblems(){
-    var out = [];
-    var mark = function(msg, sel){ out.push({ msg: msg, sel: sel }); };
-
-    /* 1) ต้องเลือกแบบฟอร์มตรวจสอบก่อน */
-    if(!state.templates || !state.templates.length){
-      mark('ยังไม่ได้เลือกแบบฟอร์มตรวจสอบ', ['.tpl-picker']);
-      return out;
-    }
-
-    /* 2) ทุกรายการในสโคปงานต้องมีข้อความ - ส่วนสถานะไม่บังคับ
-          เพราะบางงานยังไม่สรุปผลตอนอยู่หน้างาน */
-    var noText = [];
-    (state.checklist || []).forEach(function(it, i){
-      if(!String(it.text || '').trim()){ noText.push(i); }
-    });
-    if(!state.checklist || !state.checklist.length){
-      mark('ยังไม่มีรายการในสโคปงาน', ['#scopeBlocks']);
-    }
-    if(noText.length){
-      mark('สโคปงานยังไม่ได้กรอกข้อความ ' + noText.length + ' รายการ',
-           noText.map(function(i){ return '.chk-row[data-row="' + i + '"]'; }));
-    }
-
-    /* 3) ช่องรูปภาพต้องใส่ครบทุกช่อง */
-    var slots = state.photos || [], empty = [];
-    slots.forEach(function(p, i){ if(!p.img){ empty.push(i); } });
-    if(!slots.length){ mark('ยังไม่ได้ใส่รูปภาพ', ['#photoGrid']); }
-    else if(empty.length){
-      mark('ยังใส่รูปไม่ครบ เหลืออีก ' + empty.length + ' ช่อง',
-           empty.map(function(i){ return '.photo-slot[data-i="' + i + '"]'; }));
-    }
-    return out;
-  }
-
-  var fixTimer = null;
-  function clearFixMarks(){
-    Array.prototype.forEach.call(document.querySelectorAll('.need-fix'), function(el){
-      el.classList.remove('need-fix');
-    });
-  }
-  /* ทำเครื่องหมายทุกจุดที่ต้องแก้ แล้วเลื่อนจอไปหาจุดแรก */
-  function markProblems(list){
-    clearFixMarks();
-    var first = null;
-    list.forEach(function(p){
-      (p.sel || []).forEach(function(sel){
-        Array.prototype.forEach.call(document.querySelectorAll(sel), function(el){
-          el.classList.add('need-fix');
-          if(!first){ first = el; }
-        });
-      });
-    });
-    if(first){
-      try{ first.scrollIntoView({ behavior:'smooth', block:'center' }); }
-      catch(e){ first.scrollIntoView(); }
-    }
-    clearTimeout(fixTimer);
-    fixTimer = setTimeout(clearFixMarks, 6000);
-  }
-
-  function showWarn(list){
-    var ov = $('warnOverlay');
-    if(!ov){ return; }
-    $('warnList').innerHTML = list.map(function(p){
-      return '<li>' + escapeHtml(p.msg) + '</li>';
-    }).join('');
-    ov.classList.add('on');
-    ov.setAttribute('aria-hidden', 'false');
-    var b = $('warnClose');
-    if(b){ setTimeout(function(){ try{ b.focus(); }catch(e){} }, 120); }
-  }
-  function hideWarn(){
-    var ov = $('warnOverlay');
-    if(!ov) return;
-    ov.classList.remove('on');
-    ov.setAttribute('aria-hidden', 'true');
-  }
-
-  if($('warnClose')){
-    $('warnClose').addEventListener('click', function(){
-      hideWarn();
-      markProblems(reportProblems());
-    });
-  }
-  if($('warnOverlay')){
-    $('warnOverlay').addEventListener('click', function(e){
-      if(e.target === this){ hideWarn(); markProblems(reportProblems()); }
-    });
-  }
-
-  $('previewBtn').addEventListener('click', function(){
-    var bad = reportProblems();
-    if(bad.length){ showWarn(bad); return; }
-    clearFixMarks();
-    openPreview();
-  });
+  $('previewBtn').addEventListener('click', openPreview);
   $('pvZoom').addEventListener('click', function(){
     pvFull = !pvFull;
     $('pvZoom').textContent = pvFull ? 'ย่อพอดีจอ' : 'ขนาดเต็ม';
