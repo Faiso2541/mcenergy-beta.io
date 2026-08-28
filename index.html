@@ -283,76 +283,22 @@
     background:var(--paper);border-radius:14px;max-width:520px;width:100%;
     padding:22px 24px;max-height:88vh;overflow-y:auto;
   }
-  /* ---- the one dialog that stops a report going out ----
-     narrower than the picker modals: it carries a sentence, not a list */
-  .alert-box{
-    background:var(--paper);border-radius:14px;max-width:420px;width:100%;padding:22px;
-  }
-  .alert-top{display:flex;align-items:flex-start;gap:12px;margin-bottom:16px;}
-  .alert-icon{
-    width:38px;height:38px;border-radius:10px;background:#FBEAEA;flex:0 0 auto;
-    display:flex;align-items:center;justify-content:center;
-    font-family:'Sora';font-weight:700;font-size:21px;color:var(--danger);line-height:1;
-  }
-  .alert-eyebrow{
-    font-size:12px;font-weight:700;color:var(--danger);
-    letter-spacing:.09em;text-transform:uppercase;margin:0;
-  }
-  .alert-title{
-    font-family:'Sora';font-weight:700;font-size:15.5px;color:var(--ink);
-    line-height:1.5;margin:3px 0 0;
-  }
-  .alert-panel{background:var(--page);border-radius:10px;padding:12px 14px;margin-bottom:16px;}
-  .alert-panel-row{
-    display:flex;justify-content:space-between;font-size:13px;
-    color:var(--ink-soft);margin-bottom:9px;
-  }
-  .alert-panel-row b{color:var(--ink);font-weight:700;}
-  .alert-bar{height:6px;background:var(--line);border-radius:3px;overflow:hidden;}
-  .alert-bar > span{display:block;height:100%;background:var(--danger);border-radius:3px;}
-  .alert-detail{
-    margin:10px 0 0;font-size:12.5px;color:var(--ink-soft);
-    line-height:1.6;white-space:pre-line;
-  }
-  .alert-acts{display:flex;gap:9px;}
-  .alert-acts .alert-close{
-    flex:0 0 auto;background:var(--paper);border:1px solid var(--line);color:var(--ink-soft);
-    border-radius:9px;padding:10px 16px;font-size:14px;font-weight:600;
-  }
-  .alert-acts .alert-close:hover{border-color:var(--ink-faint);}
-  .alert-acts .alert-go{
-    flex:1;background:var(--navy);border:none;color:#fff;
-    border-radius:9px;padding:10px;font-size:14px;font-weight:600;
-  }
-  .alert-acts .alert-go:hover{background:var(--navy-soft);}
-
   .modal-head{font-family:'Sora';font-weight:700;font-size:16px;color:var(--navy);margin-bottom:4px;}
   .modal-sub{font-size:12.5px;color:var(--ink-faint);margin-bottom:16px;}
-  /* Twelve forms stacked one under another ran past two phone screens, and the
-     description and status chips under each name were what made them tall.
-     As cards two to a column the whole set is in view at once; what the list
-     used to spell out is now one short line under the name. */
-  .tpl-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:18px;}
   .modal-opt{
     display:block;width:100%;text-align:left;border:1px solid var(--line);border-radius:10px;
-    padding:13px 12px;background:var(--page);cursor:pointer;transition:.15s;position:relative;
+    padding:14px 16px;margin-bottom:10px;background:var(--page);cursor:pointer;transition:.15s;
   }
   .modal-opt:hover{border-color:var(--navy-soft);background:var(--paper);}
-  .modal-opt.on{border-color:var(--green);border-width:1.5px;background:#F2FBF6;padding:12.5px 11.5px;}
-  .modal-opt .tpl-ico{width:21px;height:21px;color:var(--ink-soft);display:block;}
-  .modal-opt.on .tpl-ico{color:var(--green-deep);}
-  .modal-opt .t{
-    font-family:'Sora';font-weight:700;font-size:13px;color:var(--navy);
-    line-height:1.35;margin:8px 0 0;
+  .modal-opt.on{border-color:var(--green);background:#F2FBF6;}
+  .modal-opt .t{font-family:'Sora';font-weight:700;font-size:14px;color:var(--navy);margin-bottom:4px;}
+  .modal-opt .t::before{
+    content:'';display:inline-block;vertical-align:-2px;margin-right:8px;
+    width:16px;height:16px;border:1.5px solid var(--ink-faint);border-radius:5px;
   }
-  .modal-opt .m{font-size:11px;color:var(--ink-faint);line-height:1.4;margin-top:3px;}
-  .modal-opt.on .m{color:var(--ink-soft);}
-  /* the tick shows only on a chosen card, in the corner the eye already scans
-     for - no empty checkbox sitting on every card */
-  .modal-opt.on::after{
-    content:'\2713';position:absolute;top:9px;right:9px;
-    width:17px;height:17px;border-radius:50%;background:var(--green);color:#fff;
-    font-size:11px;font-weight:700;line-height:17px;text-align:center;
+  .modal-opt.on .t::before{
+    content:'\2713';background:var(--green);border-color:var(--green);color:#fff;
+    font-size:11px;line-height:15px;text-align:center;font-weight:700;
   }
   .chk-group{
     font-family:'Sora';font-weight:700;font-size:12px;color:var(--navy);
@@ -588,25 +534,6 @@
     box-shadow:0 1px 4px rgba(0,0,0,.28);
   }
   .photo-slot .photo-x:hover{background:#A83A3A;}
-  /* An empty slot on the general photo page can be thrown away: a job with two
-     pictures should not be held back by four frames nobody wanted. Slots that
-     a form laid out belong to its work steps, so they never get this button. */
-  .photo-bulk{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin:0 0 14px;}
-  .photo-bulk-note{font-size:12.5px;color:var(--ink-soft);}
-  .photo-drop{
-    position:absolute;right:8px;bottom:8px;border:1px solid var(--line);
-    background:#fff;color:var(--ink-faint);border-radius:6px;
-    padding:3px 8px;font-size:11px;font-weight:600;line-height:1;opacity:.75;
-  }
-  .photo-drop:hover{opacity:1;border-color:var(--danger);color:var(--danger);}
-  /* marked only after a blocked attempt, never while the user is still working */
-  .photo-slot.is-missing{
-    outline:2px solid #D93A3A;outline-offset:-2px;border-radius:10px;background:#FDF1F1;
-  }
-  .photo-slot.is-missing .empty{color:#B32020;}
-  @keyframes missingPulse{0%,100%{box-shadow:0 0 0 0 rgba(217,58,58,0);}
-                          40%   {box-shadow:0 0 0 6px rgba(217,58,58,.22);}}
-  .photo-slot.is-missing.pulse{animation:missingPulse .9s ease-out 2;}
   .photo-meta{padding:9px 12px 11px;display:flex;flex-direction:column;gap:3px;}
   .ph-label-row{display:flex;align-items:baseline;gap:6px;}
   .ph-num{font-size:11px;font-weight:700;color:#2C5FAE;flex:0 0 auto;white-space:nowrap;}
@@ -815,7 +742,7 @@
     body{font-size:11.5pt;color:#000;-webkit-print-color-adjust:exact;print-color-adjust:exact;}
     .wrap{max-width:none;margin:0;padding:0 15mm;}
 
-    .topbar,.btn-install,.add-row,.add-photo-btn,.photo-bulk,.photo-x,.photo-drop,.photo-remove,.sig-toolbar,.foot-note,
+    .topbar,.btn-install,.add-row,.add-photo-btn,.photo-x,.photo-remove,.sig-toolbar,.foot-note,
     .chk-status button:not(.sel),.tpl-picker,.modal-overlay,.chk-del,.cover-hint{display:none !important;}
 
     /* ---- cover: full-bleed first page ----
@@ -844,10 +771,10 @@
 
     .card{
       border:none;box-shadow:none;break-inside:auto;
-      /* ระยะขอบ: บน 8mm / ล่าง 24mm เท่ากันทุกหน้า ทุกฟอร์ม
-         แถบท้ายหน้าอยู่ที่ 16mm จากขอบล่างและสูงราว 8mm
-         เนื้อหาจึงต้องจบที่ 24mm เพื่อไม่ให้ทับกัน */
-      padding:8mm 0 24mm;margin:0;border-radius:0;
+      /* ระยะขอบ: บน 8mm / ล่าง 34mm ทุกหน้า ทุกฟอร์ม
+         แถบท้ายหน้าอยู่ 16mm สูงราว 8mm (ขอบบนของแถบ = 24mm)
+         เว้นอีก 10mm เหนือเส้นแถบ เนื้อหาจึงจบที่ 34mm */
+      padding:8mm 0 34mm;margin:0;border-radius:0;
     }
     /* keep photos crisp when the printer/PDF downsamples them */
     .photo-slot img{image-rendering:auto;}
@@ -1054,7 +981,10 @@
     }
     .log-table tr{break-inside:avoid;}
     .log-foot{gap:5mm 8mm;margin-top:5mm;break-inside:avoid;}
-    .log-note{margin-top:5mm;break-inside:avoid;}
+    /* แผ่นสูงเต็มพื้นที่ใช้งาน แล้วดันบล็อก Comments + Verified by ไปชิดล่าง
+       ทำให้ทุกฟอร์มมีฐานอยู่ที่เดียวกันคือ 10mm เหนือเส้นแถบท้ายหน้า */
+    .log-sheet,.ct-sheet{display:flex;flex-direction:column;min-height:255mm;}
+    .log-note{margin-top:auto !important;padding-top:4mm;break-inside:avoid;}
     .ls-add,.ls-del{display:none !important;}
     .log-block + .log-block{
       break-before:page;margin-top:0;padding-top:8mm;border-top:none;
@@ -1097,7 +1027,7 @@
     .ls-meta .field{gap:.6mm;}
     .ls-meta input[type=text]{font-size:9pt;padding:.5mm 0 !important;}
     /* trim the top of the page, and keep clear of the footer at the bottom */
-    .card:has(.log-wrap.on){padding-top:8mm !important;padding-bottom:24mm !important;}
+    .card:has(.log-wrap.on){padding-top:8mm !important;padding-bottom:34mm !important;}
     .log-grid{gap:3mm;}
     /* the books with a wide reading table give it more of the sheet */
     .log-dense .log-grid{grid-template-columns:minmax(0,.78fr) minmax(0,1.7fr);}
@@ -1110,9 +1040,10 @@
       color:#000 !important;text-align:center;display:block;width:100%;
       min-height:3.1mm;overflow:hidden;white-space:nowrap;
     }
+    /* เดิมตัดข้อความทิ้งเงียบ ๆ ถ้าพิมพ์ยาว ตอนนี้ให้ขึ้นบรรทัดใหม่แทน */
     .ls-tag.pv-text{
       display:block;text-align:left;border-bottom:.6pt solid #9AA0B4;
-      min-height:6mm;white-space:nowrap;overflow:hidden;line-height:1.25;
+      min-height:6mm;white-space:normal;word-break:break-word;line-height:1.25;
     }
     /* html2canvas draws a textarea on one clipped line, so the PDF builder
        swaps them for plain text - these rules make that text wrap and grow
@@ -1135,8 +1066,9 @@
     }
     .log-note{margin-top:2.5mm;}
     .log-note label{font-size:7.5pt;}
-    .log-note textarea{
-      min-height:14mm !important;height:14mm;font-size:9pt !important;
+    /* ความสูงขั้นต่ำเท่านั้น กล่องยืดตามข้อความ ไม่ทะลุไปทับของข้างล่าง */
+    .log-note textarea,.log-note .pv-text{
+      min-height:14mm !important;height:auto !important;font-size:9pt !important;
       padding:.8mm 0 !important;line-height:1.3;
     }
     .log-foot{margin-top:2.5mm;gap:4mm;break-inside:avoid;}
@@ -1188,25 +1120,18 @@
       font-size:8.5pt !important;line-height:1.15;min-height:3.4mm;
     }
     .log-dense .log-note textarea,.log-dense .log-note .pv-text{
-      min-height:12mm !important;height:12mm;
+      min-height:12mm !important;height:auto !important;
     }
 
     /* ---- hybrid chiller sheet ----
        ตารางยาว 33 แถว ถ้าใช้ระยะปกติจะล้นไปหน้าสอง
        จึงบีบตัวอักษรและระยะในเซลล์เฉพาะตารางนี้ */
     .hb-wrap{break-inside:avoid;}
-    .card:has(.hb-wrap.on){padding-top:8mm !important;padding-bottom:24mm !important;}
-    /* ทำแผ่นให้สูงเต็มหน้า แล้วดัน Comments กับ Verified by ไปชิดล่าง
-       เดิมใส่ min-height:262mm ไว้ทั้ง .hb-wrap และ .hb-sheet ตั้งใจกันสองชั้น
-       แต่ .hb-sheet อยู่ข้างใน .hb-wrap และมี .log-head คั่นอยู่ด้านบน
-       ความสูงจึงถูกบวกกัน = log-head 5.5mm + 262mm = 267.5mm
-       ขณะที่หน้ากระดาษเหลือที่ให้ 297 - 8 (padding บน) - 24 (padding ล่าง) = 265mm
-       เกินไป 2.5mm ท้ายกระดาษเลยล้นทับ footer
-
-       แก้โดยให้ .hb-sheet เป็นตัวกำหนดความสูงตัวเดียว และหักที่ของ log-head ออก
-       258 + 5.5 = 263.5mm พอดีในกรอบ 265mm เหลือเผื่อไว้ 1.5mm */
-    .hb-wrap{display:flex;flex-direction:column;min-height:0;}
-    .hb-sheet{break-inside:avoid;display:flex;flex-direction:column;flex:1;min-height:258mm;}
+    .card:has(.hb-wrap.on){padding-top:8mm !important;padding-bottom:34mm !important;}
+    /* ทำแผ่นให้สูงเต็มหน้า แล้วดัน Comments กับ Verified by ไปชิดล่าง */
+    /* กันไว้สองชั้น เผื่อชั้นใดชั้นหนึ่งไม่ได้เป็นตัวกำหนดความสูง */
+    .hb-wrap{display:flex;flex-direction:column;min-height:255mm;}
+    .hb-sheet{break-inside:avoid;display:flex;flex-direction:column;flex:1;min-height:255mm;}
     .hb-wrap .log-head{margin-bottom:2mm;}
     .hb-grid{grid-template-columns:minmax(0,.78fr) minmax(0,1.7fr) !important;gap:3mm !important;}
     .hb-wrap .ls-meta{margin-bottom:2.5mm;}
@@ -1222,14 +1147,14 @@
     /* margin-top:auto ดันบล็อกท้ายไปชิดขอบล่างของแผ่น */
     .hb-wrap .ct-note{margin-top:auto !important;padding-top:5mm;}
     .hb-wrap .ct-note textarea,.hb-wrap .ct-note .pv-text{
-      min-height:10mm !important;height:10mm !important;font-size:8.5pt !important;
+      min-height:10mm !important;height:auto !important;font-size:8.5pt !important;
     }
     .hb-wrap .log-foot{margin-top:3mm !important;margin-bottom:0 !important;}
     .hb-add,.hb-del{display:none !important;}
 
     /* ---- cooling tower sheet ---- */
     /* the same top margin the other log sheets get */
-    .card:has(.ct-wrap.on){padding-top:8mm !important;padding-bottom:24mm !important;}
+    .card:has(.ct-wrap.on){padding-top:8mm !important;padding-bottom:34mm !important;}
     .ct-wrap{break-before:page;padding-top:0;}
     .ct-wrap .log-head{margin-top:0;}
     .ct-sheet{break-inside:auto;}
@@ -1282,10 +1207,10 @@
       white-space:normal;word-break:break-word;
     }
     .ct-foot{display:grid;grid-template-columns:70mm 1fr;gap:8mm;margin-top:5mm;break-inside:avoid;}
-    .ct-note{margin-top:6mm;break-inside:avoid;}
+    .ct-note{margin-top:auto !important;padding-top:4mm;break-inside:avoid;}
     .ct-note label{font-size:7.5pt;}
     .ct-note textarea,.ct-note .pv-text{
-      min-height:32mm !important;height:32mm;font-size:9.5pt !important;
+      min-height:20mm !important;height:auto !important;font-size:9.5pt !important;
     }
 
     /* the extra job-description box must not push the sheet onto page 2 */
@@ -1575,14 +1500,9 @@
   </div>
 
   <!-- SECTION 3: PHOTO REPORT -->
-  <div class="card" id="photoCard">
+  <div class="card">
     <div class="sec-bar">Photo record — ภาพถ่ายหน้างาน</div>
-    <p class="sec-note">เลือกทีเดียวหลายรูปได้ ระบบจะไล่ใส่ช่องว่างให้เอง — หรือคลิกทีละช่องก็ได้</p>
-    <div class="photo-bulk">
-      <button class="btn btn-primary" id="bulkPhotoBtn" type="button">เลือกรูปทีเดียวหลายรูป</button>
-      <span class="photo-bulk-note" id="bulkPhotoNote"></span>
-      <input type="file" accept="image/*" multiple id="bulkPhotoInput" style="display:none;">
-    </div>
+    <p class="sec-note">คลิกช่องภาพเพื่ออัปโหลด</p>
     <div id="photoGrid"></div>
     <button class="add-photo-btn" id="addPhotoBtn" type="button" style="margin-top:16px;width:100%;">+ เพิ่มรูปภาพ</button>
   </div>
@@ -1714,96 +1634,138 @@
   </div>
 </div>
 
-<div class="modal-overlay" id="alertModal" style="display:none;">
-  <div class="alert-box" role="alertdialog" aria-labelledby="alertTitle">
-    <div class="alert-top">
-      <div class="alert-icon" aria-hidden="true">!</div>
-      <div>
-        <p class="alert-eyebrow">แจ้งเตือน</p>
-        <p class="alert-title" id="alertTitle">—</p>
-      </div>
-    </div>
-    <div class="alert-panel" id="alertPanel">
-      <div class="alert-panel-row" id="alertCountRow">
-        <span id="alertPanelLabel">ความคืบหน้า</span><b id="alertPanelCount">—</b>
-      </div>
-      <div class="alert-bar" id="alertBarWrap"><span id="alertBar" style="width:0%;"></span></div>
-      <p class="alert-detail" id="alertDetail"></p>
-    </div>
-    <div class="alert-acts">
-      <button type="button" class="alert-close" id="alertClose">ปิด</button>
-      <button type="button" class="alert-go" id="alertGo">ตกลง</button>
-    </div>
-  </div>
-</div>
-
 <div class="modal-overlay" id="tplModal" style="display:none;">
   <div class="modal-box">
     <div class="modal-head">เลือกแบบฟอร์มตรวจสอบ</div>
-    <p class="modal-sub">แตะเพื่อเลือก — เลือกได้หลายแบบฟอร์มในงานเดียว แตะซ้ำเพื่อเอาออก</p>
+    <p class="modal-sub">แตะเพื่อเลือก — เลือกได้หลายแบบฟอร์มในงานเดียว แตะซ้ำเพื่อเอาออก · สถานะแต่ละรายการติ๊กได้มากกว่าหนึ่ง</p>
 
-    <div class="tpl-grid">
     <button type="button" class="modal-opt" data-tpl="service">
-      <svg class="tpl-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14.7 6.3a5 5 0 0 1-6.6 6.6L4 17v3h3l4.1-4.1a5 5 0 0 0 6.6-6.6l-2.5 2.5-2.1-.6-.6-2.1z"/></svg>
       <div class="t">Service / Repair</div>
-      <div class="m">งานซ่อม เขียนรายการเอง</div>
+      <div class="d">เพิ่มรายการเองตามงานที่ทำ แล้วติ๊กสถานะแต่ละรายการ</div>
+      <div class="legend">
+        <span style="background:#E6F5EC;color:#1F7248;">ปกติ</span>
+        <span style="background:#FBEAEA;color:#C94F4F;">ชำรุด</span>
+        <span style="background:#FDF3D8;color:#8A6D0E;">เฝ้าระวัง</span>
+        <span style="background:#E6F0FB;color:#1D5FA8;">เสนอราคา</span>
+        <span style="background:#FDEBDD;color:#B35A1B;">รอซ่อม</span>
+      </div>
     </button>
+
     <button type="button" class="modal-opt" data-tpl="project">
-      <svg class="tpl-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 21h18M5 21V8l7-5 7 5v13M9 21v-5h6v5"/></svg>
       <div class="t">Project Plant</div>
-      <div class="m">ติดตั้งระบบ · 6 รายการ</div>
+      <div class="d">ความคืบหน้างานติดตั้งระบบ 6 รายการ</div>
+      <div class="legend">
+        <span style="background:#E6F5EC;color:#1F7248;">เสร็จสิ้น</span>
+        <span style="background:#FBEAEA;color:#C94F4F;">เกินกำหนด</span>
+        <span style="background:#E6F0FB;color:#1D5FA8;">ตามแผนงาน</span>
+      </div>
     </button>
+
     <button type="button" class="modal-opt" data-tpl="tube">
-      <svg class="tpl-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><ellipse cx="12" cy="7" rx="8" ry="3"/><path d="M4 7v10c0 1.7 3.6 3 8 3s8-1.3 8-3V7"/><path d="M4 12c0 1.7 3.6 3 8 3s8-1.3 8-3"/></svg>
-      <div class="t">Clean tube chiller</div>
-      <div class="m">งานล้าง · 9 ขั้น · 12 รูป</div>
+      <div class="t">Log Report Clean tube chiller</div>
+      <div class="d">งานล้างทำความสะอาด Tube Chiller — สโคปงาน 9 ขั้นตอน พร้อมเตรียมช่องรูปภาพ 12 รูป ใส่คำอธิบายใต้รูปให้อัตโนมัติ</div>
+      <div class="legend">
+        <span style="background:#E6F5EC;color:#1F7248;">เสร็จสิ้น</span>
+        <span style="background:#E6F0FB;color:#1D5FA8;">อยู่ระหว่างดำเนินการ</span>
+        <span style="background:#FBEAEA;color:#C94F4F;">ไม่ได้ทำ</span>
+      </div>
     </button>
+
     <button type="button" class="modal-opt" data-tpl="ahu">
-      <svg class="tpl-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="1.5"/><path d="M7.5 5v14M12 5v14M16.5 5v14"/></svg>
-      <div class="t">Clean AHU &amp; FCU</div>
-      <div class="m">งานล้าง · 11 ขั้น · 12 รูป</div>
+      <div class="t">Log Report Clean AHU &amp; FCU</div>
+      <div class="d">งานล้างทำความสะอาด AHU / FCU — สโคปงาน 11 ขั้นตอน พร้อมเตรียมช่องรูปภาพ 12 รูป ใส่คำอธิบายใต้รูปให้อัตโนมัติ</div>
+      <div class="legend">
+        <span style="background:#E6F5EC;color:#1F7248;">เสร็จสิ้น</span>
+        <span style="background:#FDF3D8;color:#8A6D0E;">ไม่เกี่ยวข้อง</span>
+      </div>
     </button>
-    <button type="button" class="modal-opt" data-tpl="logwc">
-      <svg class="tpl-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3s5 5.5 5 9a5 5 0 0 1-10 0c0-3.5 5-9 5-9z"/></svg>
-      <div class="t">Log sheet water cool</div>
-      <div class="m">บันทึกค่า · 13 รายการ</div>
-    </button>
-    <button type="button" class="modal-opt" data-tpl="logac">
-      <svg class="tpl-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v18M4.5 7.5l15 9M19.5 7.5l-15 9"/></svg>
-      <div class="t">Log sheet air cool</div>
-      <div class="m">บันทึกค่า · 12 รายการ</div>
-    </button>
-    <button type="button" class="modal-opt" data-tpl="logtrane">
-      <svg class="tpl-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 20h16M6 20V9l6-5 6 5v11"/><path d="M10 20v-5h4v5"/></svg>
-      <div class="t">Log sheet TRANE RTHD</div>
-      <div class="m">บันทึกค่า · มี Acceptable Range</div>
-    </button>
+
     <button type="button" class="modal-opt" data-tpl="logmag">
-      <svg class="tpl-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="3"/><circle cx="12" cy="12" r="8"/><path d="M12 4v3M12 17v3M4 12h3M17 12h3"/></svg>
-      <div class="t">Magnetic bearing chiller</div>
-      <div class="m">บันทึกค่า · Magnetic Bearing</div>
+      <div class="t">Log sheet Magnetic bearing chiller</div>
+      <div class="d">สโคปงานชุดเดียวกับ water cool + ตารางบันทึกค่า Magnetic Bearing (Unit status, Compr Running Status, Refrig, Motor Amp., Speed / Bearing, Operating Hours)</div>
+      <div class="legend">
+        <span style="background:#E6F5EC;color:#1F7248;">ปกติ</span>
+        <span style="background:#FDF3D8;color:#8A6D0E;">เฝ้าระวัง</span>
+        <span style="background:#FBEAEA;color:#C94F4F;">ชำรุด</span>
+        <span style="background:#E6F0FB;color:#1D5FA8;">ควรเปลี่ยน</span>
+      </div>
     </button>
-    <button type="button" class="modal-opt" data-tpl="loghb">
-      <svg class="tpl-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="6" width="18" height="12" rx="1.5"/><path d="M7 6v12M11 6v12M15 6v12"/><path d="M19 9.5c-1.2.9-1.2 2.6 0 3.5"/></svg>
-      <div class="t">Log sheet hybrid chiller</div>
-      <div class="m">บันทึกค่า · 13 รายการ · 3 ช่วงเวลา</div>
-    </button>
+
     <button type="button" class="modal-opt" data-tpl="logct">
-      <svg class="tpl-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6.5 21 8.5 6h7l2 15z"/><path d="M4.5 6h15"/><path d="M9.5 11h5M9 15h6"/></svg>
       <div class="t">Log sheet Cooling Tower</div>
-      <div class="m">บันทึกค่า · 9 รายการ</div>
+      <div class="d">สโคปงาน 9 รายการ + ตารางบันทึกค่า Cooling Tower (Measurement, General condition, Cond Approach / RLA%)</div>
+      <div class="legend">
+        <span style="background:#E6F5EC;color:#1F7248;">ปกติ</span>
+        <span style="background:#FDF3D8;color:#8A6D0E;">เฝ้าระวัง</span>
+        <span style="background:#FBEAEA;color:#C94F4F;">ชำรุด</span>
+        <span style="background:#E6F0FB;color:#1D5FA8;">ควรเปลี่ยน</span>
+      </div>
     </button>
+
     <button type="button" class="modal-opt" data-tpl="logmp">
-      <svg class="tpl-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="9" cy="14" r="5"/><path d="M9 9V4.5h6V9M14 14h6M17 11v6"/></svg>
-      <div class="t">Service Motor pump</div>
-      <div class="m">บันทึกค่า · 9 รายการ</div>
+      <div class="t">Log sheet Service Motor pump</div>
+      <div class="d">งานตรวจสอบและบำรุงรักษา Motor pump — สโคปงาน 9 รายการ + ตารางบันทึกค่า (Measurement, General condition)</div>
+      <div class="legend">
+        <span style="background:#E6F5EC;color:#1F7248;">ปกติ</span>
+        <span style="background:#FBEAEA;color:#C94F4F;">เฝ้าระวัง</span>
+        <span style="background:#FDF3D8;color:#8A6D0E;">ควร Overhaul</span>
+      </div>
     </button>
+
+    <button type="button" class="modal-opt" data-tpl="loghb">
+      <div class="t">Log sheet hybrid chiller</div>
+      <div class="d">Plate Tube Evaporative Air Cooled Chiller — สโคปงาน 13 รายการชุดเดียวกับ RTHD + ตารางบันทึกค่า 3 ช่วงเวลา</div>
+      <div class="legend">
+        <span style="background:#E6F5EC;color:#1F7248;">ปกติ</span>
+        <span style="background:#FDF3D8;color:#8A6D0E;">เฝ้าระวัง</span>
+        <span style="background:#FBEAEA;color:#C94F4F;">ชำรุด</span>
+        <span style="background:#E6F0FB;color:#1D5FA8;">ควรเปลี่ยน</span>
+      </div>
+    </button>
+
     <button type="button" class="modal-opt" data-tpl="delivery">
-      <svg class="tpl-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 8 12 3l9 5v8l-9 5-9-5z"/><path d="m3 8 9 5 9-5M12 13v8"/></svg>
       <div class="t">ส่งของ</div>
-      <div class="m">ตารางอะไหล่ที่จัดส่ง</div>
+      <div class="d">รายการอะไหล่ / สินค้าที่จัดส่ง — กรอกเป็นตาราง</div>
+      <div class="legend">
+        <span style="background:#EDEFF7;color:#16264A;">Name part</span>
+        <span style="background:#EDEFF7;color:#16264A;">Part No.</span>
+        <span style="background:#EDEFF7;color:#16264A;">Description</span>
+        <span style="background:#EDEFF7;color:#16264A;">Qty</span>
+      </div>
     </button>
-    </div>
+
+    <button type="button" class="modal-opt" data-tpl="logwc">
+      <div class="t">Log sheet water cool</div>
+      <div class="d">สโคปงานตรวจสอบ 13 รายการ + ตารางบันทึกค่า Water Cooled Chiller (Design condition, Set point, ค่าที่อ่านได้ 3 ครั้ง)</div>
+      <div class="legend">
+        <span style="background:#E6F5EC;color:#1F7248;">ปกติ</span>
+        <span style="background:#FDF3D8;color:#8A6D0E;">เฝ้าระวัง</span>
+        <span style="background:#FBEAEA;color:#C94F4F;">ชำรุด</span>
+        <span style="background:#E6F0FB;color:#1D5FA8;">ควรเปลี่ยน</span>
+      </div>
+    </button>
+
+    <button type="button" class="modal-opt" data-tpl="logac">
+      <div class="t">Log sheet air cool</div>
+      <div class="d">สโคปงานตรวจสอบ 12 รายการ + ตารางบันทึกค่า Air Cooled Chiller (Design condition, Unit status, Comp #1-#3, ค่าที่อ่านได้ 3 ครั้ง)</div>
+      <div class="legend">
+        <span style="background:#E6F5EC;color:#1F7248;">ปกติ</span>
+        <span style="background:#FDF3D8;color:#8A6D0E;">เฝ้าระวัง</span>
+        <span style="background:#FBEAEA;color:#C94F4F;">ชำรุด</span>
+        <span style="background:#E6F0FB;color:#1D5FA8;">ควรเปลี่ยน</span>
+      </div>
+    </button>
+
+    <button type="button" class="modal-opt" data-tpl="logtrane">
+      <div class="t">Log sheet TRANE RTHD</div>
+      <div class="d">สโคปงานตรวจสอบชุดเดียวกับ water cool + ตารางบันทึกค่า TRANE RTHD พร้อมช่วงค่าที่ยอมรับได้ (Acceptable Range)</div>
+      <div class="legend">
+        <span style="background:#E6F5EC;color:#1F7248;">ปกติ</span>
+        <span style="background:#FDF3D8;color:#8A6D0E;">เฝ้าระวัง</span>
+        <span style="background:#FBEAEA;color:#C94F4F;">ชำรุด</span>
+        <span style="background:#E6F0FB;color:#1D5FA8;">ควรเปลี่ยน</span>
+      </div>
+    </button>
 
     <div class="modal-actions">
       <button type="button" class="btn btn-primary" id="modalCloseBtn">เสร็จสิ้น</button>
@@ -4107,13 +4069,9 @@
       }
       var card = document.createElement('div');
       card.className = 'photo-card';
-      /* an empty slot the engineer never wanted can be dropped - but only on
-         the general photo page, never on slots a form laid out */
-      var canDrop = !state.photoTpl;
       var slotInner = p.img
         ? '<img src="'+p.img+'" alt="photo '+(i+1)+'"><button type="button" class="photo-x" data-i="'+i+'" title="ลบรูปนี้">&times;</button>'
-        : '<div class="empty"><svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="8.5" cy="10.5" r="1.5"/><path d="M21 15l-5-5-9 9"/></svg><span>คลิกเพื่อเลือกรูป</span></div>' +
-          (canDrop ? '<button type="button" class="photo-drop" data-i="'+i+'" title="เอาช่องนี้ออก">ลบช่องนี้</button>' : '');
+        : '<div class="empty"><svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="8.5" cy="10.5" r="1.5"/><path d="M21 15l-5-5-9 9"/></svg><span>คลิกเพื่อเลือกรูป</span></div>';
       /* the caption is the whole story of the photo, so it gets the full width
          and wraps as far as it needs to - no "PHOTO n" tag in front of it */
       var meta = '<div class="photo-meta step">' +
@@ -4122,7 +4080,7 @@
         '</div>';
       card.innerHTML =
         '<div class="photo-slot" data-i="'+i+'">'+slotInner+
-          '<input type="file" accept="image/*" multiple data-i="'+i+'" class="photo-input" style="display:none;">' +
+          '<input type="file" accept="image/*" data-i="'+i+'" class="photo-input" style="display:none;">' +
         '</div>' + meta;
       grid.appendChild(card);
     });
@@ -4135,13 +4093,6 @@
     el.style.height = (el.scrollHeight + 2) + 'px';
   }
   $('photoGrid').addEventListener('click', function(e){
-    var dBtn = e.target.closest('.photo-drop');
-    if(dBtn){
-      state.photos.splice(+dBtn.getAttribute('data-i'), 1);
-      renderPhotos();
-      saveDraft(true);
-      return;
-    }
     var xBtn = e.target.closest('.photo-x');
     if(xBtn){
       var xi = +xBtn.getAttribute('data-i');
@@ -4154,103 +4105,18 @@
       slot.querySelector('.photo-input').click();
     }
   });
-  /* ---- putting a batch of pictures into the slots ----
-     Tapping twelve frames one at a time, waiting for the picker each time, is
-     the slowest part of writing up a tube cleaning. The picker can hand back
-     the whole set at once, so it does: the batch lands in the empty slots in
-     the order the picker gave them, untouched.
-
-     A form's slots are a fixed list, so a batch bigger than the gaps stops at
-     the last one and says how many were left over rather than inventing extra
-     frames that belong to no work step. The general photo page has no such
-     shape, so it simply grows.                                              */
-  /* `tapped` is the slot the engineer actually pressed, or null for the button
-     above the grid. That slot takes the first picture even when it already
-     holds one - pressing a filled frame has always meant "replace this" and
-     still does. Every slot after it has to be empty to be used. */
-  function fillPhotoSlots(fileList, tapped){
-    var files = Array.prototype.slice.call(fileList || []).filter(function(f){
-      return f && f.type && f.type.indexOf('image/') === 0;
-    });
-    if(!files.length) return;
-
-    /* No sorting. The pictures go in exactly the order the picker handed them
-       over, so what the engineer saw when choosing is what lands in the slots. */
-
-    /* the slots this batch will go into, decided before any file is read */
-    var start   = (typeof tapped === 'number' && tapped >= 0) ? tapped : 0;
-    var targets = [];
-    for(var i = start; i < state.photos.length && targets.length < files.length; i++){
-      if(i === start && typeof tapped === 'number'){ targets.push(i); continue; }
-      if(!state.photos[i].img){ targets.push(i); }
-    }
-    var overflow = 0;
-    if(targets.length < files.length){
-      if(state.photoTpl){
-        overflow = files.length - targets.length;      /* fixed list - no room */
-        files = files.slice(0, targets.length);
-      } else {
-        while(targets.length < files.length){
-          state.photos.push({ caption:'', img:null });
-          targets.push(state.photos.length - 1);
-        }
-      }
-    }
-    if(!files.length){
-      bulkNote('ช่องรูปเต็มแล้ว ' + overflow + ' รูปที่เลือกมาจึงยังไม่ได้ใส่');
-      return;
-    }
-
-    var done = 0, total = files.length;
-    bulkNote('กำลังใส่รูป 0 / ' + total + '…');
-
-    /* one at a time: a dozen phone photos read all at once is a lot of memory
-       for a phone browser, and the count would jump about as they finished */
-    (function next(n){
-      if(n >= total){
-        renderPhotos();
-        saveDraft(true);
-        bulkNote(overflow
-          ? ('ใส่แล้ว ' + total + ' รูป · อีก ' + overflow + ' รูปไม่มีช่องว่างรองรับ')
-          : ('ใส่รูปแล้ว ' + total + ' รูป'));
-        return;
-      }
-      var reader = new FileReader();
-      reader.onload = function(ev){
-        state.photos[targets[n]].img = ev.target.result;
-        done++;
-        bulkNote('กำลังใส่รูป ' + done + ' / ' + total + '…');
-        next(n + 1);
-      };
-      reader.onerror = function(){ next(n + 1); };      /* skip a bad file, keep going */
-      reader.readAsDataURL(files[n]);
-    })(0);
-  }
-
-  var bulkNoteTimer = null;
-  function bulkNote(msg){
-    var el = $('bulkPhotoNote');
-    if(!el) return;
-    el.textContent = msg || '';
-    clearTimeout(bulkNoteTimer);
-    if(msg && msg.indexOf('…') === -1){
-      bulkNoteTimer = setTimeout(function(){ el.textContent = ''; }, 6000);
-    }
-  }
-
   $('photoGrid').addEventListener('change', function(e){
     if(e.target.classList.contains('photo-input')){
-      /* start at the slot that was tapped: picking one picture behaves exactly
-         as before, picking several carries on into the slots below it */
-      fillPhotoSlots(e.target.files, +e.target.getAttribute('data-i'));
-      e.target.value = '';
+      var i = +e.target.getAttribute('data-i');
+      var file = e.target.files[0];
+      if(!file) return;
+      var reader = new FileReader();
+      reader.onload = function(ev){
+        state.photos[i].img = ev.target.result;
+        renderPhotos();
+      };
+      reader.readAsDataURL(file);
     }
-  });
-
-  $('bulkPhotoBtn').addEventListener('click', function(){ $('bulkPhotoInput').click(); });
-  $('bulkPhotoInput').addEventListener('change', function(e){
-    fillPhotoSlots(e.target.files, null);
-    e.target.value = '';
   });
   $('photoGrid').addEventListener('input', function(e){
     if(e.target.classList.contains('cap-full')){ fitCaption(e.target); }
@@ -4344,13 +4210,7 @@
 
   /* ---- top actions ---- */
   /* ---- omit empty detail blocks from the printed PDF ---- */
-  /* Fields the engineer may legitimately leave empty. An empty one prints as a
-     label above a bare ruled line, which reads as "someone forgot to fill this
-     in" - so the whole block is left out of the preview and the PDF. The form
-     on screen always shows them; only paper is affected. */
-  var OPTIONAL_FIELDS = ['summary','parts',
-                         'tagNo','modelNo','serialNo','startDate',
-                         'reportNo','reportRev'];
+  var OPTIONAL_FIELDS = ['summary','parts'];
 
   function markBlankBlocks(){
     var filled = {};
@@ -4359,8 +4219,7 @@
       if(!el) return;
       var has = el.value.trim() !== '';
       filled[id] = has;
-      /* section fields sit in .field, the letterhead boxes in .lh-meta-row */
-      var block = el.closest('.field, .lh-meta-row');
+      var block = el.closest('.field');
       if(block){
         if(has){ block.classList.remove('is-blank'); }
         else   { block.classList.add('is-blank'); }
@@ -4372,191 +4231,7 @@
       if(filled.summary || filled.parts){ pc.classList.remove('is-blank'); }
       else                              { pc.classList.add('is-blank'); }
     }
-    /* section 03 is nothing but picture slots - a report with no pictures
-       should not carry a page holding an empty frame and a heading */
-    var phc = $('photoCard');
-    if(phc){
-      var anyPhoto = (state.photos || []).some(function(p){ return !!p.img; });
-      if(anyPhoto){ phc.classList.remove('is-blank'); }
-      else        { phc.classList.add('is-blank'); }
-    }
   }
-
-  /* ================= checks before a report leaves the form =================
-     Nothing below touches printing or the PDF - it only decides whether the
-     preview opens at all. Every check refuses in the same dialog, which says
-     what is missing and carries a button that goes straight there.
-     opts: { title, count:{done,total,label}, detail, go:{label,fn} }         */
-  var alertGoFn = null;
-
-  function closeAlertModal(){
-    $('alertModal').style.display = 'none';
-    alertGoFn = null;
-  }
-
-  function showAlertModal(opts){
-    $('alertTitle').textContent = opts.title || '';
-
-    /* the progress bar belongs to the picture check; the others have nothing
-       to count, so their box carries the sentence on its own */
-    var hasCount = !!opts.count;
-    $('alertCountRow').style.display = hasCount ? '' : 'none';
-    $('alertBarWrap').style.display  = hasCount ? '' : 'none';
-    if(hasCount){
-      var done = opts.count.done, total = opts.count.total;
-      var pct  = total > 0 ? Math.round((done / total) * 100) : 0;
-      $('alertPanelLabel').textContent = opts.count.label || 'ความคืบหน้า';
-      $('alertPanelCount').textContent = done + ' / ' + total + ' ช่อง';
-      $('alertBar').style.width = pct + '%';
-    }
-    $('alertDetail').textContent   = opts.detail || '';
-    $('alertDetail').style.display = opts.detail ? '' : 'none';
-    $('alertPanel').style.display  = (hasCount || opts.detail) ? '' : 'none';
-
-    var go = opts.go || null;
-    $('alertGo').textContent = (go && go.label) ? go.label : 'ตกลง';
-    alertGoFn = (go && go.fn) ? go.fn : null;
-
-    $('alertModal').style.display = 'flex';
-  }
-
-  $('alertClose').addEventListener('click', closeAlertModal);
-  $('alertGo').addEventListener('click', function(){
-    var fn = alertGoFn;
-    closeAlertModal();
-    if(fn){ fn(); }
-  });
-  $('alertModal').addEventListener('click', function(e){
-    if(e.target.id === 'alertModal'){ closeAlertModal(); }
-  });
-  document.addEventListener('keydown', function(e){
-    if(e.key === 'Escape' && $('alertModal').style.display === 'flex'){ closeAlertModal(); }
-  });
-
-  /* ---- a report with no inspection form is not a report ----
-     Everything in section 02 hangs off the form the engineer picks, so an
-     unpicked form means the scope list, the checklists and the log tables are
-     all missing at once. */
-  function templateGuard(){
-    if((state.templates || []).length) return true;
-
-    showAlertModal({
-      title:  'เลือกแบบฟอร์มรายงาน',
-      detail: 'รายงานนี้ยังไม่ได้เลือกแบบฟอร์มตรวจสอบ จึงยังไม่มีสโคปงานและตารางบันทึกค่า\n' +
-              'เลือกอย่างน้อยหนึ่งแบบฟอร์มก่อน จึงจะดูตัวอย่างหรือส่งรายงานได้',
-      go: { label: 'เลือกแบบฟอร์ม', fn: function(){
-        var picker = $('openTplModal');
-        if(picker){ picker.scrollIntoView({ behavior:'smooth', block:'center' }); }
-        setTimeout(openTplModal, 260);
-      }}
-    });
-    $('statusChip').textContent = 'ยังไม่ได้เลือกแบบฟอร์มรายงาน';
-    return false;
-  }
-
-  /* ---- a form that brings no work steps of its own needs them written in ----
-     Most forms arrive with their scope already listed, so there is nothing to
-     ask about. Service / Repair does not: the engineer writes what was done
-     that day, and an empty list means the report says nothing about the work.
-     Only forms shipping an empty `items` array are checked, so a new form
-     added later is covered without touching this code. */
-  function scopeGuard(){
-    var missing = (state.templates || []).filter(function(k){
-      var t = TEMPLATES[k];
-      if(!t || t.mode === 'table') return false;
-      if((t.items || []).length) return false;          /* has its own steps */
-      return !state.checklist.some(function(it){
-        return it.tpl === k && (it.text || '').trim() !== '';
-      });
-    });
-
-    if(!missing.length) return true;
-
-    var names = missing.map(function(k){ return TEMPLATES[k].name; }).join(', ');
-    showAlertModal({
-      title:  'ระบุหัวข้อการทำงาน',
-      detail: 'แบบฟอร์ม ' + names + ' ยังไม่มีรายการตรวจสอบสักรายการ\n' +
-              'กด "+ เพิ่มรายการตรวจสอบ (Other)" แล้วพิมพ์งานที่ทำ อย่างน้อยหนึ่งรายการ',
-      go: { label: 'ไปที่ Scope of work', fn: function(){
-        var blk = document.querySelector('.scope-block[data-t="' + missing[0] + '"]');
-        if(blk){ blk.scrollIntoView({ behavior:'smooth', block:'center' }); }
-      }}
-    });
-    $('statusChip').textContent = 'ยังไม่ได้ระบุหัวข้อการทำงาน';
-    return false;
-  }
-
-  /* ---- the report will not go out with picture slots still empty ----
-     Two different jobs are being guarded, so they get two rules:
-
-     · A form that lays out its own slots (tube cleaning, AHU/FCU) is a record
-       of a sequence of work steps. A gap means a step went unphotographed, so
-       every slot has to be filled.
-
-     · The general Photo Record is optional evidence. Taking no pictures at all
-       is a valid report. But once one picture is in, the empty frames beside
-       it are visibly unfinished, so the rest have to be filled - or dropped
-       with the button on the slot.                                          */
-  function photoStatus(){
-    var list  = state.photos || [];
-    var empty = [];
-    list.forEach(function(p, i){ if(!p.img){ empty.push(i); } });
-
-    if(!empty.length) return { ok:true, empty:[] };
-
-    var byTemplate = !!state.photoTpl;
-    if(!byTemplate && empty.length === list.length){
-      return { ok:true, empty:[] };            /* no pictures at all - allowed */
-    }
-    return { ok:false, empty:empty, byTemplate:byTemplate, total:list.length };
-  }
-
-  function photoGuard(){
-    var st = photoStatus();
-
-    Array.prototype.forEach.call(
-      document.querySelectorAll('.photo-slot.is-missing'),
-      function(el){ el.classList.remove('is-missing','pulse'); });
-
-    if(st.ok) return true;
-
-    var nums  = st.empty.map(function(i){ return i + 1; });
-    var shown = nums.slice(0, 12).join(', ') + (nums.length > 12 ? ' …' : '');
-    var filledCount = st.total - st.empty.length;
-
-    /* mark them all, so closing the dialog leaves a trail to follow */
-    st.empty.forEach(function(i){
-      var slot = document.querySelector('.photo-slot[data-i="' + i + '"]');
-      if(slot){ slot.classList.add('is-missing','pulse'); }
-    });
-
-    var why = st.byTemplate
-      ? 'แบบฟอร์มที่เลือกไว้กำหนดช่องรูปตามขั้นตอนงาน ต้องใส่ให้ครบทุกช่อง'
-      : 'ถ้าไม่แนบรูปเลยก็ส่งได้ แต่เมื่อใส่แล้วต้องใส่ให้ครบ\n' +
-        'ถ้าไม่ต้องการช่องที่เหลือ กด "ลบช่องนี้" ที่มุมช่องว่างได้';
-
-    showAlertModal({
-      title:  'ใส่รูปให้ครบตามที่ระบบกำหนด',
-      count:  { done: filledCount, total: st.total, label: 'ความคืบหน้า' },
-      detail: 'ยังว่าง: ช่องที่ ' + shown + '\n' + why,
-      go: { label: 'ไปที่ช่องที่ ' + nums[0], fn: function(){
-        var firstSlot = document.querySelector('.photo-slot.is-missing');
-        if(firstSlot){ firstSlot.scrollIntoView({ behavior:'smooth', block:'center' }); }
-      }}
-    });
-
-    $('statusChip').textContent = 'ยังใส่รูปไม่ครบ · เหลืออีก ' + st.empty.length + ' ช่อง';
-    return false;
-  }
-
-  /* Every way out of the form runs the same checks, in the order the page is
-     filled in: pick a form, write its work steps, then the pictures. Following
-     the page order means the dialog always points forward, never back past
-     something the engineer has already scrolled by. */
-  function readyGuard(){
-    return templateGuard() && scopeGuard() && photoGuard();
-  }
-  /* ======================= end of the pre-send checks ====================== */
 
   /* the moment the PDF was made, printed small at the foot of the last page */
   function stampCreateTime(){
@@ -4949,7 +4624,6 @@
   });
 
   $('printBtn').addEventListener('click', function(){
-    if(!readyGuard()) return;
     preparePrint();
     if(iosStandalone()){
       alert('ไอคอนนี้เปิดแบบไม่มีแถบ Safari จึงไม่มีปุ่มแชร์ให้สั่งพิมพ์\n\n' +
@@ -5002,7 +4676,6 @@
   var pvFull = false;    /* false = shrink to fit the screen, true = 1:1 */
 
   function openPreview(){
-    if(!readyGuard()) return;
     preparePrint();
     var frame = $('pvFrame');
     $('pvOverlay').style.display = 'flex';
@@ -5250,8 +4923,7 @@
         }
       }
 
-      /* sections the report left out are not pages - do not count them */
-      var sheets = 1 + body.querySelectorAll('.card:not(.is-blank)').length;   /* cover + sections */
+      var sheets = 1 + body.querySelectorAll('.card').length;   /* cover + sections */
       $('pvPages').textContent = 'ประมาณ ' + sheets + ' หน้า';
 
       var doc = '<!DOCTYPE html><html lang="th"><head><meta charset="utf-8">' +
@@ -5442,7 +5114,6 @@
   }
 
   function sendPdf(){
-    if(!readyGuard()) return;
     if(!$('pvOverlay') || $('pvOverlay').style.display !== 'flex'){ openPreview(); }
     pvSay('กำลังเตรียม...');
 
@@ -5594,7 +5265,6 @@
   });
 
   function sendReport(){
-    if(!readyGuard()) return;
     if(!navigator.onLine){
       alert('ปุ่มนี้ต้องต่ออินเทอร์เน็ต\n\nระหว่างนี้ใช้ปุ่ม "ส่งเป็นไฟล์ PDF" แทนได้');
       return;
