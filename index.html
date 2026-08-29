@@ -848,7 +848,9 @@
       /* ระยะขอบ: บน 8mm / ล่าง 24mm เท่ากันทุกหน้า ทุกฟอร์ม
          แถบท้ายหน้าอยู่ที่ 16mm จากขอบล่างและสูงราว 8mm
          เนื้อหาจึงต้องจบที่ 24mm เพื่อไม่ให้ทับกัน */
-      padding:8mm 0 24mm;margin:0;border-radius:0;
+      /* แถบท้ายหน้าอยู่ 16mm สูงราว 8mm (ขอบบน = 24mm)
+         เว้นอีก 10mm เนื้อหาจึงจบที่ 34mm */
+      padding:8mm 0 34mm;margin:0;border-radius:0;
     }
     /* keep photos crisp when the printer/PDF downsamples them */
     .photo-slot img{image-rendering:auto;}
@@ -1055,7 +1057,10 @@
     }
     .log-table tr{break-inside:avoid;}
     .log-foot{gap:5mm 8mm;margin-top:5mm;break-inside:avoid;}
-    .log-note{margin-top:5mm;break-inside:avoid;}
+    /* ทุกแผ่นสูงเต็มพื้นที่ใช้งาน แล้วดันบล็อก Comments + Verified by ไปชิดล่าง
+       ฐานจึงอยู่ที่เดียวกันทุกฟอร์มคือ 10mm เหนือเส้นแถบท้ายหน้า */
+    .log-sheet,.ct-sheet{display:flex;flex-direction:column;min-height:255mm;}
+    .log-note{margin-top:auto !important;padding-top:4mm;break-inside:avoid;}
     .ls-add,.ls-del{display:none !important;}
     .log-block + .log-block{
       break-before:page;margin-top:0;padding-top:8mm;border-top:none;
@@ -1098,7 +1103,7 @@
     .ls-meta .field{gap:.6mm;}
     .ls-meta input[type=text]{font-size:9pt;padding:.5mm 0 !important;}
     /* trim the top of the page, and keep clear of the footer at the bottom */
-    .card:has(.log-wrap.on){padding-top:8mm !important;padding-bottom:24mm !important;}
+    .card:has(.log-wrap.on){padding-top:8mm !important;padding-bottom:34mm !important;}
     .log-grid{gap:3mm;}
     /* the books with a wide reading table give it more of the sheet */
     .log-dense .log-grid{grid-template-columns:minmax(0,.78fr) minmax(0,1.7fr);}
@@ -1113,7 +1118,7 @@
     }
     .ls-tag.pv-text{
       display:block;text-align:left;border-bottom:.6pt solid #9AA0B4;
-      min-height:6mm;white-space:nowrap;overflow:hidden;line-height:1.25;
+      min-height:6mm;white-space:normal;word-break:break-word;line-height:1.25;
     }
     /* html2canvas draws a textarea on one clipped line, so the PDF builder
        swaps them for plain text - these rules make that text wrap and grow
@@ -1137,7 +1142,7 @@
     .log-note{margin-top:2.5mm;}
     .log-note label{font-size:7.5pt;}
     .log-note textarea{
-      min-height:14mm !important;height:14mm;font-size:9pt !important;
+      min-height:14mm !important;height:auto !important;font-size:9pt !important;
       padding:.8mm 0 !important;line-height:1.3;
     }
     .log-foot{margin-top:2.5mm;gap:4mm;break-inside:avoid;}
@@ -1189,14 +1194,14 @@
       font-size:8.5pt !important;line-height:1.15;min-height:3.4mm;
     }
     .log-dense .log-note textarea,.log-dense .log-note .pv-text{
-      min-height:12mm !important;height:12mm;
+      min-height:12mm !important;height:auto !important;
     }
 
     /* ---- hybrid chiller sheet ----
        ตารางยาว 33 แถว ถ้าใช้ระยะปกติจะล้นไปหน้าสอง
        จึงบีบตัวอักษรและระยะในเซลล์เฉพาะตารางนี้ */
-    .hb-wrap{break-inside:avoid;}
-    .card:has(.hb-wrap.on){padding-top:8mm !important;padding-bottom:24mm !important;}
+    .hb-wrap{break-inside:auto;}
+    .card:has(.hb-wrap.on){padding-top:8mm !important;padding-bottom:34mm !important;}
     /* ทำแผ่นให้สูงเต็มหน้า แล้วดัน Comments กับ Verified by ไปชิดล่าง
        เดิมใส่ min-height:262mm ไว้ทั้ง .hb-wrap และ .hb-sheet ตั้งใจกันสองชั้น
        แต่ .hb-sheet อยู่ข้างใน .hb-wrap และมี .log-head คั่นอยู่ด้านบน
@@ -1206,8 +1211,8 @@
 
        แก้โดยให้ .hb-sheet เป็นตัวกำหนดความสูงตัวเดียว และหักที่ของ log-head ออก
        258 + 5.5 = 263.5mm พอดีในกรอบ 265mm เหลือเผื่อไว้ 1.5mm */
-    .hb-wrap{display:flex;flex-direction:column;min-height:0;}
-    .hb-sheet{break-inside:avoid;display:flex;flex-direction:column;flex:1;min-height:258mm;}
+    .hb-wrap{display:block;min-height:0;}
+    .hb-sheet{break-inside:avoid;display:flex;flex-direction:column;min-height:255mm;}
     .hb-wrap .log-head{margin-bottom:2mm;}
     .hb-grid{grid-template-columns:minmax(0,.78fr) minmax(0,1.7fr) !important;gap:3mm !important;}
     .hb-wrap .ls-meta{margin-bottom:2.5mm;}
@@ -1223,19 +1228,23 @@
     /* margin-top:auto ดันบล็อกท้ายไปชิดขอบล่างของแผ่น */
     .hb-wrap .ct-note{margin-top:auto !important;padding-top:5mm;}
     .hb-wrap .ct-note textarea,.hb-wrap .ct-note .pv-text{
-      min-height:10mm !important;height:10mm !important;font-size:8.5pt !important;
+      min-height:10mm !important;height:auto !important;font-size:8.5pt !important;
     }
     .hb-wrap .log-foot{margin-top:3mm !important;margin-bottom:0 !important;}
     .hb-add,.hb-del{display:none !important;}
 
     /* ---- cooling tower sheet ---- */
     /* the same top margin the other log sheets get */
-    .card:has(.ct-wrap.on){padding-top:8mm !important;padding-bottom:24mm !important;}
+    .card:has(.ct-wrap.on){padding-top:8mm !important;padding-bottom:34mm !important;}
     .ct-wrap{break-before:page;padding-top:0;}
     .ct-wrap .log-head{margin-top:0;}
     .ct-sheet{break-inside:auto;}
     .ct-sheet + .ct-sheet{break-before:page;padding-top:0;}
-    .hb-sheet + .hb-sheet{break-before:page;padding-top:0;margin-top:0;border-top:0;}
+    .hb-wrap > .hb-sheet:first-of-type{break-before:auto;page-break-before:auto;}
+    .hb-sheet + .hb-sheet{
+      break-before:page;page-break-before:always;
+      padding-top:0;margin-top:0;border-top:0;
+    }
     .hb-add,.hb-del{display:none !important;}
     .ct-sheet-add,.ct-sheet-del{display:none !important;}
     .ct-title{font-size:9.5pt;margin:4mm 0 1.5mm;break-after:avoid;}
@@ -1283,10 +1292,10 @@
       white-space:normal;word-break:break-word;
     }
     .ct-foot{display:grid;grid-template-columns:70mm 1fr;gap:8mm;margin-top:5mm;break-inside:avoid;}
-    .ct-note{margin-top:6mm;break-inside:avoid;}
+    .ct-note{margin-top:auto !important;padding-top:4mm;break-inside:avoid;}
     .ct-note label{font-size:7.5pt;}
     .ct-note textarea,.ct-note .pv-text{
-      min-height:32mm !important;height:32mm;font-size:9.5pt !important;
+      min-height:20mm !important;height:auto !important;font-size:9.5pt !important;
     }
 
     /* the extra job-description box must not push the sheet onto page 2 */
@@ -1295,6 +1304,22 @@
     /* every form printed in section 02 starts on a page of its own */
     .scope-block + .scope-block{break-before:page;margin-top:0;padding-top:0;border-top:none;}
     .scope-block .chk-group{margin-top:0;}
+
+    /* ---- กล่อง Comment ของฟอร์มที่ต้องจดค่า ----
+       เดิมตั้ง height:auto กล่องจึงยืดตามข้อความไม่จำกัด พอพิมพ์ยาว
+       ความสูงของแผ่นก็เกิน A4 ตัวสร้าง PDF เลยหั่นเป็นสองหน้า
+       และดัน Verified by กับแถบท้ายหน้าตกไปหน้าถัดไป
+
+       ล็อกไว้ที่ 3 บรรทัดพอดี (9pt x 1.3 = 4.13mm ต่อบรรทัด -> 12.4mm)
+       ถ้าข้อความยาวเกิน fitNotes() จะย่อฟอนต์ลงให้พอดีกรอบเอง
+       ทุกฟอร์มจึงจบภายในหน้าเดียวเสมอ และฐานของบล็อกท้ายอยู่ที่เดียวกัน */
+    .log-note textarea,.log-note .pv-text,
+    .ct-note  textarea,.ct-note  .pv-text,
+    .hb-wrap .ct-note textarea,.hb-wrap .ct-note .pv-text{
+      font-size:9pt !important;line-height:1.3 !important;
+      height:12.4mm !important;min-height:12.4mm !important;max-height:12.4mm !important;
+      overflow:hidden !important;white-space:pre-wrap;
+    }
   }
   @media screen and (max-width:640px){
     .topbar-inner{padding:10px 14px;gap:8px;}
@@ -1413,7 +1438,7 @@
   </div>
 
   <!-- SECTION 1: INFORMATION -->
-  <div class="card">
+  <div class="card" id="infoCard">
     <div class="sec-bar">Information</div>
 
     <div class="field" style="margin-bottom:16px;max-width:320px;">
@@ -4353,7 +4378,21 @@
                          'tagNo','modelNo','serialNo','startDate',
                          'reportNo','reportRev'];
 
+  /* ช่องในหมวด Information ที่ไม่ได้กรอก ไม่ต้องพิมพ์ลงไฟล์ */
+  function markBlankInfoFields(){
+    var card = $('infoCard');
+    if(!card) return;
+    Array.prototype.forEach.call(card.querySelectorAll('.field'), function(f){
+      var ctl = f.querySelector('input,select,textarea');
+      if(!ctl){ return; }
+      var v = String(ctl.value == null ? '' : ctl.value).trim();
+      if(v){ f.classList.remove('is-blank'); }
+      else  { f.classList.add('is-blank'); }
+    });
+  }
+
   function markBlankBlocks(){
+    markBlankInfoFields();
     var filled = {};
     OPTIONAL_FIELDS.forEach(function(id){
       var el = $(id);
@@ -5125,6 +5164,27 @@
             }
             /* the cooling tower tables are a sheet of their own */
             var cw = blk.querySelector('.ct-wrap');
+            /* Hybrid chiller ใช้ class ร่วมกับฟอร์มปั๊ม (mp-wrap) ถ้าปล่อยให้ตกไป
+               เข้าเงื่อนไขของปั๊ม ทุกแผ่นจะถูกย้ายรวมเป็นหน้าเดียวแล้วต่อกัน
+               จึงต้องดักก่อน แล้วแยกทีละ .hb-sheet เป็นคนละหน้า
+               แบบเดียวกับ Log sheet water cool / air cool */
+            if(cw && cw.classList.contains('hb-wrap')){
+              var hHead = cw.querySelector('.log-head');
+              Array.prototype.forEach.call(cw.querySelectorAll('.hb-sheet'), function(sh){
+                var hPage = document.createElement('div');
+                hPage.className = 'card';
+                var hWrap = document.createElement('div');
+                hWrap.className = 'ct-wrap on mp-wrap hb-wrap';
+                hWrap.style.display = 'block';
+                if(hHead){ hWrap.appendChild(hHead.cloneNode(true)); }
+                hWrap.appendChild(sh);
+                hPage.appendChild(hWrap);
+                anchorEl.parentNode.insertBefore(hPage, anchorEl.nextSibling);
+                anchorEl = hPage;
+              });
+              cw.parentNode.removeChild(cw);
+              cw = null;
+            }
             /* ตารางปั๊มไม่มี .ct-sheet ย่อย จึงย้ายทั้งก้อนเป็นหนึ่งหน้า
                ถ้าปล่อยให้ตกไปเข้าเงื่อนไขของ cooling tower จะถูกลบทิ้งทั้งอัน */
             if(cw && cw.classList.contains('mp-wrap')){
@@ -5213,7 +5273,7 @@
          when printing; the PDF builder photographs elements, so the footer has
          to be part of the element or it disappears from the file. */
       if(footSrcEl){
-        var FOOT_CSS = 'position:absolute;left:15mm;right:15mm;bottom:8mm;' +
+        var FOOT_CSS = 'position:absolute;left:15mm;right:15mm;bottom:10mm;' +
           'display:flex;align-items:baseline;justify-content:space-between;' +
           'gap:6mm;padding-top:2.2mm;border-top:.6pt solid #C2C7DC;' +
           'font-size:7.5pt;line-height:1.3;color:#5A6178;background:transparent;';
@@ -5230,6 +5290,15 @@
           if(c.indexOf('card') === -1 && c.indexOf('pv-sheet') === -1) return;
           pg.style.position  = 'relative';
           pg.style.minHeight = '297mm';
+          /* ฟอร์มที่ต้องจดค่าออกแบบมาให้จบในหน้าเดียว แถวในตารางคงที่
+             และกล่อง Comment ถูกล็อกไว้ 3 บรรทัดแล้ว ความสูงจึงคำนวณได้แน่นอน
+             ตรึงเพดานไว้ 297mm ด้วย กันไม่ให้ตัวสร้าง PDF หั่นเป็นสองหน้า
+             ซึ่งเป็นสาเหตุที่ Verified by กับแถบท้ายหน้าเคยตกไปหน้าถัดไป
+             หน้าอื่น เช่น สโคปงานหรือรูปภาพ ไม่ตรึง เพราะยาวได้หลายหน้าตามจริง */
+          if(pg.querySelector('.log-wrap, .ct-wrap, .hb-wrap, .mp-wrap')){
+            pg.style.height   = '297mm';
+            pg.style.overflow = 'hidden';
+          }
           var f = footSrcEl.cloneNode(true);
           f.removeAttribute('aria-hidden');
           f.style.cssText = FOOT_CSS;
@@ -5245,7 +5314,7 @@
         if(lastPage){
           ctEl.parentNode.removeChild(ctEl);
           lastPage.style.position = 'relative';
-          ctEl.style.cssText = 'position:absolute;left:15mm;bottom:15mm;display:block;' +
+          ctEl.style.cssText = 'position:absolute;left:15mm;bottom:17mm;display:block;' +
             'font-size:7.5pt;color:#A7ADBE;letter-spacing:.04em;';
           lastPage.appendChild(ctEl);
         }
@@ -5290,8 +5359,27 @@
       var d = frame.contentWindow.document;
       d.open(); d.write(doc); d.close();
 
+      /* ข้อความยาวกว่ากรอบ 3 บรรทัด ให้ย่อฟอนต์ลงทีละนิดจนพอดี
+         ต่ำสุด 6.5pt ถ้ายังไม่พอจริง ๆ ค่อยปล่อยให้ตัดส่วนเกิน
+         ทำในเอกสารของ iframe เพราะทั้งหน้าตัวอย่างและไฟล์ PDF ใช้ตัวเดียวกัน */
+      function fitNotes(){
+        try{
+          var d2 = frame.contentWindow.document;
+          var list = d2.querySelectorAll('.log-note .pv-text, .ct-note .pv-text');
+          Array.prototype.forEach.call(list, function(el){
+            var pt = 9;
+            el.style.fontSize = pt + 'pt';
+            while(pt > 6.5 && el.scrollHeight > el.clientHeight + 1){
+              pt = Math.round((pt - 0.25) * 100) / 100;
+              el.style.fontSize = pt + 'pt';
+            }
+          });
+        }catch(e){}
+      }
+
       /* size the frame to its content, then shrink-to-fit visually only */
       function fit(){
+        fitNotes();
         try{
           var inner = frame.contentWindow.document.documentElement;
           var hpx = Math.max(inner.scrollHeight, inner.offsetHeight);
@@ -5362,6 +5450,7 @@
   function buildPdfBlob(){
     var frame = $('pvFrame');
     var doc = frame.contentWindow.document;
+    if(pvFit){ pvFit(); }   /* ย่อฟอนต์ Comment ให้พอดีกรอบก่อนถ่ายภาพหน้า */
     var wrapEl = doc.querySelector('.wrap');
     var pages = Array.prototype.slice.call(wrapEl ? wrapEl.children : [])
                      .filter(function(el){
