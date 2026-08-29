@@ -217,7 +217,6 @@
   .cbo-new{color:var(--navy);font-weight:700;}
   .cbo-new small{display:block;font-weight:400;color:var(--ink-faint);font-size:11.5px;margin-top:2px;}
   .cbo-none{padding:9px 12px;font-size:13px;color:var(--ink-faint);}
-  @media print{ .cbo-list{display:none !important;} }
 
   .emp-other{display:flex;gap:8px;margin-bottom:12px;}
   .emp-other input{flex:1;min-width:0;}
@@ -927,6 +926,8 @@
 
     /* blocks the user left empty are omitted from the PDF */
     .is-blank{display:none !important;}
+    /* รายการชื่อลูกค้าที่เด้งขึ้นมา เป็นของหน้าจอ ไม่ใช่ของเอกสาร */
+    .cbo-list{display:none !important;}
     /* never print grey placeholder hints */
     input::placeholder,textarea::placeholder{color:transparent !important;opacity:0 !important;}
 
@@ -5225,11 +5226,13 @@
     return Promise.resolve('');
   }
 
-  /* turn "@media print{...}" into "@media all{...}" without touching the rest */
+  /* turn "@media print{...}" into "@media all{...}" without touching the rest
+
+     เดิมแปลงแค่บล็อกแรกที่เจอ พอมีบล็อก @media print เล็ก ๆ โผล่มาก่อน
+     บล็อกจริง กฎงานพิมพ์ทั้งชุดจะไม่ถูกแปลง หน้าตัวอย่างเลยแสดงเป็นหน้าจอ
+     ธรรมดา ช่องที่ไม่ได้กรอกก็ไม่ถูกซ่อน ตอนนี้แปลงให้ครบทุกบล็อก */
   function printCssToScreen(css){
-    var i = css.indexOf('@media print{');
-    if(i === -1) return css;
-    return css.slice(0, i) + '@media all{' + css.slice(i + '@media print{'.length);
+    return css.split('@media print{').join('@media all{');
   }
 
   var pvFit = null;      /* re-layout function for the current preview */
