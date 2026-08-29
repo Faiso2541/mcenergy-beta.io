@@ -994,8 +994,21 @@
     .photo-page + .photo-page{
       break-before:page;margin-top:0;padding-top:6mm;border-top:none;
     }
-    .photo-card{break-inside:avoid;border:.6pt solid #B9BFD2;border-radius:0;}
-    .photo-meta{padding:2.5mm 3mm;}
+    /* ---- งบความสูงของหน้ารูป ----
+       พื้นที่ใช้งาน 297 - 8 (บน) - 34 (ล่าง) = 255mm
+       หัวหมวดกินราว 12mm เหลือให้ตาราง 243mm
+       3 แถว + ช่องไฟ 2 ช่อง (6mm) -> แถวละ (243-12)/3 = 77mm
+
+       เดิมปล่อยรูปเป็น aspect-ratio 4/3 (สูง 65mm) บวกคำบรรยาย
+       ถ้าคำบรรยายตกไปสองบรรทัด การ์ดจะสูง 79mm สามแถวรวมเกินงบราว 7mm
+       หน้าจึงล้นไปอีกหน้าเป็นแผ่นบาง ๆ ที่มีแต่แถบท้ายหน้า
+       ล็อกความสูงตายตัวแทน คำบรรยายยาวแค่ไหนก็ไม่ดันหน้าอีก */
+    .photo-card{
+      break-inside:avoid;border:.6pt solid #B9BFD2;border-radius:0;
+      height:76mm !important;overflow:hidden;
+    }
+    .photo-card .photo-slot{aspect-ratio:auto !important;height:62mm !important;}
+    .photo-meta{padding:2.5mm 3mm;height:13.5mm !important;overflow:hidden;}
     .ph-num{font-size:7pt;}
     .photo-caption{font-size:10.5pt;}
     .photo-meta.step{padding:2.5mm 3mm;}
@@ -5491,8 +5504,9 @@
              และกล่อง Comment ถูกล็อกไว้ 3 บรรทัดแล้ว ความสูงจึงคำนวณได้แน่นอน
              ตรึงเพดานไว้ 297mm ด้วย กันไม่ให้ตัวสร้าง PDF หั่นเป็นสองหน้า
              ซึ่งเป็นสาเหตุที่ Verified by กับแถบท้ายหน้าเคยตกไปหน้าถัดไป
-             หน้าอื่น เช่น สโคปงานหรือรูปภาพ ไม่ตรึง เพราะยาวได้หลายหน้าตามจริง */
-          if(pg.querySelector('.log-wrap, .ct-wrap, .hb-wrap, .mp-wrap')){
+             หน้ารูปก็ออกแบบมาให้ลง 6 รูปพอดีหนึ่งหน้า และล็อกขนาดการ์ดไว้แล้ว
+             จึงตรึงด้วย ส่วนหน้าสโคปงานไม่ตรึง เพราะยาวได้หลายหน้าตามจริง */
+          if(pg.querySelector('.log-wrap, .ct-wrap, .hb-wrap, .mp-wrap, .photo-page')){
             pg.style.height   = '297mm';
             pg.style.overflow = 'hidden';
           }
@@ -5562,15 +5576,19 @@
       function fitNotes(){
         try{
           var d2 = frame.contentWindow.document;
-          var list = d2.querySelectorAll('.log-note .pv-text, .ct-note .pv-text');
-          Array.prototype.forEach.call(list, function(el){
-            var pt = 9;
-            el.style.fontSize = pt + 'pt';
-            while(pt > 6.5 && el.scrollHeight > el.clientHeight + 1){
-              pt = Math.round((pt - 0.25) * 100) / 100;
+          var shrink = function(sel, from, floor){
+            Array.prototype.forEach.call(d2.querySelectorAll(sel), function(el){
+              var pt = from;
               el.style.fontSize = pt + 'pt';
-            }
-          });
+              while(pt > floor && el.scrollHeight > el.clientHeight + 1){
+                pt = Math.round((pt - 0.25) * 100) / 100;
+                el.style.fontSize = pt + 'pt';
+              }
+            });
+          };
+          shrink('.log-note .pv-text, .ct-note .pv-text', 9, 6.5);
+          /* คำบรรยายใต้รูปก็มีกรอบตายตัวแล้ว ยาวเกินก็ย่อลงแทนที่จะดันหน้า */
+          shrink('.photo-meta .pv-text, .photo-meta .photo-caption', 9.5, 7);
         }catch(e){}
       }
 
