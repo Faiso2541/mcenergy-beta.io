@@ -1496,17 +1496,21 @@
           <option value="AJINIMOTO">AJINIMOTO</option>
           <option value="AMARI DMK">AMARI DMK</option>
           <option value="ASI">ASI</option>
+          <option value="BDMS">BDMS</option>
           <option value="BIGL Plant 1">BIGL Plant 1</option>
           <option value="BIGL Plant 2">BIGL Plant 2</option>
           <option value="BIGL Plant 3">BIGL Plant 3</option>
           <option value="BKK CITY">BKK CITY</option>
+          <option value="CBRE">CBRE</option>
           <option value="Colgate GDC">Colgate GDC</option>
           <option value="Colgate ILP">Colgate ILP</option>
           <option value="Colgate RPL">Colgate RPL</option>
           <option value="Colgate RSP">Colgate RSP</option>
           <option value="DAIZO">DAIZO</option>
+          <option value="DELTA">DELTA</option>
           <option value="GPF">GPF</option>
           <option value="GPO">GPO</option>
+          <option value="GSA">GSA</option>
           <option value="INC2">INC2</option>
           <option value="Indo Thai">Indo Thai</option>
           <option value="KMUTT">KMUTT</option>
@@ -1522,6 +1526,7 @@
           <option value="NSTDA - Yothi">NSTDA - Yothi</option>
           <option value="NSTDA - บ้านวิทยาศาสตร์สิรินธร">NSTDA - บ้านวิทยาศาสตร์สิรินธร</option>
           <option value="NXP">NXP</option>
+          <option value="Pearl Bangkok">Pearl Bangkok</option>
           <option value="PEPSI">PEPSI</option>
           <option value="PTT Data Center">PTT Data Center</option>
           <option value="PTT GC">PTT GC</option>
@@ -1529,6 +1534,7 @@
           <option value="SHARP">SHARP</option>
           <option value="SIG Combibloc">SIG Combibloc</option>
           <option value="Singapore Power (SP)">Singapore Power (SP)</option>
+          <option value="SISB">SISB</option>
           <option value="SONY">SONY</option>
           <option value="Standard CAN">Standard CAN</option>
           <option value="Stanley Lamp 5">Stanley Lamp 5</option>
@@ -1546,9 +1552,9 @@
         
         </select>
       </div>
-      <div class="field" id="customerOtherWrap" style="display:none;">
-        <label>ระบุชื่อลูกค้า (Other)</label>
-        <input type="text" id="customerOther" placeholder="พิมพ์ชื่อลูกค้า...">
+      <div class="field" id="customerOtherWrap">
+        <label>ระบุชื่อลูกค้า</label>
+        <input type="text" id="customerOther" placeholder="ลูกค้ารายใหม่ ไฟล์จะเก็บใต้ Other...">
       </div>
       <div class="field full"><label>Job Details</label><input type="text" id="customerDetail" placeholder="Job Details"></div>
       <div class="field"><label>Location</label>
@@ -2329,12 +2335,18 @@
   });
 
   /* ---- customer "Other" ----
-     ช่องพิมพ์ค้นหารับชื่อลูกค้ารายใหม่แทนแล้ว กล่อง Other เดิมจึงซ่อนถาวร
-     แต่ยังเก็บ input ไว้เป็นที่พักชื่อที่พิมพ์ เพราะ customerName()
-     กับร่างที่บันทึกไว้ยังอ่านจากตรงนี้ */
+     ลูกค้ารายใหม่ที่ไม่ได้เข้าต่อเนื่อง ไม่ต้องสร้างเป็นลูกค้าประจำในระบบ
+     เลือก Other แล้วพิมพ์ชื่อลงช่องนี้ ไฟล์จะไปกองอยู่ใต้ Other
+     โดยใช้ชื่อที่พิมพ์เป็นชื่อสาขา ยังแยกดูเป็นรายเจ้าได้ */
+  /* ช่องนี้แสดงตลอดแล้ว ไม่ซ่อนตามการเลือกอีก
+     ปล่อยว่างไว้ได้ ตอนออกเป็น PDF ระบบซ่อนช่องที่ไม่ได้กรอกให้เองอยู่แล้ว
+     และไม่ล้างค่าทิ้งเวลาสลับลูกค้า เพราะช่างอาจพิมพ์ค้างไว้ก่อน */
   function updateCustomerOtherVisibility(){
-    $('customerOtherWrap').style.display = 'none';
+    $('customerOtherWrap').style.display = '';
   }
+  $('customerOther').addEventListener('input', function(){
+    syncFooter(); saveDraft();
+  });
   $('customer').addEventListener('change', function(){
     updateCustomerOtherVisibility();
     saveDraft();
@@ -2378,7 +2390,7 @@
     $('customer').value = name;
     $('customerOther').value = '';
     $('customerSearch').value = name;
-    custClose(); syncFooter(); saveDraft();
+    custClose(); updateCustomerOtherVisibility(); syncFooter(); saveDraft();
   }
 
   /* ชื่อที่ไม่มีในรายการ เก็บเป็น Other แล้วพกชื่อจริงไปด้วย
@@ -2386,8 +2398,10 @@
   function custPickNew(name){
     $('customer').value = 'Other';
     $('customerOther').value = name;
-    $('customerSearch').value = name;
-    custClose(); syncFooter(); saveDraft();
+    /* ช่องค้นหาแสดงหมวดที่เลือกจริงคือ Other ส่วนชื่อเต็มไปอยู่ช่องระบุชื่อ
+       ที่โผล่ขึ้นมาข้างล่าง ช่างจึงเห็นชัดว่าไฟล์นี้จะไปลงที่ Other */
+    $('customerSearch').value = 'Other';
+    custClose(); updateCustomerOtherVisibility(); syncFooter(); saveDraft();
   }
 
   function custRender(){
@@ -2407,11 +2421,19 @@
       return '<div class="cbo-opt" data-n="' + custEsc(n) + '">' + custMark(n, q) + '</div>';
     }).join('');
 
-    if(q && !exact){
+    if(!html && q){ html = '<div class="cbo-none">ไม่พบชื่อนี้ในรายการ</div>'; }
+
+    if(q && !exact && ql !== 'other'){
       html += '<div class="cbo-opt cbo-new" data-new="1">ใช้ชื่อ "' + custEsc(q) + '"' +
               '<small>ไม่มีในรายการ รายงานจะไปเก็บใต้ Other</small></div>';
     }
-    if(!html){ html = '<div class="cbo-none">ไม่พบชื่อนี้</div>'; }
+
+    /* Other ยังอยู่ท้ายรายการเสมอ เผื่อช่างอยากลง Other เฉย ๆ โดยไม่ระบุชื่อ
+       เหมือนที่เคยเลือกได้ตอนเป็นป๊อปอัป */
+    if(!ql || 'other'.indexOf(ql) !== -1){
+      html += '<div class="cbo-opt cbo-new" data-other="1">Other' +
+              '<small>ไม่ระบุชื่อ ลงเป็น Other อย่างเดียว</small></div>';
+    }
 
     $('customerList').innerHTML = html;
     $('customerList').classList.add('on');
@@ -2431,6 +2453,13 @@
 
   function custTake(row){
     if(!row) return;
+    if(row.getAttribute('data-other')){
+      $('customer').value = 'Other';
+      $('customerOther').value = '';
+      $('customerSearch').value = 'Other';
+      custClose(); updateCustomerOtherVisibility(); syncFooter(); saveDraft();
+      return;
+    }
     if(row.getAttribute('data-new')){ custPickNew($('customerSearch').value.trim()); }
     else { custPick(row.getAttribute('data-n')); }
   }
@@ -2460,8 +2489,13 @@
     setTimeout(function(){
       custClose();
       var typed = $('customerSearch').value.trim();
-      if(!typed){ $('customer').value = ''; $('customerOther').value = ''; syncFooter(); saveDraft(); return; }
-      if(typed === customerName()) return;
+      if(!typed){
+        $('customer').value = ''; $('customerOther').value = '';
+        updateCustomerOtherVisibility(); syncFooter(); saveDraft(); return;
+      }
+      /* เทียบกับค่าที่ select เก็บอยู่จริง ไม่ใช่ชื่อที่แปลงแล้ว
+         ไม่งั้นพอเลือก Other และพิมพ์ชื่อในช่องล่าง กลับมาแตะช่องนี้จะโดนล้างทิ้ง */
+      if(typed === $('customer').value) return;
       /* พิมพ์ตรงกับรายการอยู่แล้วแต่พิมพ์เล็กใหญ่ไม่ตรง ให้เข้าล็อกชื่อจริง
          ไม่ใช่โยนไปเป็น Other ทั้งที่เป็นลูกค้าเดิม */
       var same = null, tl = typed.toLowerCase();
@@ -2472,8 +2506,7 @@
 
   /* เปิดฟอร์มขึ้นมาใหม่ ให้ช่องพิมพ์แสดงชื่อที่ค้างอยู่ในร่าง */
   function syncCustomerSearch(){
-    var v = customerName();
-    $('customerSearch').value = (v === 'Other' ? '' : v);
+    $('customerSearch').value = $('customer').value;
   }
 
   /* the name to show and print - resolves "Other" to what was typed */
