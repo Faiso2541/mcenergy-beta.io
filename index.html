@@ -1,3 +1,5 @@
+
+
 <!DOCTYPE html>
 <html lang="th">
 <head>
@@ -1005,8 +1007,26 @@
       break-inside:avoid;border:.6pt solid #B9BFD2;border-radius:0;
       height:76mm !important;overflow:hidden;
     }
-    .photo-card .photo-slot{aspect-ratio:auto !important;height:62mm !important;}
-    .photo-meta{padding:2.5mm 3mm;height:13.5mm !important;overflow:hidden;}
+    /* .photo-card เป็น flex column อยู่แล้ว การใส่แค่ height ให้ลูกไม่พอ
+       เพราะ flex item มี min-height อัตโนมัติเท่าขนาดเนื้อหา รูปถ่ายจากมือถือ
+       สูงหลายพันพิกเซล ช่องรูปจึงบวมเกิน 62mm ดันคำบรรยายตกออกนอกการ์ด
+       แล้วโดน overflow:hidden ตัดหายไป
+
+       แก้ด้วยการตรึง flex ทั้งสองก้อนแบบไม่ยืดไม่หด และปลด min-height ทิ้ง
+       62 + 13.5 = 75.5mm พอดีในกรอบ 76mm ที่หักขอบแล้วเหลือ 75.58mm */
+    .photo-card .photo-slot{
+      aspect-ratio:auto !important;
+      flex:0 0 62mm !important;height:62mm !important;min-height:0 !important;
+    }
+    .photo-meta{
+      padding:2.5mm 3mm;
+      flex:0 0 13.5mm !important;height:13.5mm !important;min-height:0 !important;
+      overflow:hidden;
+    }
+    /* คำบรรยายเต็มความสูงที่เหลือในกล่อง ไม่ใช่ยืดตามข้อความจนล้น */
+    .photo-meta .photo-caption,.photo-meta .pv-text{
+      flex:1 1 auto !important;min-height:0 !important;overflow:hidden;
+    }
     .ph-num{font-size:7pt;}
     .photo-caption{font-size:10.5pt;}
     .photo-meta.step{padding:2.5mm 3mm;}
