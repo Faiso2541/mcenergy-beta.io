@@ -2510,11 +2510,14 @@
     else if(e.key === 'Escape'){ custClose(); }
   });
 
-  /* mousedown ไม่ใช่ click เพราะ blur จะปิดรายการไปก่อนถ้ารอ click */
-  $('customerList').addEventListener('mousedown', function(e){
+  /* mousedown ไม่ใช่ click เพราะ blur จะปิดรายการไปก่อนถ้ารอ click
+     และรับ touchstart ด้วย เพราะบนมือถือบางเครื่อง mousedown มาช้ากว่า blur */
+  function custTapRow(e){
     var row = e.target.closest ? e.target.closest('.cbo-opt') : null;
     if(row && !row.classList.contains('cbo-none')){ e.preventDefault(); custTake(row); }
-  });
+  }
+  $('customerList').addEventListener('mousedown', custTapRow);
+  $('customerList').addEventListener('touchstart', custTapRow, { passive:false });
 
   /* ออกจากช่องแล้วเก็บกวาดให้ค่าที่เก็บจริงตรงกับข้อความที่ค้างอยู่ */
   $('customerSearch').addEventListener('blur', function(){
@@ -4479,6 +4482,7 @@
     })(0);
   }
 
+
   var bulkNoteTimer = null;
   function bulkNote(msg){
     var el = $('bulkPhotoNote');
@@ -5957,7 +5961,10 @@
     }
     if(!customerName()){
       alert('ยังไม่ได้เลือก Customer\n\nต้องเลือกชื่อลูกค้าก่อน ระบบจึงจะรู้ว่าต้องเอารายงานไปวางไว้ใต้ลูกค้ารายไหนบนหน้าเว็บ');
-      var cs = $('customer'); if(cs){ cs.focus(); }
+      /* <select id="customer"> ถูกซ่อนไว้แล้ว focus ไม่ติด
+         ต้องพาไปที่ช่องพิมพ์จริง พร้อมเลื่อนหน้าให้เห็นด้วย */
+      var cs = $('customerSearch');
+      if(cs){ cs.scrollIntoView({ block:'center', behavior:'smooth' }); cs.focus(); }
       return;
     }
     if(!$('pvOverlay') || $('pvOverlay').style.display !== 'flex'){ openPreview(); }
