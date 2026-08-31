@@ -5703,6 +5703,24 @@
     /* A section can be taller than one sheet (lots of photos, a long
        checklist). Cut it into sheet-high strips instead of shrinking the
        whole thing to fit, which is what made page 4 unreadable. */
+    /* แถบที่ขาวล้วนทั้งแผ่น ไม่ต้องเสียกระดาษให้มัน
+       ย่อลงเหลือ 40px ก่อนไล่อ่านพิกเซล จะได้ไม่ช้าบนมือถือ */
+    function stripIsBlank(cv){
+      try{
+        var t = document.createElement('canvas');
+        t.width  = 40;
+        t.height = Math.max(1, Math.round(40 * cv.height / cv.width));
+        var c = t.getContext('2d');
+        c.fillStyle = '#ffffff'; c.fillRect(0, 0, t.width, t.height);
+        c.drawImage(cv, 0, 0, t.width, t.height);
+        var d = c.getImageData(0, 0, t.width, t.height).data;
+        for(var i = 0; i < d.length; i += 4){
+          if(d[i] < 245 || d[i + 1] < 245 || d[i + 2] < 245){ return false; }
+        }
+        return true;
+      }catch(e){ return false; }   /* อ่านไม่ได้ก็ถือว่าไม่ว่าง ปลอดภัยกว่า */
+    }
+
     function place(canvas){
       var pxPerMm = canvas.width / W;
       var stripPx = Math.max(1, Math.floor(H * pxPerMm));
@@ -5720,6 +5738,9 @@
         cx.imageSmoothingQuality = 'high';
         cx.fillStyle = '#ffffff'; cx.fillRect(0, 0, strip.width, strip.height);
         cx.drawImage(canvas, 0, y, canvas.width, hPx, 0, 0, canvas.width, hPx);
+        /* แผ่นที่สองเป็นต้นไปถ้าไม่มีอะไรเลย ข้ามไป แผ่นแรกไม่ข้าม
+           เพราะหน้าที่ตั้งใจให้ว่างจริง ๆ ก็มี */
+        if(sheet > 0 && stripIsBlank(strip)){ y += hPx; continue; }
         if(sheet > 0) pdf.addPage();
         pdf.addImage(strip.toDataURL('image/jpeg', 0.95), 'JPEG',
                      0, 0, W, hPx / pxPerMm, undefined, 'FAST');
@@ -5739,7 +5760,13 @@
            it is derived from canvas.width. */
         var box  = el.getBoundingClientRect();
         var wCss = Math.round(box.width);
-        var hCss = Math.round(Math.max(box.height, el.scrollHeight));
+        /* หน้าที่ถูกตรึงเพดานไว้ (ฟอร์มจดค่า หน้ารูป) ใส่ overflow:hidden ไว้แล้ว
+           แต่ scrollHeight ยังรายงานความสูงเนื้อหาเต็ม ไม่สนว่าถูกตัด
+           ถ่ายภาพตามนั้นจึงได้ภาพยาวเกินหน้า แล้วโดนหั่นเป็นแผ่นเศษ
+           กรณีนี้ต้องเชื่อความสูงที่เห็นจริง ไม่ใช่ความสูงเนื้อหา */
+        var clamped = el.style.overflow === 'hidden';
+        var hCss = clamped ? Math.round(box.height)
+                           : Math.round(Math.max(box.height, el.scrollHeight));
         /* start high for sharpness and step down only until the canvas fits
            inside what mobile Safari will actually allocate */
         var sc = 3;
