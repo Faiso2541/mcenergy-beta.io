@@ -5,7 +5,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-<title>McEnergy | Service &amp; Maintenance Report</title>
+<title>APEX Office | McEnergy Evolution</title>
 <meta name="description" content="แบบฟอร์มรายงานตรวจสอบและบำรุงรักษาอุปกรณ์ออนไลน์ — McEnergy Evolution Co., Ltd.">
 <meta name="theme-color" content="#F4F5FB">
 
@@ -16,7 +16,7 @@
 <link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
 <link rel="icon" type="image/png" sizes="512x512" href="icon-512.png">
 <meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-title" content="McEnergy">
+<meta name="apple-mobile-web-app-title" content="APEX Office">
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -6863,25 +6863,25 @@
      ใครกด View Source ก็เห็น ตอนทำจริงต้องย้ายไปตรวจที่ Apps Script
      แล้วให้ฟังก์ชัน signIn() ยิงไปถามแทน จุดที่ต้องแก้อยู่ในนั้นจุดเดียว */
   var TRIAL_USERS = [
-    { u:'Faiso@mcenergy',          p:'100147', name:'ฟายโซ เต๊ะ', role:'ช่างบริการ' },
-    { u:'Thanaphat@mcenergy',      p:'100123', name:'ธนภัทร อยู่คง', role:'ช่างบริการ' },
-    { u:'Nattapol@mcenergy',       p:'100186', name:'ณัฐพล จันต๊ะ', role:'ช่างบริการ' },
-    { u:'Thammawut@mcenergy',      p:'100154', name:'ธรรมมาวุธ นวลมุสิก', role:'ช่างบริการ' },
-    { u:'Phatthanaphong@mcenergy', p:'100172', name:'พัฒนพงษ์ แสงศร', role:'ช่างบริการ' },
-    { u:'Kornpech@mcenergy',       p:'100139', name:'กรเพ็รช จันทร์เป้า', role:'ช่างบริการ' },
-    { u:'Natthaphon@mcenergy',     p:'100195', name:'ณัฐพล กองสุวรรณ', role:'ช่างบริการ' },
-    { u:'Nattawut@mcenergy',       p:'100168', name:'ฌัฐวุฒิ สารแดง', role:'ช่างบริการ' },
-    { u:'Watcharaphong@mcenergy',  p:'100131', name:'วัชรพงษ์ เสนาบุญ', role:'ช่างบริการ' },
-    { u:'Sirawut@mcenergy',        p:'100157', name:'ศิรวุธ ทาอามาตร์', role:'ช่างบริการ' },
-    { u:'Adichat@mcenergy',        p:'100184', name:'อดิชาติ พันธุ์วิเชียร', role:'ช่างบริการ' },
-    { u:'Enter@mcenergy',          p:'100110', name:'นักศึกษาฝึกงาน', role:'ฝึกงาน' }
+    { u:'Faiso@mcenergy',          p:'100147KD', name:'ฟายโซ เต๊ะ', role:'ช่างบริการ' },
+    { u:'Thanaphat@mcenergy',      p:'100123RM', name:'ธนภัทร อยู่คง', role:'ช่างบริการ' },
+    { u:'Nattapol@mcenergy',       p:'100186XV', name:'ณัฐพล จันต๊ะ', role:'ช่างบริการ' },
+    { u:'Thammawut@mcenergy',      p:'100154BQ', name:'ธรรมมาวุธ นวลมุสิก', role:'ช่างบริการ' },
+    { u:'Phatthanaphong@mcenergy', p:'100172ZT', name:'พัฒนพงษ์ แสงศร', role:'ช่างบริการ' },
+    { u:'Kornpech@mcenergy',       p:'100139HN', name:'กรเพ็รช จันทร์เป้า', role:'ช่างบริการ' },
+    { u:'Natthaphon@mcenergy',     p:'100195PW', name:'ณัฐพล กองสุวรรณ', role:'ช่างบริการ' },
+    { u:'Nattawut@mcenergy',       p:'100168GY', name:'ฌัฐวุฒิ สารแดง', role:'ช่างบริการ' },
+    { u:'Watcharaphong@mcenergy',  p:'100131MC', name:'วัชรพงษ์ เสนาบุญ', role:'ช่างบริการ' },
+    { u:'Sirawut@mcenergy',        p:'100157VJ', name:'ศิรวุธ ทาอามาตร์', role:'ช่างบริการ' },
+    { u:'Adichat@mcenergy',        p:'100184DF', name:'อดิชาติ พันธุ์วิเชียร', role:'ช่างบริการ' },
+    { u:'Enter@mcenergy',          p:'100110QS', name:'นักศึกษาฝึกงาน', role:'ฝึกงาน' }
   ];
 
   /* ---- บังคับล็อกอินใหม่ทุกครั้งที่โค้ดเปลี่ยน ----
      อ่านเลขเวอร์ชันจาก sw.js ที่บั๊มอยู่แล้วทุกรอบที่แก้ไฟล์
      จึงมีเลขเดียวให้ดูแล ไม่มีทางลืมบั๊กอีกตัวจนหลุด
      อ่านไม่ได้ (ไม่มีเน็ต) ก็ไม่เตะใครออก ใช้ของเดิมต่อไป */
-  var APP_VER = 'mce-report-4.1.0';   /* เลขรุ่นของไฟล์นี้ ต้องบั๊มทุกครั้งที่แก้ */
+  var APP_VER = 'mce-report-4.2.0';   /* เลขรุ่นของไฟล์นี้ ต้องบั๊มทุกครั้งที่แก้ */
 
   /* เก็บบัญชีไว้พร้อมติดเลขรุ่นของไฟล์ไว้ด้วย
      รีเฟรชหน้าแล้วยังอยู่ในระบบ เพราะเลขรุ่นยังตรงกัน
