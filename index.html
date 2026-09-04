@@ -6465,6 +6465,34 @@
     var W = 210, H = 297;
     var sheet = 0;
 
+    /* มือถือมีเพดานหน่วยความจำต่ำกว่าคอมมาก และ iOS จะฆ่าหน้าเว็บเงียบ ๆ เมื่อเกิน
+       ภาพหนึ่งหน้าที่ความละเอียด 3 เท่า กินราว 32 MB และระหว่างวาดต้องถือไว้พร้อมกัน
+       สองก้อน พอหลายหน้าติดกันจึงตันและค้างที่ "กำลังสร้างหน้า 1/x"
+       บนมือถือจึงลดความละเอียดลงและตั้งเพดานพื้นที่ให้ต่ำกว่า
+       ขนาดกระดาษที่พิมพ์ออกมาไม่เปลี่ยน เพราะคิดจากสัดส่วน ไม่ใช่จำนวนพิกเซล */
+    var onPhone  = isIOS() || /Android/i.test(navigator.userAgent || '');
+    var MAX_SC   = onPhone ? 2 : 3;
+    var MAX_AREA = onPhone ? 5000000 : 12000000;
+    var JPG_Q    = onPhone ? 0.88 : 0.95;
+
+    /* html2canvas ไม่มีตัวจับเวลาของตัวเอง ถ้ามันค้าง หน้าจอจะค้างตามไปตลอดกาล
+       แบบที่ช่างเจอ ต้องมีเพดานเวลาไว้ให้มันเลิกแล้วบอกสาเหตุออกมา */
+    function withCap(p, ms, msg){
+      return new Promise(function(res, rej){
+        var done = false;
+        var t = setTimeout(function(){
+          if(!done){ done = true; rej(new Error(msg)); }
+        }, ms);
+        p.then(function(v){ if(!done){ done = true; clearTimeout(t); res(v); } },
+               function(e){ if(!done){ done = true; clearTimeout(t); rej(e); } });
+      });
+    }
+
+    /* คืนหน่วยความจำของภาพที่ใช้เสร็จแล้วทันที ไม่ต้องรอระบบมาเก็บกวาดเอง */
+    function freeCanvas(cv){
+      try{ cv.width = 1; cv.height = 1; }catch(e){}
+    }
+
     /* A section can be taller than one sheet (lots of photos, a long
        checklist). Cut it into sheet-high strips instead of shrinking the
        whole thing to fit, which is what made page 4 unreadable. */
@@ -6507,8 +6535,9 @@
            เพราะหน้าที่ตั้งใจให้ว่างจริง ๆ ก็มี */
         if(sheet > 0 && stripIsBlank(strip)){ y += hPx; continue; }
         if(sheet > 0) pdf.addPage();
-        pdf.addImage(strip.toDataURL('image/jpeg', 0.95), 'JPEG',
+        pdf.addImage(strip.toDataURL('image/jpeg', JPG_Q), 'JPEG',
                      0, 0, W, hPx / pxPerMm, undefined, 'FAST');
+        freeCanvas(strip);       /* ปล่อยทิ้งทันที ไม่งั้นสะสมจนมือถือตัน */
         sheet++; y += hPx;
       }
     }
@@ -6534,18 +6563,28 @@
                            : Math.round(Math.max(box.height, el.scrollHeight));
         /* start high for sharpness and step down only until the canvas fits
            inside what mobile Safari will actually allocate */
-        var sc = 3;
-        while(sc > 1 && (wCss * sc) * (hCss * sc) > 12000000){ sc -= 0.1; }
+        var sc = MAX_SC;
+        while(sc > 1 && (wCss * sc) * (hCss * sc) > MAX_AREA){ sc -= 0.1; }
         sc = Math.max(1, Math.round(sc * 10) / 10);
 
-        return window.html2canvas(el, {
+        return withCap(window.html2canvas(el, {
           scale: sc, useCORS: true, backgroundColor: '#ffffff', logging: false,
           width: wCss, height: hCss,
+          /* รูปที่โหลดไม่ขึ้นสักรูป ต้องไม่ทำให้ทั้งฉบับหยุดรอค้าง */
+          imageTimeout: 15000,
+          removeContainer: true,
           /* capture exactly the element's own box - no surrounding page */
           x: 0, y: 0, scrollX: 0, scrollY: 0,
           windowWidth: wCss, windowHeight: hCss
-        });
-      }).then(place);
+        }), 60000, 'สร้างหน้า ' + (i + 1) + ' ไม่สำเร็จ เครื่องอาจมีหน่วยความจำไม่พอ\n' +
+                   'ลองปิดแอปอื่นที่เปิดค้างไว้ หรือลดจำนวนรูปในรายงานลง');
+      }).then(function(canvas){
+        place(canvas);
+        freeCanvas(canvas);
+        /* คืนจังหวะให้เบราว์เซอร์ได้หายใจและเก็บกวาดหน่วยความจำก่อนหน้าถัดไป
+           ถ้าวาดรวดเดียวติดกันหมด iOS จะฆ่าหน้าเว็บทิ้งกลางทาง */
+        return new Promise(function(r){ setTimeout(r, onPhone ? 120 : 0); });
+      });
     }, Promise.resolve()).then(function(){
       root.classList.remove('exporting');
       pvSay('');
@@ -6915,7 +6954,7 @@
      อ่านเลขเวอร์ชันจาก sw.js ที่บั๊มอยู่แล้วทุกรอบที่แก้ไฟล์
      จึงมีเลขเดียวให้ดูแล ไม่มีทางลืมบั๊กอีกตัวจนหลุด
      อ่านไม่ได้ (ไม่มีเน็ต) ก็ไม่เตะใครออก ใช้ของเดิมต่อไป */
-  var APP_VER = 'mce-report-4.3.0';   /* เลขรุ่นของไฟล์นี้ ต้องบั๊มทุกครั้งที่แก้ */
+  var APP_VER = 'mce-report-4.3.1';   /* เลขรุ่นของไฟล์นี้ ต้องบั๊มทุกครั้งที่แก้ */
 
   /* เก็บบัญชีไว้พร้อมติดเลขรุ่นของไฟล์ไว้ด้วย
      รีเฟรชหน้าแล้วยังอยู่ในระบบ เพราะเลขรุ่นยังตรงกัน
