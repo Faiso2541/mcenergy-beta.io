@@ -6372,9 +6372,26 @@
      the print-styled preview, which means the text is a picture: crisp to look
      at, but not selectable or searchable. The "พิมพ์" button is still there
      for anyone who needs the vector-text version. */
+  /* ตัวสร้าง PDF สองตัวนี้คือขั้นแรกของทั้งปุ่ม "ส่ง Report" และปุ่ม "ส่ง PDF"
+     ถ้าโหลดไม่ได้ ปุ่มจะตายพร้อมกันทั้งคู่ จึงเตรียมที่โหลดสำรองไว้ด้วย
+     เจ้าแรกล่มหรือโดนบล็อก ก็ยังไปต่อที่เจ้าที่สองได้เอง ช่างไม่ต้องทำอะไร */
   var PDF_LIBS = [
-    'https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js',
-    'https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js'
+    {
+      test: function(){ return !!window.html2canvas; },
+      urls: [
+        'https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js',
+        'https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js',
+        'https://unpkg.com/html2canvas@1.4.1/dist/html2canvas.min.js'
+      ]
+    },
+    {
+      test: function(){ return !!window.jspdf; },
+      urls: [
+        'https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js',
+        'https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js',
+        'https://unpkg.com/jspdf@2.5.1/dist/jspdf.umd.min.js'
+      ]
+    }
   ];
   var libsReady = null;
 
@@ -6386,11 +6403,28 @@
       document.head.appendChild(el);
     });
   }
+
+  /* ไล่ที่โหลดทีละเจ้าจนกว่าจะมีเจ้าไหนสำเร็จ
+     บางเจ้าตอบกลับมาว่าโหลดผ่านแต่ของข้างในเปล่า จึงต้องเช็คซ้ำด้วยว่าใช้ได้จริง */
+  function loadLib(lib, i){
+    i = i || 0;
+    if(lib.test()) return Promise.resolve();
+    if(i >= lib.urls.length){
+      return Promise.reject(new Error('โหลดตัวสร้าง PDF ไม่สำเร็จ ลองใหม่อีกครั้งเมื่อสัญญาณดีขึ้น'));
+    }
+    return loadScript(lib.urls[i])
+      .then(function(){
+        if(lib.test()) return;
+        return loadLib(lib, i + 1);          /* โหลดผ่านแต่ของเปล่า ไปเจ้าถัดไป */
+      })
+      .catch(function(){ return loadLib(lib, i + 1); });
+  }
+
   function ensurePdfLibs(){
     if(window.html2canvas && window.jspdf) return Promise.resolve();
     if(!libsReady){
-      libsReady = PDF_LIBS.reduce(function(p, u){
-        return p.then(function(){ return loadScript(u); });
+      libsReady = PDF_LIBS.reduce(function(p, lib){
+        return p.then(function(){ return loadLib(lib, 0); });
       }, Promise.resolve()).catch(function(e){ libsReady = null; throw e; });
     }
     return libsReady;
@@ -6881,7 +6915,7 @@
      อ่านเลขเวอร์ชันจาก sw.js ที่บั๊มอยู่แล้วทุกรอบที่แก้ไฟล์
      จึงมีเลขเดียวให้ดูแล ไม่มีทางลืมบั๊กอีกตัวจนหลุด
      อ่านไม่ได้ (ไม่มีเน็ต) ก็ไม่เตะใครออก ใช้ของเดิมต่อไป */
-  var APP_VER = 'mce-report-4.2.0';   /* เลขรุ่นของไฟล์นี้ ต้องบั๊มทุกครั้งที่แก้ */
+  var APP_VER = 'mce-report-4.3.0';   /* เลขรุ่นของไฟล์นี้ ต้องบั๊มทุกครั้งที่แก้ */
 
   /* เก็บบัญชีไว้พร้อมติดเลขรุ่นของไฟล์ไว้ด้วย
      รีเฟรชหน้าแล้วยังอยู่ในระบบ เพราะเลขรุ่นยังตรงกัน
