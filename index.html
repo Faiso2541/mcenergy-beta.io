@@ -290,6 +290,12 @@
   .auth-err.info{background:#E7F0F7;color:#1D5A80;}
   .auth-err.on{display:block;}
 
+  /* เลขรุ่นใต้กล่องล็อกอิน ตัวเล็กจาง ๆ ไม่รบกวนสายตา แต่เช็คได้ตลอด */
+  .ver-tag{
+    margin-top:14px;text-align:center;font-size:11px;letter-spacing:.3px;
+    color:var(--ink-faint,#9AA0AF);
+  }
+
   /* ---- หน้ากำลังเข้าสู่ระบบ ----
      สายฟ้าโคจรรอบวงแล้วดิ่งเข้าที่ พร้อมชื่อพิมพ์ทีละตัว จบพร้อมกันที่ 5 วินาที
      ตั้ง 5 วิเพราะชื่อบางคนยาว ต้องมีเวลาพิมพ์จนจบ */
@@ -1907,6 +1913,9 @@
 
       <div class="auth-err" id="authErr"></div>
     </form>
+    <!-- เลขรุ่นที่เครื่องนี้กำลังใช้อยู่จริง มีไว้ให้เช็คตอนมีปัญหา
+         ว่าเครื่องนั้นได้ตัวใหม่แล้วหรือยังใช้ของเก่าค้างอยู่ -->
+    <div class="ver-tag" id="verTag"></div>
   </div>
 </div>
 
@@ -5197,16 +5206,64 @@
           : ('ใส่รูปแล้ว ' + total + ' รูป'));
         return;
       }
-      var reader = new FileReader();
-      reader.onload = function(ev){
-        state.photos[targets[n]].img = ev.target.result;
+      shrinkPhoto(files[n]).then(function(dataUrl){
+        state.photos[targets[n]].img = dataUrl;
         done++;
         bulkNote('กำลังใส่รูป ' + done + ' / ' + total + '…');
         next(n + 1);
-      };
-      reader.onerror = function(){ next(n + 1); };      /* skip a bad file, keep going */
-      reader.readAsDataURL(files[n]);
+      }, function(){ next(n + 1); });                   /* skip a bad file, keep going */
     })(0);
+  }
+
+  /* ย่อรูปก่อนเก็บ - จุดนี้สำคัญกว่าที่เห็น
+
+     เดิมเก็บรูปดิบจากกล้องทั้งใบ รูปจากมือถือทุกวันนี้ราว 12 ล้านพิกเซล
+     พอแปลงเป็นข้อความเพื่อเก็บ ขนาดจะบวมขึ้นอีกหนึ่งในสาม ตกใบละ 4-5 MB
+     สิบสองใบก็ราว 60 MB แค่ตอนเก็บ
+
+     ที่หนักกว่านั้นคือตอนสร้าง PDF ทุกใบต้องถูกคลี่ออกเป็นภาพในหน่วยความจำ
+     รูป 12 ล้านพิกเซลกินราว 48 MB ต่อใบ สิบสองใบคือหลายร้อย MB
+     ซึ่งเกินเพดานที่ Safari บนมือถือยอมให้ไปไกลมาก มันจึงค้างตั้งแต่หน้าแรก
+
+     ช่องรูปในกระดาษ A4 สูง 62 มม. ที่ความละเอียดงานพิมพ์คิดเป็นราว 500 พิกเซล
+     เก็บไว้ 1600 พิกเซลจึงเกินพอ ชัดเท่าเดิมทุกประการเมื่อพิมพ์ออกมา
+     แต่ขนาดลดลงสิบกว่าเท่า และร่างที่เซฟไว้ก็ไม่ล้นพื้นที่เก็บของเบราว์เซอร์อีก */
+  var PHOTO_MAX_DIM = 1600;
+  var PHOTO_QUALITY = 0.82;
+
+  function shrinkPhoto(file){
+    return new Promise(function(resolve, reject){
+      var rd = new FileReader();
+      rd.onerror = function(){ reject(new Error('อ่านไฟล์รูปไม่สำเร็จ')); };
+      rd.onload = function(ev){
+        var raw = ev.target.result;
+        var img = new Image();
+        /* ย่อไม่ได้ด้วยเหตุใดก็ตาม ยังดีกว่าไม่ได้รูปเลย จึงคืนรูปเดิมไป */
+        img.onerror = function(){ resolve(raw); };
+        img.onload = function(){
+          try{
+            var w = img.naturalWidth, h = img.naturalHeight;
+            if(!w || !h){ resolve(raw); return; }
+            var k = Math.min(1, PHOTO_MAX_DIM / Math.max(w, h));
+            if(k >= 1 && raw.length < 900000){ resolve(raw); return; }  /* เล็กอยู่แล้ว */
+            var cw = Math.max(1, Math.round(w * k));
+            var ch = Math.max(1, Math.round(h * k));
+            var cv = document.createElement('canvas');
+            cv.width = cw; cv.height = ch;
+            var cx = cv.getContext('2d');
+            cx.fillStyle = '#ffffff'; cx.fillRect(0, 0, cw, ch);
+            cx.imageSmoothingEnabled = true;
+            cx.imageSmoothingQuality = 'high';
+            cx.drawImage(img, 0, 0, cw, ch);
+            var out = cv.toDataURL('image/jpeg', PHOTO_QUALITY);
+            cv.width = 1; cv.height = 1;               /* คืนหน่วยความจำทันที */
+            resolve(out && out.length > 32 ? out : raw);
+          }catch(e){ resolve(raw); }
+        };
+        img.src = raw;
+      };
+      rd.readAsDataURL(file);
+    });
   }
 
 
@@ -6954,7 +7011,7 @@
      อ่านเลขเวอร์ชันจาก sw.js ที่บั๊มอยู่แล้วทุกรอบที่แก้ไฟล์
      จึงมีเลขเดียวให้ดูแล ไม่มีทางลืมบั๊กอีกตัวจนหลุด
      อ่านไม่ได้ (ไม่มีเน็ต) ก็ไม่เตะใครออก ใช้ของเดิมต่อไป */
-  var APP_VER = 'mce-report-4.3.1';   /* เลขรุ่นของไฟล์นี้ ต้องบั๊มทุกครั้งที่แก้ */
+  var APP_VER = 'mce-report-4.4.0';   /* เลขรุ่นของไฟล์นี้ ต้องบั๊มทุกครั้งที่แก้ */
 
   /* เก็บบัญชีไว้พร้อมติดเลขรุ่นของไฟล์ไว้ด้วย
      รีเฟรชหน้าแล้วยังอยู่ในระบบ เพราะเลขรุ่นยังตรงกัน
@@ -8940,7 +8997,14 @@
     box.insertBefore(b, box.firstChild);
   })();
 
+  /* แสดงเลขรุ่นมุมล่างของหน้าล็อกอิน เอาไว้ยืนยันว่าเครื่องนั้นได้ตัวใหม่แล้วจริง */
+  function paintVerTag(){
+    var el = $('verTag');
+    if(el){ el.textContent = 'เวอร์ชัน ' + APP_VER.replace('mce-report-', ''); }
+  }
+
   function bootAuth(){
+    paintVerTag();
     try{ localStorage.removeItem('mce_auth_v1'); }catch(e){}   /* ของเก่าคนละรูปแบบ */
     var d = readAuth();
     if(d){
