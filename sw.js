@@ -3,7 +3,7 @@
    Bump CACHE_VERSION every time index.html changes (1.11.0 -> 1.11.1 -> ...).
    Bumping the number also wipes every old cache on the phone, which is the
    surest way to get a stuck device back onto the current form. */
-var CACHE_VERSION = 'mce-report-4.2.0';
+var CACHE_VERSION = 'mce-report-4.3.0';
 
 /* how long to wait for the network before falling back to the stored copy.
    long enough for a weak site signal, short enough that the form still opens */
@@ -107,17 +107,30 @@ self.addEventListener('fetch', function(e){
     return;
   }
 
-  /* everything else (icons, Google Fonts): cache first, then fill the cache */
+  /* ไฟล์อื่นทั้งหมด - ไอคอน, ฟอนต์ Google, และตัวสร้าง PDF จาก cdnjs
+
+     เดิมตรงนี้ "เอาจากแคชก่อนเสมอ" ซึ่งพังได้ถาวรด้วยเหตุผลนี้
+     ไฟล์ที่มาจากเว็บนอกโดเมน เบราว์เซอร์ไม่ยอมให้ service worker เปิดดูข้างใน
+     จึงแยกไม่ออกว่าโหลดสำเร็จจริง หรือได้ไฟล์เปล่ากลับมาเพราะสัญญาณหลุด
+     ถ้าเผลอเก็บไฟล์เสียลงแคชไปแล้ว เครื่องนั้นจะหยิบไฟล์เสียอันเดิมมาใช้ตลอดไป
+     ตัวสร้าง PDF จึงพังค้าง กดปุ่มส่งไม่ได้ทั้งสองปุ่ม ปิดแอปเปิดใหม่ก็ไม่หาย
+     เพราะไม่มีอะไรไปแตะเน็ตอีกเลย
+
+     แก้เป็นไปเอาของใหม่จากเน็ตก่อนเสมอ ใช้ของในแคชเฉพาะตอนเน็ตไม่มาจริง ๆ
+     ถ้าในแคชมีไฟล์เสียค้างอยู่ ของใหม่จะทับทันทีที่มีสัญญาณ ไม่ค้างถาวรอีก */
   e.respondWith(
-    caches.match(req).then(function(hit){
-      if(hit) return hit;
-      return fetch(req).then(function(res){
-        if(res && (res.ok || res.type === 'opaque')){
-          var copy = res.clone();
-          caches.open(CACHE_VERSION).then(function(c){ c.put(req, copy); });
-        }
-        return res;
-      }).catch(function(){ return hit; });
+    withTimeout(fetch(req), NET_TIMEOUT_MS).then(function(res){
+      if(res && (res.ok || res.type === 'opaque')){
+        var copy = res.clone();
+        caches.open(CACHE_VERSION).then(function(c){ c.put(req, copy); });
+      }
+      return res;
+    }).catch(function(){
+      return caches.match(req).then(function(hit){
+        /* โค้ดเดิมคืนค่าว่างตรงนี้ ซึ่งทำให้การโหลดล้มทันทีแบบไม่มีคำอธิบาย
+           ต้องคืนคำตอบที่ใช้ได้จริง หน้าเว็บจึงจะรู้ว่าเกิดอะไรขึ้น */
+        return hit || new Response('', { status: 504, statusText: 'offline' });
+      });
     })
   );
 });
