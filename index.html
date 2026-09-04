@@ -6678,10 +6678,7 @@
     return pages.reduce(function(chain, el, i){
       return chain.then(function(){
         pvSay('กำลังสร้างหน้า ' + (i + 1) + '/' + pages.length);
-        /* Mobile Safari refuses canvases past roughly 4096x4096 and returns a
-           blank one without saying so. Drop the scale only when a section is
-           long enough to get near that; the printed size is unaffected because
-           it is derived from canvas.width. */
+
         var box  = el.getBoundingClientRect();
         var wCss = Math.round(box.width);
         /* หน้าที่ถูกตรึงเพดานไว้ (ฟอร์มจดค่า หน้ารูป) ใส่ overflow:hidden ไว้แล้ว
@@ -6691,54 +6688,70 @@
         var clamped = el.style.overflow === 'hidden';
         var hCss = clamped ? Math.round(box.height)
                            : Math.round(Math.max(box.height, el.scrollHeight));
-        /* start high for sharpness and step down only until the canvas fits
-           inside what mobile Safari will actually allocate */
-        var sc = MAX_SC;
-        while(sc > 1 && (wCss * sc) * (hCss * sc) > MAX_AREA){ sc -= 0.1; }
-        sc = Math.max(1, Math.round(sc * 10) / 10);
 
-        diag('หน้า ' + (i + 1) + '/' + pages.length + ' เริ่ม · กล่อง ' +
-             wCss + 'x' + hCss + ' · ย่อ ' + sc + ' เท่า · ภาพ ' +
-             Math.round(wCss * sc) + 'x' + Math.round(hCss * sc) +
-             ' (' + ((wCss * sc * hCss * sc) / 1e6).toFixed(1) + ' ล้านจุด)');
+        /* ---- วาดทีละแถบเท่าความสูงกระดาษหนึ่งแผ่น ----
 
-        /* ถ้าความละเอียดที่ตั้งไว้ทำไม่ไหว ลดลงแล้วลองใหม่เองอีกสองยก
-           ได้ภาพหยาบลงยังดีกว่าส่งรายงานไม่ออกเลย */
-        function attempt(scale, tryNo){
-          var cap = 45000;
+           ของเดิมสั่งวาดทั้งส่วนเป็นภาพเดียว บางส่วนยาวหลายหน้ากระดาษ
+           ภาพที่ได้จึงสูงเป็นหมื่นจุด Safari บนมือถือมีเพดานพื้นที่ภาพราว 16 ล้านจุด
+           พอเกินมันจะไม่ฟ้อง ไม่คืนค่า ได้แต่ค้างอยู่อย่างนั้น
+           และลดความละเอียดก็ไม่ช่วย เพราะต่ำสุดได้แค่ 1 เท่า ซึ่งยังสูงเกินเพดานอยู่ดี
+           ตรงกับที่เจอ คือหมดเวลาแม้ที่ความละเอียด 1 เท่า
+
+           แก้เป็นวาดทีละแถบสูงเท่ากระดาษหนึ่งแผ่น ภาพแต่ละใบจึงเล็กเสมอ
+           ไม่ว่าเนื้อหาจะยาวแค่ไหน และเท่ากับหนึ่งหน้าพอดีอยู่แล้ว */
+        var pageCss = Math.max(200, Math.round(H * wCss / W));
+        var slices  = Math.max(1, Math.ceil(hCss / pageCss - 0.04));
+
+        diag('หน้า ' + (i + 1) + '/' + pages.length + ' · กล่อง ' + wCss + 'x' + hCss +
+             ' · แบ่งวาด ' + slices + ' แถบ (แถบละ ' + pageCss + ')');
+
+        function drawSlice(off, sh, scale, tryNo){
+          var cap = 40000;
           return withCap(window.html2canvas(el, {
             scale: scale, useCORS: true, backgroundColor: '#ffffff', logging: false,
-            width: wCss, height: hCss,
             /* รูปที่โหลดไม่ขึ้นสักรูป ต้องไม่ทำให้ทั้งฉบับหยุดรอค้าง */
-            imageTimeout: 15000,
+            imageTimeout: 12000,
             removeContainer: true,
-            /* capture exactly the element's own box - no surrounding page */
-            x: 0, y: 0, scrollX: 0, scrollY: 0,
+            /* ตัดเอาเฉพาะแถบนี้ของกล่อง ไม่เอาหน้าเว็บรอบ ๆ */
+            x: 0, y: off, width: wCss, height: sh,
+            scrollX: 0, scrollY: 0,
             windowWidth: wCss, windowHeight: hCss
           }), cap, 'หมดเวลา ' + (cap / 1000) + ' วิ ที่ความละเอียด ' + scale + ' เท่า')
-          .then(function(cv){
-            diag('หน้า ' + (i + 1) + ' วาดเสร็จ · ได้ภาพ ' + cv.width + 'x' + cv.height);
-            return cv;
-          })
           .catch(function(err){
-            diag('หน้า ' + (i + 1) + ' ยกที่ ' + tryNo + ' ไม่ผ่าน · ' +
+            diag('  แถบ y=' + off + ' ยกที่ ' + tryNo + ' ไม่ผ่าน · ' +
                  ((err && err.message) || err));
             if(tryNo >= 3) throw err;
             var next = tryNo === 1 ? 1.5 : 1;
-            diag('ลดความละเอียดเหลือ ' + next + ' เท่า แล้วลองใหม่');
+            diag('  ลดความละเอียดเหลือ ' + next + ' เท่า แล้วลองใหม่');
             return new Promise(function(r){ setTimeout(r, 300); })
-                   .then(function(){ return attempt(next, tryNo + 1); });
+                   .then(function(){ return drawSlice(off, sh, next, tryNo + 1); });
           });
         }
 
-        return attempt(sc, 1);
-      }).then(function(canvas){
-        place(canvas);
-        freeCanvas(canvas);
+        return (function nextSlice(s){
+          if(s >= slices) return Promise.resolve();
+          var off = s * pageCss;
+          var sh  = Math.min(pageCss, hCss - off);
+          if(sh <= 0) return Promise.resolve();
+
+          var sc = MAX_SC;
+          while(sc > 1 && (wCss * sc) * (sh * sc) > MAX_AREA){ sc -= 0.1; }
+          sc = Math.max(1, Math.round(sc * 10) / 10);
+
+          pvSay('กำลังสร้างหน้า ' + (i + 1) + '/' + pages.length +
+                (slices > 1 ? ' (' + (s + 1) + '/' + slices + ')' : ''));
+
+          return drawSlice(off, sh, sc, 1).then(function(cv){
+            diag('  แถบ ' + (s + 1) + '/' + slices + ' เสร็จ · ภาพ ' +
+                 cv.width + 'x' + cv.height);
+            place(cv);
+            freeCanvas(cv);
+            /* คืนจังหวะให้เบราว์เซอร์ได้หายใจและเก็บกวาดหน่วยความจำก่อนแถบถัดไป */
+            return new Promise(function(r){ setTimeout(r, onPhone ? 120 : 0); });
+          }).then(function(){ return nextSlice(s + 1); });
+        })(0);
+      }).then(function(){
         diag('หน้า ' + (i + 1) + ' ลงกระดาษแล้ว · รวม ' + sheet + ' แผ่น');
-        /* คืนจังหวะให้เบราว์เซอร์ได้หายใจและเก็บกวาดหน่วยความจำก่อนหน้าถัดไป
-           ถ้าวาดรวดเดียวติดกันหมด iOS จะฆ่าหน้าเว็บทิ้งกลางทาง */
-        return new Promise(function(r){ setTimeout(r, onPhone ? 120 : 0); });
       });
     }, Promise.resolve()).then(function(){
       root.classList.remove('exporting');
@@ -7118,7 +7131,7 @@
      อ่านเลขเวอร์ชันจาก sw.js ที่บั๊มอยู่แล้วทุกรอบที่แก้ไฟล์
      จึงมีเลขเดียวให้ดูแล ไม่มีทางลืมบั๊กอีกตัวจนหลุด
      อ่านไม่ได้ (ไม่มีเน็ต) ก็ไม่เตะใครออก ใช้ของเดิมต่อไป */
-  var APP_VER = 'mce-report-4.5.0';   /* เลขรุ่นของไฟล์นี้ ต้องบั๊มทุกครั้งที่แก้ */
+  var APP_VER = 'mce-report-4.6.0';   /* เลขรุ่นของไฟล์นี้ ต้องบั๊มทุกครั้งที่แก้ */
 
   /* เก็บบัญชีไว้พร้อมติดเลขรุ่นของไฟล์ไว้ด้วย
      รีเฟรชหน้าแล้วยังอยู่ในระบบ เพราะเลขรุ่นยังตรงกัน
