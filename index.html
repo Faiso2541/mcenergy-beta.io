@@ -294,6 +294,19 @@
      ที่ต้องใช้ fixed เพราะกล่องล็อกอินจัดวางแบบยืดหยุ่น ถ้าปล่อยให้ไหลตามลำดับปกติ
      มันจะไปโผล่ข้างกล่องแทนที่จะอยู่ใต้กล่อง
      สีขาวจาง เพราะพื้นหลังหน้าล็อกอินเป็นสีกรมท่า ใช้สีเทาเข้มจะมองแทบไม่เห็น */
+  /* กล่องบันทึกปัญหาบนแถบตัวอย่างก่อนส่ง */
+  .pv-diag{
+    background:#1B1F2A;color:#D6E2F0;border-radius:8px;margin:8px 10px 10px;
+    padding:8px 10px;max-height:42vh;overflow:auto;
+  }
+  .pv-diag-head{display:flex;align-items:center;gap:8px;font-size:12.5px;margin-bottom:6px;}
+  .pv-diag-head b{flex:1;color:#fff;}
+  .pv-diag-head .btn{padding:4px 10px;font-size:12px;color:#D6E2F0;border-color:#3A4256;}
+  .pv-diag pre{
+    margin:0;white-space:pre-wrap;word-break:break-word;
+    font-family:ui-monospace,Menlo,Consolas,monospace;font-size:11.5px;line-height:1.55;
+  }
+
   .ver-tag{
     position:fixed;left:0;right:0;
     bottom:calc(16px + env(safe-area-inset-bottom,0px));
@@ -2471,6 +2484,16 @@
 <div class="pv-overlay" id="pvOverlay" style="display:none;">
   <div class="pv-bar">
     <div class="pv-title">ตัวอย่างก่อนส่ง <span class="pv-hint" id="pvPages"></span><span class="pv-hint" id="pvStatus"></span></div>
+    <!-- บันทึกปัญหา ปกติซ่อนไว้ โผล่เมื่อสร้าง PDF ไม่สำเร็จ
+         มีไว้ให้ช่างถ่ายภาพส่งกลับมา จะได้รู้ว่าตายตรงขั้นไหนโดยไม่ต้องเดา -->
+    <div class="pv-diag" id="pvDiag" style="display:none;">
+      <div class="pv-diag-head">
+        <b>บันทึกปัญหา</b>
+        <button class="btn btn-ghost" id="pvDiagCopy" type="button">คัดลอก</button>
+        <button class="btn btn-ghost" id="pvDiagHide" type="button">ปิด</button>
+      </div>
+      <pre id="pvDiagBody"></pre>
+    </div>
     <div class="pv-actions">
       <button class="btn btn-ghost" id="pvZoom" type="button">ขนาดเต็ม</button>
       <button class="btn btn-ghost" id="pvClose" type="button">ปิด</button>
@@ -6494,6 +6517,50 @@
 
   function pvSay(msg){ var el = $('pvStatus'); if(el){ el.textContent = msg ? '· ' + msg : ''; } }
 
+  /* ---------- บันทึกปัญหาตอนสร้าง PDF ----------
+     บนมือถือเราเปิดหน้าต่างนักพัฒนาดูไม่ได้ ถ้ามันค้างก็ได้แต่เดากันไปเรื่อย
+     ตัวนี้จดทุกขั้นตอนพร้อมเวลาไว้ในตัวแอปเลย พอมีปัญหาก็กางให้ดูได้ทันที
+     ช่างถ่ายภาพส่งกลับมาแผ่นเดียว ก็รู้แล้วว่าไปตายตรงไหน */
+  var diagLog = [];
+  var diagT0  = 0;
+
+  function diag(msg){
+    var t = diagT0 ? Math.round(perfNow() - diagT0) : 0;
+    diagLog.push(('' + t).replace(/\B(?=(\d{3})+(?!\d))/g, ',') + ' ms  ' + msg);
+    if(diagLog.length > 200) diagLog.shift();
+  }
+
+  function diagReset(){ diagLog = []; diagT0 = perfNow(); }
+
+  function diagHeader(){
+    var ua = navigator.userAgent || '';
+    var n  = 0, bytes = 0;
+    try{
+      (state.photos || []).forEach(function(p){
+        if(p && p.img){ n++; bytes += p.img.length; }
+      });
+    }catch(e){}
+    var mem = '';
+    try{
+      if(navigator.deviceMemory) mem = ' · RAM~' + navigator.deviceMemory + 'GB';
+    }catch(e){}
+    return [
+      'รุ่น ' + APP_VER,
+      'จอ ' + screen.width + 'x' + screen.height + ' @' + (window.devicePixelRatio || 1) + 'x' + mem,
+      'รูป ' + n + ' ใบ รวม ' + (bytes / 1048576).toFixed(1) + ' MB' +
+        (n ? ' (เฉลี่ยใบละ ' + Math.round(bytes / n / 1024) + ' KB)' : ''),
+      ua,
+      '----------'
+    ].join('\n');
+  }
+
+  function diagShow(){
+    var box = $('pvDiag'), body = $('pvDiagBody');
+    if(!box || !body) return;
+    body.textContent = diagHeader() + '\n' + diagLog.join('\n');
+    box.style.display = 'block';
+  }
+
   /* wait until the preview iframe has laid out and its webfonts are in */
   function previewReady(){
     var frame = $('pvFrame');
@@ -6521,6 +6588,7 @@
                                c.indexOf('card')       !== -1);
                      });
     if(!pages.length) return Promise.reject(new Error('ไม่พบเนื้อหาสำหรับสร้าง PDF'));
+    diag('พบเนื้อหา ' + pages.length + ' ส่วน เตรียมวาด');
 
     var jsPDF = window.jspdf.jsPDF;
     var pdf = new jsPDF({ unit:'mm', format:'a4', orientation:'portrait', compress:true });
@@ -6629,42 +6697,73 @@
         while(sc > 1 && (wCss * sc) * (hCss * sc) > MAX_AREA){ sc -= 0.1; }
         sc = Math.max(1, Math.round(sc * 10) / 10);
 
-        return withCap(window.html2canvas(el, {
-          scale: sc, useCORS: true, backgroundColor: '#ffffff', logging: false,
-          width: wCss, height: hCss,
-          /* รูปที่โหลดไม่ขึ้นสักรูป ต้องไม่ทำให้ทั้งฉบับหยุดรอค้าง */
-          imageTimeout: 15000,
-          removeContainer: true,
-          /* capture exactly the element's own box - no surrounding page */
-          x: 0, y: 0, scrollX: 0, scrollY: 0,
-          windowWidth: wCss, windowHeight: hCss
-        }), 60000, 'สร้างหน้า ' + (i + 1) + ' ไม่สำเร็จ เครื่องอาจมีหน่วยความจำไม่พอ\n' +
-                   'ลองปิดแอปอื่นที่เปิดค้างไว้ หรือลดจำนวนรูปในรายงานลง');
+        diag('หน้า ' + (i + 1) + '/' + pages.length + ' เริ่ม · กล่อง ' +
+             wCss + 'x' + hCss + ' · ย่อ ' + sc + ' เท่า · ภาพ ' +
+             Math.round(wCss * sc) + 'x' + Math.round(hCss * sc) +
+             ' (' + ((wCss * sc * hCss * sc) / 1e6).toFixed(1) + ' ล้านจุด)');
+
+        /* ถ้าความละเอียดที่ตั้งไว้ทำไม่ไหว ลดลงแล้วลองใหม่เองอีกสองยก
+           ได้ภาพหยาบลงยังดีกว่าส่งรายงานไม่ออกเลย */
+        function attempt(scale, tryNo){
+          var cap = 45000;
+          return withCap(window.html2canvas(el, {
+            scale: scale, useCORS: true, backgroundColor: '#ffffff', logging: false,
+            width: wCss, height: hCss,
+            /* รูปที่โหลดไม่ขึ้นสักรูป ต้องไม่ทำให้ทั้งฉบับหยุดรอค้าง */
+            imageTimeout: 15000,
+            removeContainer: true,
+            /* capture exactly the element's own box - no surrounding page */
+            x: 0, y: 0, scrollX: 0, scrollY: 0,
+            windowWidth: wCss, windowHeight: hCss
+          }), cap, 'หมดเวลา ' + (cap / 1000) + ' วิ ที่ความละเอียด ' + scale + ' เท่า')
+          .then(function(cv){
+            diag('หน้า ' + (i + 1) + ' วาดเสร็จ · ได้ภาพ ' + cv.width + 'x' + cv.height);
+            return cv;
+          })
+          .catch(function(err){
+            diag('หน้า ' + (i + 1) + ' ยกที่ ' + tryNo + ' ไม่ผ่าน · ' +
+                 ((err && err.message) || err));
+            if(tryNo >= 3) throw err;
+            var next = tryNo === 1 ? 1.5 : 1;
+            diag('ลดความละเอียดเหลือ ' + next + ' เท่า แล้วลองใหม่');
+            return new Promise(function(r){ setTimeout(r, 300); })
+                   .then(function(){ return attempt(next, tryNo + 1); });
+          });
+        }
+
+        return attempt(sc, 1);
       }).then(function(canvas){
         place(canvas);
         freeCanvas(canvas);
+        diag('หน้า ' + (i + 1) + ' ลงกระดาษแล้ว · รวม ' + sheet + ' แผ่น');
         /* คืนจังหวะให้เบราว์เซอร์ได้หายใจและเก็บกวาดหน่วยความจำก่อนหน้าถัดไป
            ถ้าวาดรวดเดียวติดกันหมด iOS จะฆ่าหน้าเว็บทิ้งกลางทาง */
         return new Promise(function(r){ setTimeout(r, onPhone ? 120 : 0); });
       });
     }, Promise.resolve()).then(function(){
       root.classList.remove('exporting');
+      pvSay('กำลังรวมเป็นไฟล์...');
+      diag('วาดครบทุกหน้าแล้ว รวม ' + sheet + ' แผ่น · กำลังรวมเป็นไฟล์');
+      var blob = pdf.output('blob');
+      diag('ได้ไฟล์ PDF ขนาด ' + (blob.size / 1048576).toFixed(2) + ' MB');
       pvSay('');
-      return pdf.output('blob');
+      return blob;
     }).catch(function(err){
       root.classList.remove('exporting');
+      diag('ล้มเหลว · ' + ((err && err.message) || err));
       throw err;
     });
   }
 
   function sendPdf(){
     if(!readyGuard()) return;
+    diagReset(); diag('กดปุ่ม ส่งเป็นไฟล์ PDF');
     if(!$('pvOverlay') || $('pvOverlay').style.display !== 'flex'){ openPreview(); }
     pvSay('กำลังเตรียม...');
 
     ensurePdfLibs()
-      .then(previewReady)
-      .then(buildPdfBlob)
+      .then(function(){ diag('ตัวสร้าง PDF พร้อม'); return previewReady(); })
+      .then(function(){ diag('หน้าตัวอย่างพร้อม'); return buildPdfBlob(); })
       .then(function(blob){
         return shareFile(blob, reportFileName('.pdf'), 'application/pdf',
                          'ส่งไฟล์ PDF แล้ว', 'ดาวน์โหลดไฟล์ PDF แล้ว');
@@ -6672,6 +6771,7 @@
       .catch(function(err){
         pvSay('');
         console.error('sendPdf', err);
+        diagShow();
         alert('สร้างไฟล์ PDF ไม่สำเร็จ\n\n' + (err && err.message ? err.message : '') +
               '\n\nครั้งแรกต้องต่ออินเทอร์เน็ตเพื่อโหลดตัวสร้าง PDF\n' +
               'ระหว่างนี้ใช้ปุ่ม "พิมพ์" แทนได้ ซึ่งได้ไฟล์คมชัดกว่าด้วย');
@@ -6817,6 +6917,7 @@
 
   function sendReport(){
     if(!readyGuard()) return;
+    diagReset(); diag('กดปุ่ม ส่ง Report');
     if(!navigator.onLine){
       alert('ปุ่มนี้ต้องต่ออินเทอร์เน็ต\n\nระหว่างนี้ใช้ปุ่ม "ส่งเป็นไฟล์ PDF" แทนได้');
       return;
@@ -6836,8 +6937,8 @@
     var fileName = reportFileName('.pdf');
 
     ensurePdfLibs()
-      .then(previewReady)
-      .then(buildPdfBlob)
+      .then(function(){ diag('ตัวสร้าง PDF พร้อม'); return previewReady(); })
+      .then(function(){ diag('หน้าตัวอย่างพร้อม'); return buildPdfBlob(); })
       .then(function(blob){
         pvSay('กำลังอัปโหลดขึ้น Google Drive...');
         $('statusChip').textContent = 'กำลังอัปโหลดขึ้น Google Drive...';
@@ -6852,6 +6953,7 @@
       .catch(function(err){
         pvSay('');
         console.error('sendReport', err);
+        diagShow();
         $('statusChip').textContent = 'ส่ง Report ไม่สำเร็จ';
         alert('ส่ง Report ไม่สำเร็จ\n\n' + (err && err.message ? err.message : '') +
               '\n\nลองใหม่อีกครั้ง หรือใช้ปุ่ม "ส่งเป็นไฟล์ PDF" แทนไปก่อน');
@@ -7016,7 +7118,7 @@
      อ่านเลขเวอร์ชันจาก sw.js ที่บั๊มอยู่แล้วทุกรอบที่แก้ไฟล์
      จึงมีเลขเดียวให้ดูแล ไม่มีทางลืมบั๊กอีกตัวจนหลุด
      อ่านไม่ได้ (ไม่มีเน็ต) ก็ไม่เตะใครออก ใช้ของเดิมต่อไป */
-  var APP_VER = 'mce-report-4.4.1';   /* เลขรุ่นของไฟล์นี้ ต้องบั๊มทุกครั้งที่แก้ */
+  var APP_VER = 'mce-report-4.5.0';   /* เลขรุ่นของไฟล์นี้ ต้องบั๊มทุกครั้งที่แก้ */
 
   /* เก็บบัญชีไว้พร้อมติดเลขรุ่นของไฟล์ไว้ด้วย
      รีเฟรชหน้าแล้วยังอยู่ในระบบ เพราะเลขรุ่นยังตรงกัน
@@ -9007,6 +9109,31 @@
     var el = $('verTag');
     if(el){ el.textContent = 'เวอร์ชัน ' + APP_VER.replace('mce-report-', ''); }
   }
+
+  /* ปุ่มของกล่องบันทึกปัญหา */
+  on('pvDiagHide', 'click', function(){ $('pvDiag').style.display = 'none'; });
+  on('pvDiagCopy', 'click', function(){
+    var t = $('pvDiagBody').textContent || '';
+    if(navigator.clipboard && navigator.clipboard.writeText){
+      navigator.clipboard.writeText(t).then(function(){
+        $('pvDiagCopy').textContent = 'คัดลอกแล้ว';
+        setTimeout(function(){ $('pvDiagCopy').textContent = 'คัดลอก'; }, 1500);
+      }, function(){});
+    }
+  });
+
+  /* ข้อผิดพลาดที่ไม่มีใครรับไว้ ปกติจะหายเงียบไปเฉย ๆ
+     ระหว่างสร้าง PDF มันคือเบาะแสสำคัญที่สุด จึงจดเก็บไว้ให้หมด */
+  window.addEventListener('error', function(ev){
+    if(!diagT0) return;
+    diag('ข้อผิดพลาด · ' + (ev.message || '') +
+         (ev.filename ? ' @' + String(ev.filename).split('/').pop() + ':' + ev.lineno : ''));
+  });
+  window.addEventListener('unhandledrejection', function(ev){
+    if(!diagT0) return;
+    var r = ev.reason;
+    diag('คำสั่งค้าง · ' + ((r && r.message) || r));
+  });
 
   function bootAuth(){
     paintVerTag();
