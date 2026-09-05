@@ -6078,8 +6078,63 @@
      เดิมแปลงแค่บล็อกแรกที่เจอ พอมีบล็อก @media print เล็ก ๆ โผล่มาก่อน
      บล็อกจริง กฎงานพิมพ์ทั้งชุดจะไม่ถูกแปลง หน้าตัวอย่างเลยแสดงเป็นหน้าจอ
      ธรรมดา ช่องที่ไม่ได้กรอกก็ไม่ถูกซ่อน ตอนนี้แปลงให้ครบทุกบล็อก */
+  /* ---- ตัด CSS ของหน้าจอแอปออกก่อนส่งเข้ากรอบตัวอย่าง ----
+
+     กรอบตัวอย่างเคยได้รับ CSS ทั้งก้อนของแอป 902 กฎ ทั้งที่กฎของหน้าล็อกอิน
+     เมนู ลิ้นชัก ลงเวลา ใบงาน ใบคำขอ ไม่มีทางโผล่บนกระดาษเลยสักข้อ
+     ตัวสร้าง PDF ต้องไล่กฎทุกข้อกับทุกชิ้นส่วนบนกระดาษ กฎยิ่งเยอะยิ่งช้า
+     และทุกระบบที่เพิ่มในอนาคตจะมาถ่วงตรงนี้เรื่อย ๆ ถ้าไม่แยกกันตั้งแต่ตอนนี้
+
+     รายชื่อข้างล่างไม่ได้เดาจากชื่อ แต่ไล่ตรวจกับ markup ของกระดาษจริงแล้วว่า
+     ไม่มีตัวไหนถูกใช้บนกระดาษ ตระกูลที่ชนกัน เช่น .pf- (มีทั้งโปรไฟล์และท้ายกระดาษ)
+     .sig- (มีทั้งแผ่นวาดและช่องลายเซ็นบนกระดาษ) .btn .emp- .tpl- .pv-overlay
+     จึงไม่อยู่ในรายการนี้ เพราะตัดแล้วกระดาษจะเพี้ยน */
+  var APP_ONLY_CSS = [
+    '.scr','#authScreen','#loadScreen','#menuScreen','#jobScreen','#reqScreen','#jobPanel',
+    '.auth-','.ver-tag','.ld-','.menu-','.dw-','.drawer','.people-','.stat-','.cal-',
+    '.req-','.job-','.jb-','.jp-','.site-','.tl-','.geo-','.map-','.status-chip','.install',
+    '.modal','.alert-','.pill','.badge','.pv-bar','.pv-title','.pv-hint','.pv-actions',
+    '.pv-diag','.pv-zoom','.cust-','.bulk','.brand-bar','.toast','.fab','.chip','.avatar',
+    '.sw-','.upd-'
+  ];
+
+  function cssIsAppOnly(sel){
+    var s = sel.trim();
+    if(!s) return false;
+    for(var i = 0; i < APP_ONLY_CSS.length; i++){
+      if(s.indexOf(APP_ONLY_CSS[i]) === 0) return true;
+    }
+    return false;
+  }
+
+  function stripAppCss(css){
+    var out = '', i = 0, n = css.length;
+    while(i < n){
+      var open = css.indexOf('{', i);
+      if(open === -1){ out += css.slice(i); break; }
+      var head = css.slice(i, open), depth = 1, j = open + 1;
+      while(j < n && depth > 0){
+        var c = css.charAt(j);
+        if(c === '{') depth++; else if(c === '}') depth--;
+        j++;
+      }
+      var body = css.slice(open + 1, j - 1), ht = head.replace(/^\s+/, '');
+      if(ht.charAt(0) === '@'){
+        /* @media กับ @supports มีกฎซ้อนอยู่ข้างใน ต้องไล่เข้าไปตัดด้วย */
+        out += /^@(media|supports)/i.test(ht)
+             ? head + '{' + stripAppCss(body) + '}'
+             : head + '{' + body + '}';
+      } else {
+        var keep = ht.split(',').filter(function(s){ return !cssIsAppOnly(s); });
+        if(keep.length){ out += head.match(/^\s*/)[0] + keep.join(',') + '{' + body + '}'; }
+      }
+      i = j;
+    }
+    return out;
+  }
+
   function printCssToScreen(css){
-    return css.split('@media print{').join('@media all{');
+    return stripAppCss(css).split('@media print{').join('@media all{');
   }
 
   var pvFit = null;      /* re-layout function for the current preview */
@@ -7131,7 +7186,15 @@
      อ่านเลขเวอร์ชันจาก sw.js ที่บั๊มอยู่แล้วทุกรอบที่แก้ไฟล์
      จึงมีเลขเดียวให้ดูแล ไม่มีทางลืมบั๊กอีกตัวจนหลุด
      อ่านไม่ได้ (ไม่มีเน็ต) ก็ไม่เตะใครออก ใช้ของเดิมต่อไป */
-  var APP_VER = 'mce-report-4.6.0';   /* เลขรุ่นของไฟล์นี้ ต้องบั๊มทุกครั้งที่แก้ */
+  /* ---- โหมดเรียบง่าย ----
+     true  = ล็อกอินแล้วเข้าหน้าทำรายงานเลย ไม่ผ่านเมนู ไม่มีลิ้นชัก
+             ระบบลงเวลา ใบงาน ใบคำขอ โปรไฟล์ ยังอยู่ในไฟล์ครบ แค่ไม่เปิดให้เข้า
+     false = กลับไปใช้เต็มรูปแบบเหมือนเดิม
+     ตั้งไว้เพื่อพิสูจน์ว่าที่ iPhone สร้าง PDF ไม่ได้ เป็นเพราะระบบที่เพิ่มเข้ามาหรือไม่
+     เปลี่ยนค่าตรงนี้บรรทัดเดียว ไม่ต้องแก้ที่อื่นเลย */
+  var SLIM_MODE = true;
+
+  var APP_VER = 'mce-report-4.7.0-slim';   /* เลขรุ่นของไฟล์นี้ ต้องบั๊มทุกครั้งที่แก้ */
 
   /* เก็บบัญชีไว้พร้อมติดเลขรุ่นของไฟล์ไว้ด้วย
      รีเฟรชหน้าแล้วยังอยู่ในระบบ เพราะเลขรุ่นยังตรงกัน
@@ -9052,6 +9115,7 @@
     if(loadTimer){ clearTimeout(loadTimer); }
     loadTimer = setTimeout(function(){
       loadTimer = null;
+      if(SLIM_MODE){ showScreen('form'); return; }
       paintMenu();
       showScreen('menu');
     }, 5000);
@@ -9155,6 +9219,7 @@
     if(d){
       /* เลขรุ่นตรงกัน = แค่รีเฟรชหน้า ไม่ต้องให้เข้าใหม่ */
       me = { u:d.u, name:d.name, role:d.role };
+      if(SLIM_MODE){ showScreen('form'); return; }
       paintMenu();
       showScreen('menu');
       return;
