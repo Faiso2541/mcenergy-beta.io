@@ -4855,14 +4855,20 @@
     var list  = state.photos || [];
     var empty = [];
     list.forEach(function(p, i){ if(!p.img){ empty.push(i); } });
+    var filled = list.length - empty.length;
+
+    /* รูปเป็นข้อบังคับแล้ว
+       ของเดิมยอมให้ผ่านถ้าไม่ใส่รูปเลยสักใบ ซึ่งทำให้รายงานที่ไม่มีรูปหลุดไปถึงลูกค้าได้
+       ตอนนี้ต้องมีรูปอย่างน้อยหนึ่งใบเสมอ จึงจะดูตัวอย่างหรือส่งได้
+       ช่องที่ไม่ต้องการ ให้กด "ลบช่องนี้" ที่มุมช่องว่างแทนการปล่อยว่างไว้ */
+    if(!filled){
+      return { ok:false, empty:(empty.length ? empty : [0]), none:true,
+               byTemplate:!!state.photoTpl, total:Math.max(1, list.length) };
+    }
 
     if(!empty.length) return { ok:true, empty:[] };
 
-    var byTemplate = !!state.photoTpl;
-    if(!byTemplate && empty.length === list.length){
-      return { ok:true, empty:[] };            /* no pictures at all - allowed */
-    }
-    return { ok:false, empty:empty, byTemplate:byTemplate, total:list.length };
+    return { ok:false, empty:empty, byTemplate:!!state.photoTpl, total:list.length };
   }
 
   function photoGuard(){
@@ -4884,13 +4890,16 @@
       if(slot){ slot.classList.add('is-missing','pulse'); }
     });
 
-    var why = st.byTemplate
-      ? 'แบบฟอร์มที่เลือกไว้กำหนดช่องรูปตามขั้นตอนงาน ต้องใส่ให้ครบทุกช่อง'
-      : 'ถ้าไม่แนบรูปเลยก็ส่งได้ แต่เมื่อใส่แล้วต้องใส่ให้ครบ\n' +
-        'ถ้าไม่ต้องการช่องที่เหลือ กด "ลบช่องนี้" ที่มุมช่องว่างได้';
+    var why = st.none
+      ? 'รายงานทุกฉบับต้องมีรูปประกอบอย่างน้อยหนึ่งรูป จึงจะดูตัวอย่างหรือส่งได้\n' +
+        'แตะช่องรูปเพื่อถ่ายใหม่ หรือเลือกจากคลังภาพในเครื่อง'
+      : st.byTemplate
+        ? 'แบบฟอร์มที่เลือกไว้กำหนดช่องรูปตามขั้นตอนงาน ต้องใส่ให้ครบทุกช่อง'
+        : 'เมื่อใส่รูปแล้วต้องใส่ให้ครบทุกช่อง\n' +
+          'ถ้าไม่ต้องการช่องที่เหลือ กด "ลบช่องนี้" ที่มุมช่องว่างได้';
 
     showAlertModal({
-      title:  'ใส่รูปให้ครบตามที่ระบบกำหนด',
+      title:  st.none ? 'ยังไม่ได้ใส่รูป' : 'ใส่รูปให้ครบตามที่ระบบกำหนด',
       count:  { done: filledCount, total: st.total, label: 'ความคืบหน้า' },
       detail: 'ยังว่าง: ช่องที่ ' + shown + '\n' + why,
       go: { label: 'ไปที่ช่องที่ ' + nums[0], fn: function(){
@@ -4899,7 +4908,9 @@
       }}
     });
 
-    $('statusChip').textContent = 'ยังใส่รูปไม่ครบ · เหลืออีก ' + st.empty.length + ' ช่อง';
+    $('statusChip').textContent = st.none
+      ? 'ยังไม่ได้ใส่รูป · ต้องมีอย่างน้อยหนึ่งรูป'
+      : 'ยังใส่รูปไม่ครบ · เหลืออีก ' + st.empty.length + ' ช่อง';
     return false;
   }
 
@@ -5780,7 +5791,7 @@
   /* ---------- บันทึกปัญหาตอนสร้าง PDF ----------
      บนมือถือเปิดหน้าต่างนักพัฒนาดูไม่ได้ ถ้าค้างก็ได้แต่เดากันไปเรื่อย
      ตัวนี้จดทุกขั้นตอนพร้อมเวลาไว้ในแอปเลย พอมีปัญหาก็กางให้ดูได้ทันที */
-  var APP_VER = 'mce-report-5.0.0';   /* เลขรุ่น ต้องบั๊มทุกครั้งที่แก้ไฟล์นี้ */
+  var APP_VER = 'mce-report-5.1.0';   /* เลขรุ่น ต้องบั๊มทุกครั้งที่แก้ไฟล์นี้ */
   var diagLog = [], diagT0 = 0;
 
   function diag(msg){
