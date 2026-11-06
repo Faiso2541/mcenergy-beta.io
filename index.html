@@ -373,7 +373,7 @@
   .cbo-opt.sel,.cbo-opt:hover{background:var(--lav-bg);}
   .cbo-opt b{background:#FDE68A;font-weight:700;border-radius:2px;}
   .cbo-new{color:var(--navy);font-weight:700;}
-  .cbo-new small{display:block;font-weight:400;color:var(--ink-faint);font-size:11.5px;margin-top:2px;}
+  .cbo-new small,.cbo-opt small{display:block;font-weight:400;color:var(--ink-faint);font-size:11.5px;margin-top:2px;}
   .cbo-none{padding:9px 12px;font-size:13px;color:var(--ink-faint);}
 
   .emp-other{display:flex;gap:8px;margin-bottom:12px;}
@@ -1693,10 +1693,7 @@
     <div class="actions">
       <!-- แถบบนเหลือเฉพาะปุ่มที่ใช้ทุกครั้ง ที่เหลือเก็บในเมนู ⋯
            ของเดิมเรียง 10 ปุ่มติดกัน บนมือถือจะล้นเป็นสองแถวและหาปุ่มยาก -->
-      <button class="tb-back" id="backHub" type="button">
-        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="15 18 9 12 15 6"/></svg>
-        กลับหน้าเมนู
-      </button>
+      <!-- ปุ่ม "กลับหน้าเมนู" เอาออกแล้ว (โค้ดผูกปุ่มเช็กก่อน ถ้าไม่มีปุ่มก็ข้ามไปเอง) -->
       <span class="tb-right">
       <button class="btn btn-preview" id="previewBtn" type="button">ดูตัวอย่าง</button>
 
@@ -1860,6 +1857,7 @@
           <option value="BIGL Plant 3">BIGL Plant 3</option>
           <option value="BKK CITY">BKK CITY</option>
           <option value="CBRE">CBRE</option>
+          <option value="Colgate">Colgate</option>
           <option value="Colgate GDC">Colgate GDC</option>
           <option value="Colgate ILP">Colgate ILP</option>
           <option value="Colgate RPL">Colgate RPL</option>
@@ -1875,7 +1873,7 @@
           <option value="KNAUF SIAM GYPSUM">KNAUF SIAM GYPSUM</option>
           <option value="LION">LION</option>
           <option value="Mercury Ville">Mercury Ville</option>
-          <option value="MEUYUME">MEUYUME</option>
+          <option value="MEIYUME">MEIYUME</option>
           <option value="MIRACLE BIO">MIRACLE BIO</option>
           <option value="NSTDA - BIOTEC">NSTDA - BIOTEC</option>
           <option value="NSTDA - CO">NSTDA - CO</option>
@@ -1886,6 +1884,7 @@
           <option value="NXP">NXP</option>
           <option value="Pearl Bangkok">Pearl Bangkok</option>
           <option value="PEPSI">PEPSI</option>
+          <option value="PTT">PTT</option>
           <option value="PTT Data Center">PTT Data Center</option>
           <option value="PTT GC">PTT GC</option>
           <option value="PTT Innovation">PTT Innovation</option>
@@ -1910,9 +1909,25 @@
         
         </select>
       </div>
-      <div class="field" id="customerOtherWrap">
+      <div class="field" id="customerOtherWrap" style="display:none;">
         <label>ระบุชื่อลูกค้า</label>
-        <input type="text" id="customerOther" placeholder="ลูกค้ารายใหม่ ไฟล์จะเก็บใต้ Other...">
+        <input type="text" id="customerOther" placeholder="พิมพ์ชื่อลูกค้า เช่น บริษัท ABC จำกัด">
+        <small id="customerOtherHint" style="display:block;margin-top:4px;font-size:11px;color:#6b7280;line-height:1.4;">ไฟล์จะเก็บที่โฟลเดอร์ Other</small>
+      </div>
+      <div class="field" id="customerSubWrap" style="display:none;">
+        <label>ระบุชื่อลูกค้า</label>
+        <select id="customerSub">
+          <option value="">-- เลือกลูกค้า --</option>
+          <option value="3M Innovation">3M Innovation</option>
+          <option value="3M Thailand">3M Thailand</option>
+          <option value="Colgate RPL">Colgate RPL</option>
+          <option value="Colgate GDC">Colgate GDC</option>
+          <option value="Colgate RSP">Colgate RSP</option>
+          <option value="Colgate ILP">Colgate ILP</option>
+          <option value="PTT Innovation">PTT Innovation</option>
+          <option value="PTT GC">PTT GC</option>
+        </select>
+        <small id="customerSubHint" style="display:block;margin-top:4px;font-size:11px;color:#6b7280;line-height:1.4;"></small>
       </div>
       <div class="field full"><label>Job Details</label><input type="text" id="customerDetail" placeholder="Job Details"></div>
       <div class="field"><label>Location</label>
@@ -2558,7 +2573,7 @@
   var fieldIds = ['company','customer','customerDetail','location','equipType',
     'tagNo','modelNo','serialNo','startDate','summary','parts',
     'employees','clientName','reportDate','contractType','contractOther','reportNo','reportRev',
-    'locationOther','customerOther','equipTypeOther'];
+    'locationOther','customerOther','customerSub','equipTypeOther'];
 
   function loadDraft(){
     try{
@@ -2871,14 +2886,58 @@
      ลูกค้ารายใหม่ที่ไม่ได้เข้าต่อเนื่อง ไม่ต้องสร้างเป็นลูกค้าประจำในระบบ
      เลือก Other แล้วพิมพ์ชื่อลงช่องนี้ ไฟล์จะไปกองอยู่ใต้ Other
      โดยใช้ชื่อที่พิมพ์เป็นชื่อสาขา ยังแยกดูเป็นรายเจ้าได้ */
-  /* ช่องนี้แสดงตลอดแล้ว ไม่ซ่อนตามการเลือกอีก
-     ปล่อยว่างไว้ได้ ตอนออกเป็น PDF ระบบซ่อนช่องที่ไม่ได้กรอกให้เองอยู่แล้ว
-     และไม่ล้างค่าทิ้งเวลาสลับลูกค้า เพราะช่างอาจพิมพ์ค้างไว้ก่อน */
+  /* ช่องพิมพ์ชื่อลูกค้า (customerOther) โชว์เฉพาะตอน Customer เป็น Other
+     ช่างพิมพ์ชื่อที่ไม่มีในป๊อปอัป ระบบตั้ง Customer เป็น Other แล้วยกชื่อมาใส่ให้ */
+
+  /* ลูกค้าแบบกลุ่ม: เลือกชื่อหลักแล้วต้องเลือกชื่อลูกค้าย่อยต่อจากป๊อปอัป
+     ไฟล์ยังลงโฟลเดอร์ของลูกค้าย่อย (ชื่อเดิมในระบบ) รายงานเก่าจึงไม่แยกโฟลเดอร์
+     อยากเพิ่มกลุ่ม เติมที่นี่ และเพิ่ม <option> ใน #customer กับ #customerSub ให้ตรงกัน */
+  var CUST_GROUPS = {
+    'CBRE': ['3M Innovation', '3M Thailand'],
+    'Colgate': ['Colgate RPL', 'Colgate GDC', 'Colgate RSP', 'Colgate ILP'],
+    'PTT': ['PTT Innovation', 'PTT GC']
+  };
+  var CUST_PARENT_OF = {};
+  Object.keys(CUST_GROUPS).forEach(function(g){
+    CUST_GROUPS[g].forEach(function(n){ CUST_PARENT_OF[n] = g; });
+  });
+
+  function fillCustomerSub(parent){
+    var sel = $('customerSub'), keep = sel.value, subs = CUST_GROUPS[parent] || [];
+    sel.innerHTML = '<option value="">-- เลือกลูกค้า --</option>' + subs.map(function(n){
+      return '<option value="' + custEsc(n) + '">' + custEsc(n) + '</option>';
+    }).join('');
+    sel.value = subs.indexOf(keep) !== -1 ? keep : '';
+  }
+
   function updateCustomerOtherVisibility(){
-    $('customerOtherWrap').style.display = '';
+    /* ร่างเก่าที่เก็บเป็นชื่อย่อยตรง ๆ เช่น "Colgate RPL" แปลงเป็นกลุ่ม + ชื่อย่อย */
+    var c = $('customer').value, p = CUST_PARENT_OF[c];
+    if(p){ $('customer').value = p; fillCustomerSub(p); $('customerSub').value = c; c = p; }
+
+    var isOther = c === 'Other', isGroup = !!CUST_GROUPS[c];
+    $('customerOtherWrap').style.display = isOther ? '' : 'none';
+    if(!isOther){ $('customerOther').value = ''; }
+    $('customerSubWrap').style.display = isGroup ? '' : 'none';
+    if(isGroup){ fillCustomerSub(c); } else { $('customerSub').value = ''; }
+    updateCustomerOtherHint();
+  }
+  function updateCustomerOtherHint(){
+    var n = $('customerOther').value.trim();
+    $('customerOtherHint').textContent = n
+      ? 'ไฟล์จะเก็บที่ Other › ' + n
+      : 'ไม่ใส่ชื่อก็ได้ ไฟล์จะเก็บที่โฟลเดอร์ Other';
+    var sub = $('customerSub').value;
+    $('customerSubHint').textContent = sub
+      ? 'ไฟล์จะเก็บที่โฟลเดอร์ ' + sub
+      : 'ต้องเลือกชื่อลูกค้าก่อนส่งรายงาน';
+    $('customerSubHint').style.color = sub ? '#6b7280' : '#dc2626';
   }
   $('customerOther').addEventListener('input', function(){
-    syncFooter(); saveDraft();
+    updateCustomerOtherHint(); syncFooter(); syncCover(); saveDraft();
+  });
+  $('customerSub').addEventListener('change', function(){
+    updateCustomerOtherHint(); syncFooter(); syncCover(); saveDraft();
   });
   $('customer').addEventListener('change', function(){
     updateCustomerOtherVisibility();
@@ -2920,10 +2979,21 @@
 
   /* ลูกค้าที่มีอยู่ในรายการ */
   function custPick(name){
-    $('customer').value = name;
+    /* เลือกชื่อย่อยตรง ๆ จากการค้นหา (เช่นพิมพ์ RPL) ให้ตั้งกลุ่มกับชื่อย่อยให้เลย */
+    var parent = CUST_PARENT_OF[name];
+    $('customer').value = parent || name;
+    $('customerSearch').value = parent || name;
     $('customerOther').value = '';
-    $('customerSearch').value = name;
-    custClose(); updateCustomerOtherVisibility(); syncFooter(); saveDraft();
+    if(parent){ fillCustomerSub(parent); $('customerSub').value = name; }
+    else if(CUST_GROUPS[name]){ fillCustomerSub(name); $('customerSub').value = ''; }
+    custClose(); updateCustomerOtherVisibility(); syncFooter(); syncCover(); saveDraft();
+    /* เลือกชื่อกลุ่ม พาไปป๊อปอัปเลือกชื่อลูกค้าต่อเลย */
+    if(CUST_GROUPS[name]){ setTimeout(function(){ openCustomerSub(); }, 0); }
+  }
+  function openCustomerSub(){
+    var sel = $('customerSub');
+    sel.focus();
+    try{ if(sel.showPicker){ sel.showPicker(); } }catch(e){}
   }
 
   /* ชื่อที่ไม่มีในรายการ เก็บเป็น Other แล้วพกชื่อจริงไปด้วย
@@ -2934,7 +3004,7 @@
     /* ช่องค้นหาแสดงหมวดที่เลือกจริงคือ Other ส่วนชื่อเต็มไปอยู่ช่องระบุชื่อ
        ที่โผล่ขึ้นมาข้างล่าง ช่างจึงเห็นชัดว่าไฟล์นี้จะไปลงที่ Other */
     $('customerSearch').value = 'Other';
-    custClose(); updateCustomerOtherVisibility(); syncFooter(); saveDraft();
+    custClose(); updateCustomerOtherVisibility(); syncFooter(); syncCover(); saveDraft();
   }
 
   function custRender(){
@@ -2951,21 +3021,23 @@
 
     var exact = CUST_NAMES.some(function(n){ return n.toLowerCase() === ql; });
     var html  = hits.map(function(n){
-      return '<div class="cbo-opt" data-n="' + custEsc(n) + '">' + custMark(n, q) + '</div>';
+      var tip = CUST_GROUPS[n] ? '<small>เลือกแล้วระบุชื่อลูกค้าต่อ: ' + custEsc(CUST_GROUPS[n].join(', ')) + '</small>'
+              : CUST_PARENT_OF[n] ? '<small>อยู่ในกลุ่ม ' + custEsc(CUST_PARENT_OF[n]) + '</small>' : '';
+      return '<div class="cbo-opt" data-n="' + custEsc(n) + '">' + custMark(n, q) + tip + '</div>';
     }).join('');
 
     if(!html && q){ html = '<div class="cbo-none">ไม่พบชื่อนี้ในรายการ</div>'; }
 
     if(q && !exact && ql !== 'other'){
       html += '<div class="cbo-opt cbo-new" data-new="1">ใช้ชื่อ "' + custEsc(q) + '"' +
-              '<small>ไม่มีในรายการ รายงานจะไปเก็บใต้ Other</small></div>';
+              '<small>ลูกค้ารายใหม่ ไฟล์จะเก็บที่ Other › ' + custEsc(q) + '</small></div>';
     }
 
     /* Other ยังอยู่ท้ายรายการเสมอ เผื่อช่างอยากลง Other เฉย ๆ โดยไม่ระบุชื่อ
        เหมือนที่เคยเลือกได้ตอนเป็นป๊อปอัป */
     if(!ql || 'other'.indexOf(ql) !== -1){
-      html += '<div class="cbo-opt cbo-new" data-other="1">Other' +
-              '<small>ไม่ระบุชื่อ ลงเป็น Other อย่างเดียว</small></div>';
+      html += '<div class="cbo-opt cbo-new" data-other="1">Other (ลูกค้ารายใหม่)' +
+              '<small>เลือกแล้วพิมพ์ชื่อลูกค้าในช่องที่โผล่ขึ้นมาด้านล่าง</small></div>';
     }
 
     $('customerList').innerHTML = html;
@@ -2990,7 +3062,8 @@
       $('customer').value = 'Other';
       $('customerOther').value = '';
       $('customerSearch').value = 'Other';
-      custClose(); updateCustomerOtherVisibility(); syncFooter(); saveDraft();
+      custClose(); updateCustomerOtherVisibility(); syncFooter(); syncCover(); saveDraft();
+      $('customerOther').focus();
       return;
     }
     if(row.getAttribute('data-new')){ custPickNew($('customerSearch').value.trim()); }
@@ -3046,6 +3119,7 @@
   function customerName(){
     var v = val('customer');
     if(v === 'Other'){ return val('customerOther').trim() || 'Other'; }
+    if(CUST_GROUPS[v]){ return val('customerSub') || v; }
     return v;
   }
 
@@ -6648,6 +6722,11 @@
     diagReset(); diag('กดปุ่ม ส่ง Report');
     if(!navigator.onLine){
       alert('ปุ่มนี้ต้องต่ออินเทอร์เน็ต\n\nระหว่างนี้ใช้ปุ่ม "ส่งเป็นไฟล์ PDF" แทนได้');
+      return;
+    }
+    if(CUST_GROUPS[val('customer')] && !val('customerSub')){
+      alert('ยังไม่ได้ระบุชื่อลูกค้า\n\nเลือก ' + val('customer') + ' แล้ว ต้องเลือกชื่อลูกค้าในช่อง "ระบุชื่อลูกค้า" ด้วย');
+      openCustomerSub();
       return;
     }
     if(!customerName()){
