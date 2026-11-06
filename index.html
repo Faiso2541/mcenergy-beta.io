@@ -6317,7 +6317,7 @@
   /* ---------- บันทึกปัญหาตอนสร้าง PDF ----------
      บนมือถือเปิดหน้าต่างนักพัฒนาดูไม่ได้ ถ้าค้างก็ได้แต่เดากันไปเรื่อย
      ตัวนี้จดทุกขั้นตอนพร้อมเวลาไว้ในแอปเลย พอมีปัญหาก็กางให้ดูได้ทันที */
-  var APP_VER = '3.0.0';
+  var APP_VER = '3.0.1';
 
   /* ---- หน้าเปิดแอป ----
      เวลาที่ค้างหน้าจอ หน่วยเป็นมิลลิวินาที
@@ -6874,7 +6874,25 @@
   /* ---- installable / offline app ---- */
   if('serviceWorker' in navigator && location.protocol.indexOf('http') === 0){
     window.addEventListener('load', function(){
-      navigator.serviceWorker.register('sw.js').catch(function(){ /* opened without a server - fine */ });
+      /* updateViaCache:'none' = ไม่ใช้ sw.js จากแคชของเบราว์เซอร์ เช็กของใหม่จากเซิร์ฟเวอร์ทุกครั้ง */
+      navigator.serviceWorker.register('sw.js', { updateViaCache: 'none' }).then(function(reg){
+        /* เช็กเวอร์ชันใหม่ตอนเปิด และทุกครั้งที่ช่างสลับกลับมาที่แอป (แอปบนหน้าจอโฮมมักค้างไว้ไม่ปิด) */
+        reg.update();
+        document.addEventListener('visibilitychange', function(){
+          if(document.visibilityState === 'visible'){ reg.update(); }
+        });
+      }).catch(function(){ /* opened without a server - fine */ });
+
+      /* พอ sw.js ตัวใหม่เข้าทำงาน รีโหลดหน้าให้เองครั้งเดียว ช่างจะได้หน้าใหม่ทันที
+         ไม่ต้องลบแอปแล้วติดตั้งใหม่ ร่างที่กรอกค้างไว้เก็บใน localStorage ไม่หาย */
+      var hadController = !!navigator.serviceWorker.controller, reloading = false;
+      navigator.serviceWorker.addEventListener('controllerchange', function(){
+        if(!hadController){ hadController = true; return; }   /* ติดตั้งครั้งแรก ไม่ต้องรีโหลด */
+        if(reloading) return;
+        reloading = true;
+        try{ saveDraft(true); }catch(e){}
+        location.reload();
+      });
     });
   }
 
