@@ -458,6 +458,9 @@
     position:fixed;inset:0;background:rgba(20,25,40,.5);
     display:flex;align-items:center;justify-content:center;z-index:100;padding:20px;
   }
+  /* กล่องแจ้งเตือน / ยืนยัน ต้องอยู่บนสุดเสมอ
+     ถูกเรียกขณะเปิดหน้าเลือกแบบฟอร์ม (100) หน้าดูตัวอย่าง (200) หรือกล่องส่งสำเร็จ (300) */
+  #alertModal{z-index:400;}
   .modal-box{
     background:var(--paper);border-radius:14px;max-width:520px;width:100%;
     padding:22px 24px;max-height:88vh;overflow-y:auto;
@@ -1178,6 +1181,8 @@
       padding:0 !important;font-size:11.5pt;font-weight:500;color:#000 !important;
       flex:1 1 auto;min-width:0;
     }
+    /* รายการ Scope of work ที่ยาว ให้ขึ้นบรรทัดใหม่ ไม่ถูกตัดท้ายเหมือนช่องพิมพ์ */
+    .chk-row .pv-text.chk-text{display:block;white-space:normal;word-break:break-word;line-height:1.35;}
     .chk-status{flex:0 0 auto;gap:4mm;}
     .chk-status button.sel{
       background:transparent !important;border:none !important;
@@ -2181,9 +2186,9 @@
 <div class="modal-overlay" id="alertModal" style="display:none;">
   <div class="alert-box" role="alertdialog" aria-labelledby="alertTitle">
     <div class="alert-top">
-      <div class="alert-icon" aria-hidden="true">!</div>
+      <div class="alert-icon" id="alertIcon" aria-hidden="true">!</div>
       <div>
-        <p class="alert-eyebrow">แจ้งเตือน</p>
+        <p class="alert-eyebrow" id="alertEyebrow">แจ้งเตือน</p>
         <p class="alert-title" id="alertTitle">—</p>
       </div>
     </div>
@@ -2193,6 +2198,7 @@
       </div>
       <div class="alert-bar" id="alertBarWrap"><span id="alertBar" style="width:0%;"></span></div>
       <p class="alert-detail" id="alertDetail"></p>
+      <input type="text" id="alertCopy" readonly style="display:none;width:100%;box-sizing:border-box;margin-top:10px;padding:9px 10px;border:1px solid var(--line);border-radius:8px;font-size:13px;background:#fff;color:var(--ink);">
     </div>
     <div class="alert-acts">
       <button type="button" class="alert-close" id="alertClose">ปิด</button>
@@ -4689,10 +4695,13 @@
     }
     if(btn.classList.contains('hb-del')){
       var hbBox = btn.closest('.hb-sheet');
-      if(hbBox && hbSheets().length > 1 && confirm('ลบแผ่นนี้ใช่หรือไม่?')){
-        state.hb.splice(+hbBox.getAttribute('data-s'), 1);
-        renderChecklist();
-        saveDraft(true);
+      if(hbBox && hbSheets().length > 1){
+        appConfirm({ title: 'ลบแผ่นนี้ใช่หรือไม่?', detail: 'ค่าที่กรอกในแผ่นนี้จะถูกลบ',
+                     ok: 'ลบ', danger: true, onOk: function(){
+          state.hb.splice(+hbBox.getAttribute('data-s'), 1);
+          renderChecklist();
+          saveDraft(true);
+        }});
       }
       return;
     }
@@ -4721,10 +4730,13 @@
     }
     if(btn.classList.contains('ct-sheet-del')){
       var sBox = btn.closest('.ct-sheet');
-      if(sBox && ctSheets().length > 1 && confirm('ลบแผ่นนี้ใช่หรือไม่?')){
-        state.ct.splice(+sBox.getAttribute('data-s'), 1);
-        renderChecklist();
-        saveDraft(true);
+      if(sBox && ctSheets().length > 1){
+        appConfirm({ title: 'ลบแผ่นนี้ใช่หรือไม่?', detail: 'ค่าที่กรอกในแผ่นนี้จะถูกลบ',
+                     ok: 'ลบ', danger: true, onOk: function(){
+          state.ct.splice(+sBox.getAttribute('data-s'), 1);
+          renderChecklist();
+          saveDraft(true);
+        }});
       }
       return;
     }
@@ -4803,10 +4815,12 @@
       var box = btn.closest('.log-sheet');
       var list = state.logs[box.getAttribute('data-t')] || [];
       if(list.length < 2) return;
-      if(!confirm('ลบ Log sheet แผ่นนี้ใช่หรือไม่?')) return;
-      list.splice(+box.getAttribute('data-s'), 1);
-      renderChecklist();
-      saveDraft(true);
+      appConfirm({ title: 'ลบ Log sheet แผ่นนี้ใช่หรือไม่?', detail: 'ค่าที่กรอกในแผ่นนี้จะถูกลบ',
+                   ok: 'ลบ', danger: true, onOk: function(){
+        list.splice(+box.getAttribute('data-s'), 1);
+        renderChecklist();
+        saveDraft(true);
+      }});
       return;
     }
     /* a status button: repaint just that row, so the tables below keep their
@@ -4857,6 +4871,21 @@
     renderPhotos();
   }
 
+  /* ช่องรูปตามขั้นตอนงาน ใช้ได้เฉพาะตอนเลือกฟอร์มที่มีคำอธิบายใต้รูปแค่ 1 ฟอร์ม
+     ถ้าเลือกตั้งแต่ 2 ฟอร์มขึ้นไป (เช่น Clean tube + Cooling Tower) ช่องรูปจะเยอะเกิน
+     จึงกลับเป็นช่องรูปธรรมดา 6 ช่อง ไม่มีคำอธิบาย เพิ่ม / ลบช่องได้ และไม่บังคับใส่ครบทุกช่อง
+     รูปที่ถ่ายไว้แล้วยังอยู่ครบ เอาฟอร์มออกจนเหลือ 1 ฟอร์ม คำอธิบายของฟอร์มนั้นจะกลับมา */
+  function syncStepPhotos(){
+    var stepForms = (state.templates || []).filter(function(k){
+      return TEMPLATES[k] && TEMPLATES[k].photoSteps;
+    });
+    if(stepForms.length === 1){
+      if(state.photoTpl !== stepForms[0]){ applyStepPhotos(stepForms[0]); }
+      return;
+    }
+    if(state.photoTpl){ clearStepPhotos(state.photoTpl); }
+  }
+
   /* ---- template picker modal (multi-select) ---- */
   function syncTplModal(){
     Array.prototype.forEach.call($('tplModal').querySelectorAll('.modal-opt'), function(op){
@@ -4898,23 +4927,33 @@
     var tpl = TEMPLATES[key];
     if(!tpl) return;
 
+    function afterToggle(){
+      state.templates = TPL_ORDER.filter(tplSelected);
+      syncStepPhotos();
+      ensureTemplateData();
+      syncTplModal();
+      renderChecklist();
+      saveDraft();
+    }
+    function removeTpl(){
+      state.templates = state.templates.filter(function(k2){ return k2 !== key; });
+      afterToggle();
+    }
     if(tplSelected(key)){
       var hasData = tpl.mode === 'table'
         ? state.partsTable.some(function(r){ return r.name || r.partNo || r.desc || r.qty; })
         : state.checklist.some(function(it){ return it.tpl === key; });
-      if(hasData && !confirm('เอาแบบฟอร์ม "' + tpl.name + '" ออกจากงานนี้?\n' +
-                             'รายการและค่าที่กรอกของแบบฟอร์มนี้จะถูกลบ')){ return; }
-      state.templates = state.templates.filter(function(k2){ return k2 !== key; });
-      clearStepPhotos(key);
+      if(hasData){
+        appConfirm({ title: 'เอาแบบฟอร์ม "' + tpl.name + '" ออกจากงานนี้?',
+                     detail: 'รายการและค่าที่กรอกของแบบฟอร์มนี้จะถูกลบ',
+                     ok: 'เอาออก', danger: true, onOk: removeTpl });
+        return;
+      }
+      removeTpl();
     } else {
       state.templates.push(key);
-      applyStepPhotos(key);
+      afterToggle();
     }
-    state.templates = TPL_ORDER.filter(tplSelected);
-    ensureTemplateData();
-    syncTplModal();
-    renderChecklist();
-    saveDraft();
   });
 
   /* ---- photos ---- */
@@ -5276,7 +5315,11 @@
   function closeAlertModal(){
     $('alertModal').style.display = 'none';
     alertGoFn = null;
+    var fn = alertCloseFn;
+    alertCloseFn = null;
+    if(fn){ fn(); }
   }
+  var alertCloseFn = null;
 
   function showAlertModal(opts){
     $('alertTitle').textContent = opts.title || '';
@@ -5301,7 +5344,59 @@
     $('alertGo').textContent = (go && go.label) ? go.label : 'ตกลง';
     alertGoFn = (go && go.fn) ? go.fn : null;
 
+    /* ใช้กล่องเดียวกันแทน alert / confirm / prompt ของเครื่อง
+       eyebrow  ข้อความเล็กบนหัว · icon ตัวอักษรในวงกลม
+       closeLabel ปุ่มซ้าย ('' = ซ่อน) · danger ปุ่มขวาเป็นสีแดง (ลบ / ล้าง)
+       copy ข้อความในช่องให้คัดลอก */
+    $('alertEyebrow').textContent = opts.eyebrow || 'แจ้งเตือน';
+    $('alertIcon').textContent    = opts.icon || '!';
+    var cl = (opts.closeLabel === undefined) ? 'ปิด' : opts.closeLabel;
+    $('alertClose').textContent   = cl;
+    $('alertClose').style.display = cl ? '' : 'none';
+    $('alertGo').style.background = opts.danger ? 'var(--danger)' : '';
+    alertCloseFn = null;
+    var cp = $('alertCopy');
+    cp.style.display = opts.copy ? '' : 'none';
+    cp.value = opts.copy || '';
+    if(opts.copy){ $('alertPanel').style.display = ''; }
+
     $('alertModal').style.display = 'flex';
+    if(opts.copy){ setTimeout(function(){ cp.focus(); cp.select(); }, 50); }
+    else { $('alertGo').focus(); }
+  }
+
+  /* แจ้งอย่างเดียว ปุ่มเดียว */
+  function closePreviewIfOpen(){
+    var pv = $('pvOverlay');
+    if(pv && pv.style.display === 'flex'){
+      var x = document.getElementById('pvClose');
+      if(x){ x.click(); } else { pv.style.display = 'none'; }
+    }
+  }
+  function appAlert(title, detail, then){
+    showAlertModal({ title: title, detail: detail, closeLabel: '',
+                     go: { label: 'ตกลง', fn: then || null } });
+  }
+  /* ถามยืนยัน กดปุ่มขวาถึงจะทำ กดยกเลิก / แตะนอกกล่อง = ไม่ทำ */
+  function appConfirm(o){
+    showAlertModal({ title: o.title, detail: o.detail, eyebrow: o.eyebrow || 'ยืนยัน',
+                     icon: '?', closeLabel: o.cancel || 'ยกเลิก', danger: !!o.danger,
+                     go: { label: o.ok || 'ตกลง', fn: o.onOk } });
+  }
+  /* ช่องให้คัดลอกลิงก์ */
+  function appCopy(title, text){
+    showAlertModal({ title: title, detail: 'กดค้างที่ช่องแล้วเลือกคัดลอก หรือกดปุ่มคัดลอก',
+                     eyebrow: 'ลิงก์', icon: '↗', closeLabel: 'ปิด', copy: text,
+                     go: { label: 'คัดลอก', fn: function(){
+                       var done = function(){ $('statusChip').textContent = 'คัดลอกลิงก์แล้ว'; };
+                       if(navigator.clipboard && navigator.clipboard.writeText){
+                         navigator.clipboard.writeText(text).then(done, function(){
+                           try{ var c = $('alertCopy'); c.select(); document.execCommand('copy'); done(); }catch(e){}
+                         });
+                       } else {
+                         try{ var c2 = $('alertCopy'); c2.style.display=''; c2.select(); document.execCommand('copy'); done(); }catch(e){}
+                       }
+                     }}});
   }
 
   $('alertClose').addEventListener('click', closeAlertModal);
@@ -5654,7 +5749,8 @@
       downloadBlob(blob, name);
       $('statusChip').textContent = savedMsg;
       if(inAppBrowser()){
-        alert('ตอนนี้เปิดฟอร์มอยู่ในเบราว์เซอร์ของ LINE จึงส่งไฟล์เข้าแชทโดยตรงไม่ได้\n\n' +
+        appAlert('บันทึกไฟล์ลงเครื่องแล้ว แต่ส่งเข้าแชทตรงไม่ได้',
+              'ตอนนี้เปิดฟอร์มอยู่ในเบราว์เซอร์ของ LINE\n\n' +
               'กดปุ่มมุมขวาบน แล้วเลือก "เปิดในเบราว์เซอร์อื่น" (Chrome หรือ Safari)\n' +
               'แล้วกดส่ง PDF อีกครั้ง จะได้ไฟล์อย่างเดียว ไม่มีลิงก์ติดไปด้วย');
       }
@@ -5699,16 +5795,18 @@
     reader.onload = function(ev){
       var d;
       try{ d = JSON.parse(ev.target.result); }
-      catch(err){ alert('ไฟล์นี้อ่านไม่ได้ ต้องเป็นไฟล์งานที่เก็บไว้จากฟอร์มนี้'); return; }
+      catch(err){ appAlert('เปิดไฟล์ไม่ได้', 'ไฟล์นี้อ่านไม่ได้ ต้องเป็นไฟล์งานที่เก็บไว้จากฟอร์มนี้'); return; }
       if(!d || d._app !== FILE_TAG){
-        alert('ไฟล์นี้ไม่ใช่ข้อมูลของฟอร์มรายงาน McEnergy');
+        appAlert('เปิดไฟล์ไม่ได้', 'ไฟล์นี้ไม่ใช่ข้อมูลของฟอร์มรายงาน McEnergy');
         return;
       }
-      if(!confirm('เปิดงานนี้จะแทนที่ข้อมูลที่กรอกอยู่ทั้งหมด ดำเนินการต่อหรือไม่?')) return;
-
-      saveSnapshot();          /* so the work on screen can still be brought back */
-      applyLoadedData(d);
-      $('statusChip').textContent = 'เปิดงานที่ค้างแล้ว';
+      appConfirm({ title: 'เปิดงานนี้?',
+                   detail: 'ข้อมูลที่กรอกอยู่ทั้งหมดจะถูกแทนที่\nระบบเก็บชุดปัจจุบันไว้ให้ กด "กู้คืนสถานะ" เพื่อเรียกกลับได้',
+                   ok: 'เปิดงานนี้', onOk: function(){
+        saveSnapshot();          /* so the work on screen can still be brought back */
+        applyLoadedData(d);
+        $('statusChip').textContent = 'เปิดงานที่ค้างแล้ว';
+      }});
     };
     reader.readAsText(file);
     e.target.value = '';
@@ -5798,24 +5896,26 @@
         new Date().toLocaleTimeString('th-TH',{hour:'2-digit',minute:'2-digit'});
     } else if(r === 'lite'){
       $('statusChip').textContent = 'บันทึกสถานะแล้ว (ไม่รวมรูปภาพ)';
-      alert('บันทึกข้อมูลที่กรอกไว้เรียบร้อย แต่รูปภาพมีขนาดใหญ่เกินพื้นที่ของเบราว์เซอร์\n' +
+      appAlert('บันทึกแล้ว แต่ไม่รวมรูปภาพ', 'รูปภาพมีขนาดใหญ่เกินพื้นที่ของเบราว์เซอร์\n' +
             'ถ้าต้องการเก็บรูปด้วย ให้กด "เก็บงานไว้ทำต่อ" เพื่อบันทึกเป็นไฟล์');
     } else {
       $('statusChip').textContent = 'บันทึกสถานะไม่สำเร็จ';
-      alert('พื้นที่จัดเก็บของเบราว์เซอร์เต็ม บันทึกสถานะไม่ได้\nกรุณาใช้ปุ่ม "เก็บงานไว้ทำต่อ" เพื่อบันทึกเป็นไฟล์แทน');
+      appAlert('บันทึกสถานะไม่ได้', 'พื้นที่จัดเก็บของเบราว์เซอร์เต็ม\nกรุณาใช้ปุ่ม "เก็บงานไว้ทำต่อ" เพื่อบันทึกเป็นไฟล์แทน');
     }
   });
 
   $('restoreBtn').addEventListener('click', function(){
     var d = readSnapshot();
     if(!d){ updateRestoreBtn(); return; }
-    if(!confirm('กู้คืนข้อมูลชุดที่บันทึกไว้เมื่อ ' + snapTime(d) + '\n' +
-                'ข้อมูลที่กรอกอยู่ตอนนี้จะถูกแทนที่ ดำเนินการต่อหรือไม่?')) return;
-    applyLoadedData(d);
-    $('statusChip').textContent = 'กู้คืนสถานะเมื่อ ' + snapTime(d) + ' แล้ว';
-    if(d._noPhotos){
-      alert('กู้คืนข้อมูลที่กรอกแล้ว — ชุดนี้ไม่ได้เก็บรูปภาพไว้ กรุณาแนบรูปใหม่');
-    }
+    appConfirm({ title: 'กู้คืนข้อมูลชุดที่บันทึกไว้เมื่อ ' + snapTime(d) + '?',
+                 detail: 'ข้อมูลที่กรอกอยู่ตอนนี้จะถูกแทนที่',
+                 ok: 'กู้คืน', onOk: function(){
+      applyLoadedData(d);
+      $('statusChip').textContent = 'กู้คืนสถานะเมื่อ ' + snapTime(d) + ' แล้ว';
+      if(d._noPhotos){
+        appAlert('กู้คืนแล้ว แต่ไม่มีรูป', 'ชุดนี้ไม่ได้เก็บรูปภาพไว้ กรุณาแนบรูปใหม่');
+      }
+    }});
   });
 
   /* ---------- share ---------- */
@@ -5825,7 +5925,7 @@
     var title = 'McEnergy — Service & Maintenance Report';
 
     if(!onWeb){
-      alert('ปุ่มแชร์ใช้ได้เมื่อเปิดฟอร์มผ่านลิงก์เว็บครับ\n' +
+      appAlert('แชร์ไม่ได้', 'ปุ่มแชร์ใช้ได้เมื่อเปิดฟอร์มผ่านลิงก์เว็บครับ\n' +
             'ตอนนี้กำลังเปิดจากไฟล์ในเครื่องอยู่');
       return;
     }
@@ -5837,17 +5937,17 @@
     if(navigator.clipboard && navigator.clipboard.writeText){
       navigator.clipboard.writeText(url).then(function(){
         $('statusChip').textContent = 'คัดลอกลิงก์แล้ว';
-      }, function(){ prompt('คัดลอกลิงก์นี้', url); });
+      }, function(){ appCopy('คัดลอกลิงก์นี้', url); });
       return;
     }
-    prompt('คัดลอกลิงก์นี้', url);
+    appCopy('คัดลอกลิงก์นี้', url);
   });
 
   $('printBtn').addEventListener('click', function(){
     if(!readyGuard()) return;
     preparePrint();
     if(iosStandalone()){
-      alert('ไอคอนนี้เปิดแบบไม่มีแถบ Safari จึงไม่มีปุ่มแชร์ให้สั่งพิมพ์\n\n' +
+      appAlert('สั่งพิมพ์จากไอคอนนี้ไม่ได้', 'ไอคอนนี้เปิดแบบไม่มีแถบ Safari จึงไม่มีปุ่มแชร์ให้สั่งพิมพ์\n\n' +
             'แก้ครั้งเดียวจบ:\n' +
             '1. ลบไอคอนนี้ออกจากหน้าจอโฮม\n' +
             '2. เปิดลิงก์ใน Safari แล้วกดแชร์ → Add to Home Screen ใหม่');
@@ -5948,6 +6048,10 @@
         });
       }
 
+      /* สำเนาหน้าเว็บมีโค้ดของแอปติดมาด้วย ถ้าปล่อยไว้ โค้ดทั้งแอปจะรันซ้ำในหน้าตัวอย่าง
+         แล้วพังกลางทาง (หาปุ่มที่ถูกตัดออกไม่เจอ) ตัดทิ้งก่อน หน้าตัวอย่างต้องเป็นภาพนิ่งเท่านั้น */
+      Array.prototype.forEach.call(body.querySelectorAll('script'), function(n){ n.remove(); });
+
       /* strip the chrome that never prints */
       ['.topbar','.pv-overlay','.modal-overlay','.cover-hint','.foot-note']
         .forEach(function(sel){
@@ -5971,7 +6075,7 @@
          there. Flatten those fields to plain text - the value is already in
          the value attribute, and printing shows the same thing. */
       Array.prototype.forEach.call(
-        body.querySelectorAll('.log-table input, .log-table select, .ct-table input, .ct-table select, .ls-tag, .ls-meta input, textarea, .photo-caption'),
+        body.querySelectorAll('.log-table input, .log-table select, .ct-table input, .ct-table select, .ls-tag, .ls-meta input, .chk-text, textarea, .photo-caption'),
         function(inp){
           var span = document.createElement(inp.tagName === 'TEXTAREA' ? 'div' : 'span');
           span.className = 'pv-text ' + (inp.className || '');
@@ -6321,7 +6425,7 @@
   /* ---------- บันทึกปัญหาตอนสร้าง PDF ----------
      บนมือถือเปิดหน้าต่างนักพัฒนาดูไม่ได้ ถ้าค้างก็ได้แต่เดากันไปเรื่อย
      ตัวนี้จดทุกขั้นตอนพร้อมเวลาไว้ในแอปเลย พอมีปัญหาก็กางให้ดูได้ทันที */
-  var APP_VER = '5.2.3';
+  var APP_VER = '5.2.6';
 
   /* ---- หน้าเปิดแอป ----
      เวลาที่ค้างหน้าจอ หน่วยเป็นมิลลิวินาที
@@ -6578,7 +6682,7 @@
         pvSay('');
         console.error('sendPdf', err);
         diagShow();
-        alert('สร้างไฟล์ PDF ไม่สำเร็จ\n\n' + (err && err.message ? err.message : '') +
+        appAlert('สร้างไฟล์ PDF ไม่สำเร็จ', (err && err.message ? err.message : '') +
               '\n\nครั้งแรกต้องต่ออินเทอร์เน็ตเพื่อโหลดตัวสร้าง PDF\n' +
               'ระหว่างนี้ใช้ปุ่ม "พิมพ์" แทนได้ ซึ่งได้ไฟล์คมชัดกว่าด้วย');
       });
@@ -6725,17 +6829,19 @@
     if(!readyGuard()) return;
     diagReset(); diag('กดปุ่ม ส่ง Report');
     if(!navigator.onLine){
-      alert('ปุ่มนี้ต้องต่ออินเทอร์เน็ต\n\nระหว่างนี้ใช้ปุ่ม "ส่งเป็นไฟล์ PDF" แทนได้');
+      appAlert('ไม่มีอินเทอร์เน็ต', 'ปุ่มนี้ต้องต่ออินเทอร์เน็ต\nระหว่างนี้ใช้ปุ่ม "ส่งเป็นไฟล์ PDF" แทนได้');
       return;
     }
     if(CUST_GROUPS[val('customer')] && !val('customerSub')){
-      alert('ยังไม่ได้ระบุชื่อลูกค้า\n\nเลือก ' + val('customer') + ' แล้ว ต้องเลือกชื่อลูกค้าในช่อง "ระบุชื่อลูกค้า" ด้วย');
-      openCustomerSub();
+      showAlertModal({ title: 'ยังไม่ได้ระบุชื่อลูกค้า',
+        detail: 'เลือก ' + val('customer') + ' แล้ว ต้องเลือกชื่อลูกค้าในช่อง "ระบุชื่อลูกค้า" ด้วย',
+        go: { label: 'ไปเลือกชื่อลูกค้า', fn: function(){ closePreviewIfOpen(); openCustomerSub(); } } });
       return;
     }
     if(!customerName()){
-      alert('ยังไม่ได้เลือก Customer\n\nต้องเลือกชื่อลูกค้าก่อน ระบบจึงจะรู้ว่าต้องเอารายงานไปวางไว้ใต้ลูกค้ารายไหนบนหน้าเว็บ');
-      var cs = $('customer'); if(cs){ cs.focus(); }
+      showAlertModal({ title: 'ยังไม่ได้เลือก Customer',
+        detail: 'ต้องเลือกชื่อลูกค้าก่อน ระบบจึงจะรู้ว่าต้องเอารายงานไปวางไว้ใต้ลูกค้ารายไหนบนหน้าเว็บ',
+        go: { label: 'ไปเลือก Customer', fn: function(){ closePreviewIfOpen(); var cs = $('customerSearch'); if(cs){ cs.scrollIntoView({ behavior:'smooth', block:'center' }); cs.focus(); } } } });
       return;
     }
     if(!$('pvOverlay') || $('pvOverlay').style.display !== 'flex'){ openPreview(); }
@@ -6762,7 +6868,7 @@
         console.error('sendReport', err);
         diagShow();
         $('statusChip').textContent = 'ส่ง Report ไม่สำเร็จ';
-        alert('ส่ง Report ไม่สำเร็จ\n\n' + (err && err.message ? err.message : '') +
+        appAlert('ส่ง Report ไม่สำเร็จ', (err && err.message ? err.message : '') +
               '\n\nลองใหม่อีกครั้ง หรือใช้ปุ่ม "ส่งเป็นไฟล์ PDF" แทนไปก่อน');
       })
       .then(function(){ reportBtnState(false); });
@@ -6793,39 +6899,41 @@
     document.title = ORIGINAL_TITLE;
   });
   $('clearBtn').addEventListener('click', function(){
-    if(!confirm('ล้างข้อมูลทั้งหมดในฟอร์มนี้ใช่หรือไม่?\n\n' +
-                'ระบบจะเก็บข้อมูลชุดปัจจุบันไว้ให้ กดปุ่ม "กู้คืนสถานะ" เพื่อเรียกกลับมาได้')) return;
-    saveSnapshot();          /* the safety net for an accidental tap */
-    localStorage.removeItem(STORAGE_KEY);
-    state = {
-      fields:{},
-      templates: [],
-      checklist: [],
-      partsTable: [],
-      logs: {},
-      ct: null,
-      photoTpl: null,
-      employees: [],
-      photos: JSON.parse(JSON.stringify(defaultPhotos)),
-      signature: null
-    };
-    fieldIds.forEach(function(id){ var el = $(id); if(el) el.value=''; });
-    var t = new Date();
-    $('reportDate').value = t.toISOString().slice(0,10);
-    $('company').value = 'McEnergy Evolution';
-    state.employees = [];
-    refreshEmployees();
-    updateContractOtherVisibility();
-    updateLocationOtherVisibility();
-    updateCustomerOtherVisibility();
-    syncCustomerSearch();
-    updateEquipOtherVisibility();
-    renderChecklist(); renderPhotos();
-    var rect = canvas.getBoundingClientRect();
-    ctx.clearRect(0,0,rect.width,rect.height);
-    syncCover();
-    syncSignature();
-    $('statusChip').textContent = 'ล้างฟอร์มแล้ว · กดกู้คืนสถานะเพื่อเรียกข้อมูลกลับ';
+    appConfirm({ title: 'ล้างข้อมูลทั้งหมดในฟอร์มนี้?',
+                 detail: 'ระบบจะเก็บข้อมูลชุดปัจจุบันไว้ให้ กดปุ่ม "กู้คืนสถานะ" เพื่อเรียกกลับมาได้',
+                 ok: 'ล้างฟอร์ม', danger: true, onOk: function(){
+      saveSnapshot();          /* the safety net for an accidental tap */
+      localStorage.removeItem(STORAGE_KEY);
+      state = {
+        fields:{},
+        templates: [],
+        checklist: [],
+        partsTable: [],
+        logs: {},
+        ct: null,
+        photoTpl: null,
+        employees: [],
+        photos: JSON.parse(JSON.stringify(defaultPhotos)),
+        signature: null
+      };
+      fieldIds.forEach(function(id){ var el = $(id); if(el) el.value=''; });
+      var t = new Date();
+      $('reportDate').value = t.toISOString().slice(0,10);
+      $('company').value = 'McEnergy Evolution';
+      state.employees = [];
+      refreshEmployees();
+      updateContractOtherVisibility();
+      updateLocationOtherVisibility();
+      updateCustomerOtherVisibility();
+      syncCustomerSearch();
+      updateEquipOtherVisibility();
+      renderChecklist(); renderPhotos();
+      var rect = canvas.getBoundingClientRect();
+      ctx.clearRect(0,0,rect.width,rect.height);
+      syncCover();
+      syncSignature();
+      $('statusChip').textContent = 'ล้างฟอร์มแล้ว · กดกู้คืนสถานะเพื่อเรียกข้อมูลกลับ';
+    }});
   });
 
   /* auto-save on blur for text fields */
