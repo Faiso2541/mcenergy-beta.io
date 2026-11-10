@@ -213,6 +213,8 @@
     background:#fff;border:1px solid var(--line);border-radius:11px;padding:7px;
     box-shadow:0 12px 30px rgba(22,38,74,.18);
   }
+  /* จอแคบ ปุ่ม ⋯ อยู่ชิดซ้าย เมนูต้องกางไปทางขวา ไม่งั้นล้นขอบจอ */
+  @media (max-width:560px){ .tb-menu{right:auto;left:0;} }
   .tb-menu[hidden]{display:none;}
   .tb-sec{
     font-size:10.5px;color:var(--ink-faint);padding:7px 8px 4px;letter-spacing:.2px;
@@ -2105,6 +2107,23 @@
     .bk-grid{opacity:1;}
   }
 
+  /* ---- About ---- */
+  .about-box{max-width:420px;padding:0 0 18px;overflow:hidden;}
+  .about-hero{background:linear-gradient(135deg,#16264A,#2A3D66);color:#fff;text-align:center;padding:26px 20px 22px;}
+  .about-logo{height:46px;background:#fff;border-radius:10px;padding:6px 10px;}
+  .about-name{font-family:'Sora';font-weight:700;font-size:20px;margin-top:14px;}
+  .about-sub{font-size:12.5px;color:#B9C6E0;margin-top:2px;}
+  .about-ver{display:inline-block;margin-top:12px;background:#F5C518;color:#16264A;font-weight:700;font-size:12.5px;border-radius:99px;padding:4px 12px;}
+  .about-list{margin:6px 20px 0;}
+  .about-list div{display:flex;justify-content:space-between;gap:14px;padding:11px 0;border-bottom:1px solid var(--line);font-size:13.5px;}
+  .about-list dt{color:var(--ink-soft);}
+  .about-list dd{margin:0;font-weight:600;color:var(--navy);text-align:right;}
+  .about-note{margin:12px 20px 14px;font-size:12px;color:var(--ink-faint);line-height:1.55;}
+  .about-gap{height:16px;}
+  .tb-sep{height:1px;background:var(--line,#e5e7eb);margin:6px 4px;}
+  .about-box .btn,.about-box .modal-close{margin-left:20px;margin-right:20px;width:calc(100% - 40px) !important;}
+  .about-msg{margin:8px 20px 0;font-size:12.5px;color:var(--ink-soft);text-align:center;min-height:18px;}
+
 </style>
 </head>
 <body>
@@ -2200,15 +2219,16 @@
 
         <div class="tb-menu" id="tbMenu" hidden>
           <div class="tb-sec">ฉบับร่าง</div>
-          <button class="btn tb-item" id="saveFileBtn" type="button">เก็บงานไว้ทำต่อ</button>
-          <button class="btn tb-item" id="openFileBtn" type="button">เปิดงานที่ค้าง</button>
           <button class="btn tb-item btn-save" id="snapshotBtn" type="button" title="เก็บข้อมูลทั้งหมดที่กรอกไว้เป็นจุดกู้คืน">บันทึกสถานะล่าสุด</button>
           <button class="btn tb-item btn-restore" id="restoreBtn" type="button" style="display:none;">กู้คืนสถานะ</button>
+          <button class="btn tb-item" id="saveFileBtn" type="button">เก็บงานไว้ทำต่อ</button>
+          <button class="btn tb-item" id="openFileBtn" type="button">เปิดงานที่ค้าง</button>
 
-          <div class="tb-sec">อื่น ๆ</div>
+          <div class="tb-sep" aria-hidden="true"></div>
           <button class="btn tb-item" id="shareBtn" type="button">แชร์</button>
           <button class="btn tb-item btn-install" id="installBtn" type="button" style="display:none;">ติดตั้งแอป</button>
           <button class="btn tb-item tb-danger" id="clearBtn" type="button">ล้างฟอร์ม</button>
+          <button class="btn tb-item" id="aboutBtn" type="button">About · เกี่ยวกับแอป</button>
         </div>
       </span>
       </span>
@@ -2619,6 +2639,30 @@
     </div>
   </div>
 
+
+<div class="modal-overlay" id="aboutModal" style="display:none;" role="dialog" aria-modal="true" aria-labelledby="aboutTitle">
+  <div class="modal-box about-box">
+    <div class="about-hero">
+      <img data-logo class="about-logo" src="" alt="McEnergy">
+      <div class="about-name" id="aboutTitle">Report Online</div>
+      <div class="about-sub">Service &amp; Maintenance Report</div>
+      <span class="about-ver" id="aboutVer">Version</span>
+    </div>
+    <dl class="about-list">
+      <div><dt>บริษัท</dt><dd>McEnergy Evolution Co., Ltd.</dd></div>
+      <div><dt>เวอร์ชันแอป</dt><dd id="aboutApp">—</dd></div>
+      <div><dt>sw.js</dt><dd id="aboutCache">—</dd></div>
+      <div><dt>สถานะ</dt><dd id="aboutNet">—</dd></div>
+      <div><dt>เปิดจาก</dt><dd id="aboutMode">—</dd></div>
+      <div><dt>ข้อมูลในเครื่อง</dt><dd id="aboutStore">—</dd></div>
+      <div><dt>Develop by</dt><dd>Faiso Teh</dd></div>
+    </dl>
+    <div class="about-gap"></div>
+    <button class="btn btn-primary" id="aboutUpdate" type="button" style="width:100%;justify-content:center;">ตรวจหาเวอร์ชันใหม่</button>
+    <div class="about-msg" id="aboutMsg" role="status" aria-live="polite"></div>
+    <button class="modal-close" id="aboutClose" type="button">ปิด</button>
+  </div>
+</div>
 
 <div class="modal-overlay" id="iosModal" style="display:none;">
   <div class="modal-box">
@@ -3326,6 +3370,48 @@
     });
     document.addEventListener('click', close);
     document.addEventListener('keydown', function(e){ if(e.key === 'Escape'){ close(); } });
+  })();
+
+  /* ---- About ในเมนู ⋯ ---- */
+  (function(){
+    var btn = document.getElementById('aboutBtn'), modal = document.getElementById('aboutModal');
+    if(!btn || !modal) return;
+    function set(id, t){ var e = document.getElementById(id); if(e) e.textContent = t; }
+    function fill(){
+      set('aboutVer', 'Version ' + APP_VER);
+      set('aboutApp', APP_VER);
+      set('aboutNet', navigator.onLine ? 'ออนไลน์' : 'ออฟไลน์');
+      var standalone = (window.matchMedia && matchMedia('(display-mode: standalone)').matches) || navigator.standalone;
+      set('aboutMode', location.protocol === 'file:' ? 'ไฟล์ในเครื่อง' : (standalone ? 'แอปที่ติดตั้งไว้' : 'เบราว์เซอร์'));
+      var bytes = 0;
+      try{ for(var i = 0; i < localStorage.length; i++){ var k = localStorage.key(i); bytes += (k.length + (localStorage.getItem(k) || '').length) * 2; } }catch(e){}
+      set('aboutStore', (bytes / 1048576).toFixed(1) + ' MB');
+      set('aboutMsg', '');
+      set('aboutCache', '—');
+      if(location.protocol !== 'file:'){
+        fetch('sw.js', { cache: 'no-store' }).then(function(r){ return r.text(); }).then(function(t){
+          var m = t.match(/CACHE_VERSION\s*=\s*'([^']+)'/);
+          if(m) set('aboutCache', m[1]);
+        }).catch(function(){});
+      }
+    }
+    function open(){ fill(); modal.style.display = 'flex'; }
+    function close(){ modal.style.display = 'none'; }
+    btn.addEventListener('click', open);
+    document.getElementById('aboutClose').addEventListener('click', close);
+    modal.addEventListener('click', function(e){ if(e.target === modal) close(); });
+    document.getElementById('aboutUpdate').addEventListener('click', function(){
+      if(!('serviceWorker' in navigator) || location.protocol === 'file:'){ set('aboutMsg', 'เปิดจากไฟล์ในเครื่อง ไม่มีระบบอัปเดต'); return; }
+      if(!navigator.onLine){ set('aboutMsg', 'ไม่มีอินเทอร์เน็ต ลองใหม่อีกครั้งเมื่อมีสัญญาณ'); return; }
+      set('aboutMsg', 'กำลังตรวจ…');
+      navigator.serviceWorker.getRegistration().then(function(reg){
+        if(!reg){ set('aboutMsg', 'ยังไม่ได้ติดตั้งระบบอัปเดต ลองปิดแล้วเปิดแอปใหม่'); return; }
+        return reg.update().then(function(){
+          /* ถ้ามีตัวใหม่ แอปจะเซฟร่างแล้วรีโหลดเอง (controllerchange) */
+          setTimeout(function(){ set('aboutMsg', 'ใช้เวอร์ชันล่าสุดอยู่แล้ว'); }, 1500);
+        });
+      }).catch(function(){ set('aboutMsg', 'ตรวจไม่สำเร็จ ลองใหม่อีกครั้ง'); });
+    });
   })();
 
   /* ปุ่มของกล่องบันทึกปัญหา ผูกแบบกันพลาด ถ้าไม่มีปุ่มก็ข้ามไปเฉย ๆ */
@@ -6931,7 +7017,7 @@
   /* ---------- บันทึกปัญหาตอนสร้าง PDF ----------
      บนมือถือเปิดหน้าต่างนักพัฒนาดูไม่ได้ ถ้าค้างก็ได้แต่เดากันไปเรื่อย
      ตัวนี้จดทุกขั้นตอนพร้อมเวลาไว้ในแอปเลย พอมีปัญหาก็กางให้ดูได้ทันที */
-  var APP_VER = '1.0.5';   /* เริ่มนับใหม่ที่ 1.0.4 (เดิม 5.2.8) */
+  var APP_VER = '1.0.6';   /* เริ่มนับใหม่ที่ 1.0.4 (เดิม 5.2.8) */
   (function(){ var v = document.getElementById('ldVer'); if(v){ v.textContent = 'Version ' + APP_VER; } })();
 
   /* ---- หน้าเปิดแอป ----
