@@ -11,7 +11,7 @@
 <meta name="theme-color" content="#16264A">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Sora:wght@500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@500;600;700&family=Inter:wght@400;500;600&family=Chakra+Petch:ital,wght@0,600;0,700;1,700&display=swap" rel="stylesheet">
 <style>
 
   /* ---- หน้าหน่วงตอนเข้าหน้ารายงาน ----
@@ -73,7 +73,61 @@
     font-family:'Sora',sans-serif;line-height:1.4;text-align:center;
   }
   .ld-tail{color:rgba(255,255,255,.45);font-size:12.5px;}
+
+  /* ---- ลายพื้นหลังหน้าเปิดแอป 10 แบบ ----
+     สุ่มทุกครั้งที่เปิด (ไม่ซ้ำกับครั้งก่อน) ลายจาง ๆ ไม่แย่งสายตาจากโลโก้ตรงกลาง
+     p1 กระดาษกราฟ · p2 จุด · p3 เส้นทแยง · p4 คลื่นน้ำ · p5 รังผึ้ง
+     p6 วงจร · p7 เกล็ดน้ำแข็ง · p8 วงแหวน · p9 ใบพัด · p10 กราฟแนวโน้ม
+     p11-p20 ชุดรถแข่ง ดูคำอธิบายด้านล่าง
+     ล็อกลายเดียวได้: ใส่ class เช่น ld-p4 ไว้ที่ #ldScreen ใน HTML */
+  .ld-bg{position:absolute;inset:-60px;pointer-events:none;animation:ldDrift 24s linear infinite;}
+  .ld-glow{
+    position:absolute;inset:0;pointer-events:none;
+    background:radial-gradient(ellipse 60% 42% at 50% 47%,var(--navy) 0%,rgba(22,38,74,.7) 40%,rgba(22,38,74,0) 100%),
+               linear-gradient(180deg,rgba(0,0,0,.18),rgba(0,0,0,0) 30%,rgba(0,0,0,0) 70%,rgba(0,0,0,.25));
+  }
+  .ld-mid{position:relative;z-index:1;}
+  @keyframes ldDrift{ from{transform:translate(0,0);} to{transform:translate(48px,48px);} }
+  .ld-p1 .ld-bg{background-image:linear-gradient(rgba(255,255,255,0.12) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,0.12) 1px,transparent 1px),linear-gradient(rgba(255,255,255,0.05) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,0.05) 1px,transparent 1px);background-size:96px 96px,96px 96px,16px 16px,16px 16px;}
+  .ld-p2 .ld-bg{background-image:radial-gradient(rgba(255,255,255,0.18) 1.4px,transparent 1.6px);background-size:22px 22px;}
+  .ld-p3 .ld-bg{background-image:repeating-linear-gradient(135deg,rgba(255,255,255,0.12) 0 1px,transparent 1px 18px);}
+  .ld-p4 .ld-bg{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='80' height='40' viewBox='0 0 80 40'%3E%3Cpath d='M0 20 Q 20 8 40 20 T 80 20' fill='none' stroke='white' stroke-opacity='.14' stroke-width='1.6'/%3E%3Cpath d='M0 40 Q 20 28 40 40 T 80 40' fill='none' stroke='white' stroke-opacity='.05' stroke-width='1.2'/%3E%3C/svg%3E");background-size:80px 40px;}
+  .ld-p5 .ld-bg{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='84' height='48' viewBox='0 0 84 48'%3E%3Cpath d='M14 0 L42 0 L56 24 L42 48 L14 48 L0 24 Z' fill='none' stroke='white' stroke-opacity='.12' stroke-width='1.2'/%3E%3Cpath d='M56 24 L84 24' stroke='white' stroke-opacity='.12' stroke-width='1.2'/%3E%3C/svg%3E");background-size:84px 48px;}
+  .ld-p6 .ld-bg{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120' viewBox='0 0 120 120'%3E%3Cg fill='none' stroke='white' stroke-opacity='.13' stroke-width='1.3'%3E%3Cpath d='M0 30 H40 L55 15 H120'/%3E%3Cpath d='M0 90 H25 L45 70 H80 L95 85 H120'/%3E%3Cpath d='M70 0 V35'/%3E%3Cpath d='M100 120 V95'/%3E%3C/g%3E%3Cg fill='%23F5C518' fill-opacity='.38'%3E%3Ccircle cx='40' cy='30' r='3'/%3E%3Ccircle cx='80' cy='70' r='3'/%3E%3Ccircle cx='70' cy='35' r='3'/%3E%3Ccircle cx='100' cy='95' r='3'/%3E%3C/g%3E%3C/svg%3E");background-size:120px 120px;}
+  .ld-p7 .ld-bg{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='100' viewBox='0 0 120 100'%3E%3Cg stroke='white' stroke-opacity='.15' stroke-width='1.4' stroke-linecap='round'%3E%3Cpath d='M30 18 V42 M19.6 24 L40.4 36 M19.6 36 L40.4 24'/%3E%3Cpath d='M90 68 V82 M84 71.5 L96 78.5 M84 78.5 L96 71.5'/%3E%3C/g%3E%3C/svg%3E");background-size:120px 100px;}
+  .ld-p8 .ld-bg{background-image:repeating-radial-gradient(circle at 50% 45%,transparent 0 34px,rgba(255,255,255,0.12) 34px 35.5px);}
+  .ld-p9 .ld-bg{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='90' height='90' viewBox='0 0 90 90'%3E%3Cg transform='translate(45 45)' fill='white' fill-opacity='.10'%3E%3Cpath d='M0 0 C6 -8 6 -20 0 -26 C-4 -18 -4 -8 0 0Z'/%3E%3Cpath d='M0 0 C6 -8 6 -20 0 -26 C-4 -18 -4 -8 0 0Z' transform='rotate(120)'/%3E%3Cpath d='M0 0 C6 -8 6 -20 0 -26 C-4 -18 -4 -8 0 0Z' transform='rotate(240)'/%3E%3Ccircle r='3.2'/%3E%3C/g%3E%3Ccircle cx='45' cy='45' r='30' fill='none' stroke='white' stroke-opacity='.05'/%3E%3C/svg%3E");background-size:90px 90px;}
+  .ld-p10 .ld-bg{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='120' viewBox='0 0 160 120'%3E%3Cpath d='M0 70 L20 62 L40 66 L60 48 L80 54 L100 36 L120 42 L140 30 L160 38' fill='none' stroke='%23F5C518' stroke-opacity='.38' stroke-width='1.8' stroke-linejoin='round'/%3E%3Cpath d='M0 100 L20 96 L40 98 L60 88 L80 92 L100 80 L120 84 L140 76 L160 80' fill='none' stroke='white' stroke-opacity='.15' stroke-width='1.4' stroke-linejoin='round'/%3E%3Cpath d='M0 119.5 H160' stroke='white' stroke-opacity='.06'/%3E%3C/svg%3E");background-size:160px 120px;}
+
+  /* ---- ชุดธีมรถแข่ง F1 / MotoGP (p11-p20) ----
+     ออกแบบจากองค์ประกอบทั่วไปของสนามแข่ง ไม่ใช้โลโก้ ลายทีม หรือเบอร์นักแข่งจริง
+     p11 ธงตาหมากรุก · p12 ขอบทางแดงขาว · p13 เส้นความเร็ว · p14 ดอกยาง · p15 คาร์บอน
+     p16 ไฟออกตัว · p17 เส้นสนาม · p18 มาตรวัดรอบ · p19 ลูกศรโค้ง · p20 สวูชความเร็ว */
+  .ld-p11 .ld-bg{background-image:conic-gradient(rgba(255,255,255,.10) 25%,transparent 0 50%,rgba(255,255,255,.10) 0 75%,transparent 0);background-size:44px 44px;}
+  .ld-p12 .ld-bg{background-image:repeating-linear-gradient(-35deg,rgba(232,32,42,.32) 0 26px,rgba(255,255,255,.13) 26px 52px,transparent 52px 190px);}
+  .ld-p13 .ld-bg{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='240' height='120' viewBox='0 0 240 120'%3E%3Cg stroke-linecap='round'%3E%3Cpath d='M10 14 H120' stroke='white' stroke-opacity='.16' stroke-width='2'/%3E%3Cpath d='M60 38 H200' stroke='white' stroke-opacity='.09' stroke-width='1.5'/%3E%3Cpath d='M0 62 H70' stroke='%23E8202A' stroke-opacity='.45' stroke-width='2.2'/%3E%3Cpath d='M110 82 H230' stroke='white' stroke-opacity='.12' stroke-width='1.6'/%3E%3Cpath d='M30 104 H150' stroke='white' stroke-opacity='.07' stroke-width='1.2'/%3E%3C/g%3E%3C/svg%3E");background-size:240px 120px;}
+  .ld-p14 .ld-bg{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='68' height='52' viewBox='0 0 68 52'%3E%3Cg fill='none' stroke='white' stroke-opacity='.13' stroke-width='5' stroke-linejoin='round'%3E%3Cpath d='M8 10 L30 26 L8 42'/%3E%3Cpath d='M38 10 L60 26 L38 42'/%3E%3C/g%3E%3C/svg%3E");background-size:68px 52px;}
+  .ld-p15 .ld-bg{background-image:linear-gradient(45deg,rgba(255,255,255,.07) 25%,transparent 25% 75%,rgba(255,255,255,.07) 75%),linear-gradient(-45deg,rgba(0,0,0,.22) 25%,transparent 25% 75%,rgba(0,0,0,.22) 75%);background-size:12px 12px,12px 12px;background-position:0 0,6px 6px;}
+  .ld-p16 .ld-bg{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='150' viewBox='0 0 180 150'%3E%3Crect x='6' y='8' width='168' height='36' rx='8' fill='black' fill-opacity='.22'/%3E%3Cg fill='%23E8202A' fill-opacity='.55'%3E%3Ccircle cx='26' cy='26' r='10'/%3E%3Ccircle cx='58' cy='26' r='10'/%3E%3Ccircle cx='90' cy='26' r='10'/%3E%3Ccircle cx='122' cy='26' r='10'/%3E%3Ccircle cx='154' cy='26' r='10'/%3E%3C/g%3E%3C/svg%3E");background-size:180px 150px;}
+  .ld-p17 .ld-bg{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='520' height='480' viewBox='0 0 520 480'%3E%3Cpath d='M70 300 C40 220 60 120 130 90 C190 64 230 120 280 110 C340 98 330 30 400 40 C470 50 480 160 430 210 C390 250 330 230 300 280 C270 330 330 380 280 420 C220 470 110 420 70 300 Z' fill='none' stroke='white' stroke-opacity='.24' stroke-width='10' stroke-linejoin='round'/%3E%3Cpath d='M70 300 C40 220 60 120 130 90' fill='none' stroke='%23E8202A' stroke-opacity='.75' stroke-width='4' stroke-dasharray='10 8'/%3E%3Cg fill='white' fill-opacity='.25'%3E%3Crect x='52' y='286' width='8' height='8'/%3E%3Crect x='60' y='294' width='8' height='8'/%3E%3Crect x='52' y='302' width='8' height='8'/%3E%3C/g%3E%3C/svg%3E");background-size:118% auto;background-repeat:no-repeat;background-position:center 44%;}
+  .ld-p18 .ld-bg{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='110' viewBox='0 0 120 110'%3E%3Cg transform='translate(60 64)' fill='none'%3E%3Cpath d='M-42 20 A46 46 0 1 1 42 20' stroke='white' stroke-opacity='.12' stroke-width='2'/%3E%3Cpath d='M24 -34 A46 46 0 0 1 42 20' stroke='%23E8202A' stroke-opacity='.5' stroke-width='3'/%3E%3Cpath d='M0 0 L-24 -30' stroke='white' stroke-opacity='.22' stroke-width='2' stroke-linecap='round'/%3E%3Ccircle r='3' fill='white' fill-opacity='.25'/%3E%3C/g%3E%3C/svg%3E");background-size:120px 110px;}
+  .ld-p19 .ld-bg{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='110' height='64' viewBox='0 0 110 64'%3E%3Cg fill='white' fill-opacity='.10'%3E%3Cpath d='M0 0 H14 L30 20 L14 40 H0 L16 20 Z'/%3E%3Cpath d='M26 0 H40 L56 20 L40 40 H26 L42 20 Z'/%3E%3C/g%3E%3Cpath d='M52 0 H66 L82 20 L66 40 H52 L68 20 Z' fill='%23E8202A' fill-opacity='.35'/%3E%3C/svg%3E");background-size:110px 64px;}
+  .ld-p20 .ld-bg{background-image:linear-gradient(160deg,transparent 0 58%,rgba(232,32,42,.32) 58% 63%,transparent 63% 66%,rgba(255,255,255,.12) 66% 68%,transparent 68%),linear-gradient(160deg,transparent 0 22%,rgba(255,255,255,.08) 22% 23%,transparent 23% 26%,rgba(245,197,24,.18) 26% 27.5%,transparent 27.5%);background-size:100% 100%;background-repeat:no-repeat;}
+  /* ลายที่วางทีละชิ้น ไม่ใช่ลายซ้ำ ไม่ต้องเลื่อน */
+  .ld-p17 .ld-bg,.ld-p20 .ld-bg{animation:none;inset:0;}
+  /* ลายรถแข่งเลื่อนแนวนอนเร็วขึ้นเล็กน้อย ให้รู้สึกถึงความเร็ว */
+  .ld-p11 .ld-bg,.ld-p12 .ld-bg,.ld-p13 .ld-bg,.ld-p14 .ld-bg,.ld-p19 .ld-bg{animation:ldRace 6s linear infinite;}
+  @keyframes ldRace{ from{transform:translateX(0);} to{transform:translateX(-60px);} }
+  /* หน้าเปิดแบบแรก ไม่มีลายและเงา */
+  .ld-plain .ld-bg,.ld-plain .ld-glow{display:none;}
+  .ld-ver{
+    position:absolute;left:0;right:0;z-index:1;text-align:center;
+    bottom:calc(22px + env(safe-area-inset-bottom,0px));
+    color:rgba(255,255,255,.55);font-size:11px;font-weight:600;letter-spacing:.06em;
+    font-family:Inter,system-ui,sans-serif;
+  }
   @media (prefers-reduced-motion: reduce){
+    .ld-bg{animation:none;}
     .ld-pen,.ld-line .v{animation:none;}
     .ld-line .v{opacity:1;}
   }
@@ -928,6 +982,415 @@
   }
   .cv-foot-co{font-size:1.55cqw;color:#B9C6E0;}
 
+
+  /* ================= COVER THEMES (cvt-1 ... cvt-5) =================
+     ใส่ class ที่ #coverPage เพื่อเปลี่ยนแบบ ไม่ใส่ = แบบเดิม (แถบน้ำเงิน + คลื่นเขียว)
+     ทุกแบบใช้ช่องข้อมูลชุดเดิม (cvCustomer, cvJob ...) ไม่ต้องแก้โค้ดที่เติมข้อมูล
+     ใช้แค่ gradient / pseudo element / transform ที่ html2canvas วาดได้
+     (ไม่ใช้ clip-path, conic-gradient, writing-mode, text-stroke, object-fit) */
+  .cv-deco,.cv-hero{display:none;}
+  .cover-page > *{position:relative;}
+  .cover-page > .cv-deco,.cover-page > .cv-hero{position:absolute;}
+
+  /* ---------- 1 · Blueprint : ทั้งหน้าน้ำเงิน ลายกระดาษกราฟ ข้อมูลอยู่ในการ์ดขาว ---------- */
+  .cover-page.cvt-1,.exporting .cover-page.cvt-1{background:#16264A !important;}
+  .cvt-1 .cv-deco{
+    display:block;inset:0;z-index:0;
+    background-image:
+      linear-gradient(rgba(255,255,255,.07) 1px,transparent 1px),
+      linear-gradient(90deg,rgba(255,255,255,.07) 1px,transparent 1px),
+      linear-gradient(rgba(255,255,255,.03) 1px,transparent 1px),
+      linear-gradient(90deg,rgba(255,255,255,.03) 1px,transparent 1px);
+    background-size:10cqw 10cqw,10cqw 10cqw,2.5cqw 2.5cqw,2.5cqw 2.5cqw;
+  }
+  .cvt-1 .cv-top,.cvt-1 .cv-bot{background:transparent;}
+  .cvt-1 .cv-bot{border-top:1px solid rgba(255,255,255,.16);}
+  .cvt-1 .cv-eyebrow{color:#8FD9B4;}
+  .cvt-1 .cv-title{color:#fff;font-size:6.6cqw;}
+  .cvt-1 .cv-title::after{content:'';display:block;width:16cqw;height:.8cqw;background:#F5C518;margin-top:3.2cqw;border-radius:.4cqw;}
+  .cvt-1 .cv-title-th{color:#B9C6E0;}
+  .cvt-1 .cv-fields{
+    width:auto;margin-top:8cqw;background:#fff;border-radius:2.2cqw;padding:1.4cqw 4.4cqw;
+    box-shadow:0 2cqw 5cqw rgba(0,0,0,.28);
+  }
+  .cvt-1 .cv-wave{display:none;}
+
+  /* ---------- 2 · Sidebar : แถบน้ำเงินแนวตั้งด้านซ้าย เนื้อหาด้านขวา ---------- */
+  .cvt-2 .cv-deco{
+    display:block;left:0;top:0;bottom:0;width:30%;z-index:0;
+    background:linear-gradient(180deg,#16264A 0%,#2A3D66 100%);
+  }
+  .cvt-2 .cv-deco::before{
+    content:'';position:absolute;right:0;top:0;bottom:0;width:1.1cqw;
+    background:linear-gradient(180deg,#22A45D 0 33%,#F5C518 33% 66%,#3B82F6 66%);
+  }
+  .cvt-2 .cv-deco::after{
+    content:'SERVICE  ·  MAINTENANCE  ·  REPORT';position:absolute;left:50%;top:58%;
+    white-space:nowrap;font-family:'Sora';font-weight:700;font-size:3cqw;letter-spacing:.5em;
+    color:rgba(255,255,255,.12);transform:translate(-50%,-50%) rotate(-90deg);
+  }
+  .cvt-2 .cv-top{
+    position:absolute;left:0;top:0;width:30%;z-index:1;background:transparent;
+    flex-direction:column;align-items:flex-start;gap:5cqw;padding:7cqw 4.4cqw;
+  }
+  .cvt-2 .cv-logo{width:100%;height:auto !important;}
+  .cvt-2 .cv-doc-tag{text-align:left;}
+  .cvt-2 .cv-body{margin-left:30%;padding:16cqw 6cqw 0 6cqw;}
+  .cvt-2 .cv-title{font-size:5.6cqw;}
+  .cvt-2 .cv-fields{width:100%;}
+  .cvt-2 .cv-wave{display:none;}
+  .cvt-2 .cv-bot{margin-left:30%;background:transparent;border-top:1px solid var(--lav-line);padding:3cqw 6cqw;}
+  .cvt-2 .cv-foot-lbl{color:var(--green-deep);}
+  .cvt-2 .cv-foot-val{color:var(--navy);}
+  .cvt-2 .cv-foot-co{color:var(--ink-soft);}
+  .cvt-2 .cv-chip{border-color:#EF4444;color:#EF4444;}
+
+  /* ---------- 3 · Minimal : พื้นขาว ตัวหนังสือใหญ่ ข้อมูลเป็นตาราง 2 คอลัมน์ ---------- */
+  .cvt-3 .cv-deco{
+    display:block;inset:0;z-index:0;
+    background:linear-gradient(90deg,#16264A 0 34%,#22A45D 34% 67%,#F5C518 67%) top/100% 1.4cqw no-repeat;
+  }
+  .cvt-3 .cv-deco::after{
+    content:'REPORT';position:absolute;right:-2cqw;bottom:14cqw;
+    font-family:'Sora';font-weight:700;font-size:25cqw;line-height:1;letter-spacing:-.04em;color:#F2F4FA;
+  }
+  .cvt-3 .cv-top{background:transparent;padding:7cqw 7cqw 0;}
+  .cvt-3 .cv-logo{padding:0;border-radius:0;}
+  .cvt-3 .cv-doc-tag .t0,.cvt-3 .cv-doc-tag .t1{color:var(--ink-faint);}
+  .cvt-3 .cv-doc-tag .t2{color:var(--navy);}
+  .cvt-3 .cv-body{padding:11cqw 7cqw 0;}
+  .cvt-3 .cv-title{font-size:7.6cqw;line-height:1.02;letter-spacing:-.025em;}
+  .cvt-3 .cv-fields{
+    width:100%;margin-top:11cqw;display:grid;grid-template-columns:1fr 1fr;column-gap:5cqw;
+    border-top:.35cqw solid var(--navy);
+  }
+  .cvt-3 .cv-row{flex-wrap:wrap;align-items:flex-start;gap:1.2cqw 2cqw;padding:2.6cqw 0;border-bottom:1px solid var(--lav-line) !important;}
+  .cvt-3 .cv-ic{width:4.4cqw;height:4.4cqw;}
+  .cvt-3 .cv-ic svg{width:2.5cqw;height:2.5cqw;}
+  .cvt-3 .cv-lbl{width:auto;flex:1 1 auto;padding-top:1.1cqw;}
+  .cvt-3 .cv-val{flex:0 0 100%;font-size:2.3cqw;}
+  .cvt-3 .cv-wave{display:none;}
+  .cvt-3 .cv-bot{background:transparent;padding:3.4cqw 7cqw 4.4cqw;border-top:.35cqw solid var(--navy);margin:0 7cqw;padding-left:0;padding-right:0;}
+  .cvt-3 .cv-foot-lbl{color:var(--green-deep);}
+  .cvt-3 .cv-foot-val{color:var(--navy);}
+  .cvt-3 .cv-foot-co{color:var(--ink-soft);}
+  .cvt-3 .cv-chip{border-color:#EF4444;color:#EF4444;}
+
+  /* ---------- 4 · Racing : แบบเดียวกับ APX ครึ่งบนน้ำเงินตัดเฉียง แถบแดง-ขาว-เหลือง ---------- */
+  .cvt-4 .cv-deco{
+    display:block;inset:0;z-index:0;
+    background:linear-gradient(168deg,#16264A 0 40%,#EF3E36 40% 41.4%,#fff 41.4% 42.4%,#F5C518 42.4% 43.4%,transparent 43.4%);
+  }
+  .cvt-4 .cv-deco::after{
+    content:'';position:absolute;left:0;right:0;top:0;height:44%;
+    background-image:repeating-linear-gradient(115deg,rgba(255,255,255,.05) 0 1px,transparent 1px 2.4cqw);
+  }
+  .cvt-4 .cv-top{background:transparent;}
+  .cvt-4 .cv-body{padding-top:5cqw;}
+  .cvt-4 .cv-eyebrow{color:#F5C518;}
+  .cvt-4 .cv-title{
+    color:#fff;font-family:'Chakra Petch','Sora',sans-serif;font-style:italic;font-weight:700;
+    font-size:7.2cqw;line-height:1;letter-spacing:-.01em;text-transform:uppercase;
+  }
+  .cvt-4 .cv-title-th{color:#B9C6E0;}
+  .cvt-4 .cv-fields{width:84%;margin-top:22cqw;}
+  .cvt-4 .cv-ic{border-radius:1cqw;transform:skewX(-10deg);}
+  .cvt-4 .cv-lbl{font-family:'Chakra Petch','Sora',sans-serif;font-weight:600;}
+  .cvt-4 .cv-wave{display:none;}
+  .cvt-4 .cv-bot{border-top:1cqw solid #EF3E36;background:#16264A;}
+  .cvt-4 .cv-foot-lbl{color:#F5C518;}
+
+  /* ---------- 5 · Photo : ภาพหน้างานรูปแรกเป็นปก ถ้ายังไม่มีรูปใช้ลายกระดาษกราฟ ---------- */
+  .cvt-5 .cv-hero{
+    display:block;left:0;right:0;top:0;height:66cqw;z-index:0;
+    background-color:#16264A;background-size:cover;background-position:center;
+  }
+  .cvt-5 .cv-hero:not(.has-img){
+    background-image:
+      linear-gradient(rgba(255,255,255,.07) 1px,transparent 1px),
+      linear-gradient(90deg,rgba(255,255,255,.07) 1px,transparent 1px);
+    background-size:8cqw 8cqw;
+  }
+  .cvt-5 .cv-hero::after{
+    content:'';position:absolute;inset:0;
+    background:linear-gradient(180deg,rgba(22,38,74,.55) 0%,rgba(22,38,74,.15) 40%,rgba(22,38,74,.92) 100%);
+  }
+  .cvt-5 .cv-top{background:transparent;}
+  .cvt-5 .cv-body{padding-top:20cqw;}
+  .cvt-5 .cv-eyebrow{color:#F5C518;}
+  .cvt-5 .cv-title{color:#fff;font-size:6cqw;}
+  .cvt-5 .cv-title-th{color:#DCE3F2;}
+  .cvt-5 .cv-fields{width:100%;margin-top:13cqw;display:grid;grid-template-columns:1fr 1fr;column-gap:5cqw;}
+  .cvt-5 .cv-row:nth-last-child(2){border-bottom:none;}
+  .cvt-5 .cv-lbl{width:auto;flex:0 0 auto;}
+  .cvt-5 .cv-row{flex-wrap:wrap;gap:1cqw 2cqw;}
+  .cvt-5 .cv-val{flex:0 0 100%;padding-left:8.4cqw;}
+
+  /* ================= COVER THEMES 6-20 =================
+     6-10 แนวฉีก · 11-15 แนว HVAC · 16-20 แนวทางการ   (ใส่ class cvt-N ที่ #coverPage) */
+  .cv-art{display:none;}
+  .cover-page > .cv-art{position:absolute;pointer-events:none;z-index:0;background-repeat:no-repeat;background-position:center;background-size:contain;}
+
+  /* ใช้ร่วม: ข้อมูลบนพื้นเข้ม */
+  .cvt-9 .cv-row,.cvt-11 .cv-row{border-bottom-color:rgba(255,255,255,.14) !important;}
+  .cvt-9 .cv-lbl,.cvt-11 .cv-lbl{color:#B9C6E0;}
+  .cvt-9 .cv-val,.cvt-11 .cv-val{color:#fff;}
+  /* ใช้ร่วม: ข้อมูล 2 คอลัมน์ */
+  .cvt-6 .cv-fields,.cvt-8 .cv-fields,.cvt-10 .cv-fields,.cvt-11 .cv-fields,.cvt-13 .cv-fields{display:grid;grid-template-columns:1fr 1fr;column-gap:5cqw;width:100%;}
+  .cvt-6 .cv-row,.cvt-10 .cv-row,.cvt-11 .cv-row,.cvt-13 .cv-row{flex-wrap:wrap;gap:1cqw 2cqw;}
+  .cvt-6 .cv-lbl,.cvt-10 .cv-lbl,.cvt-11 .cv-lbl,.cvt-13 .cv-lbl{width:auto;flex:1 1 auto;}
+  .cvt-6 .cv-val,.cvt-10 .cv-val,.cvt-11 .cv-val,.cvt-13 .cv-val{flex:0 0 100%;}
+  /* ใช้ร่วม: ซ่อนคลื่น */
+  .cvt-6 .cv-wave,.cvt-7 .cv-wave,.cvt-8 .cv-wave,.cvt-9 .cv-wave,.cvt-10 .cv-wave,.cvt-11 .cv-wave,.cvt-12 .cv-wave,
+  .cvt-13 .cv-wave,.cvt-14 .cv-wave,.cvt-15 .cv-wave,.cvt-16 .cv-wave,.cvt-17 .cv-wave,.cvt-18 .cv-wave,.cvt-19 .cv-wave,.cvt-20 .cv-wave{display:none;}
+  /* ใช้ร่วม: หัวโปร่ง */
+  .cvt-6 .cv-top,.cvt-7 .cv-top,.cvt-9 .cv-top,.cvt-10 .cv-top,.cvt-11 .cv-top,.cvt-12 .cv-top,.cvt-13 .cv-top,.cvt-14 .cv-top,
+  .cvt-15 .cv-top,.cvt-16 .cv-top,.cvt-17 .cv-top,.cvt-18 .cv-top,.cvt-19 .cv-top,.cvt-20 .cv-top{background:transparent;}
+  /* ใช้ร่วม: เลขเอกสารสีเข้มบนพื้นสว่าง */
+  .cvt-6 .cv-doc-tag .t2,.cvt-10 .cv-doc-tag .t2,.cvt-12 .cv-doc-tag .t2,.cvt-14 .cv-doc-tag .t2,.cvt-15 .cv-doc-tag .t2,
+  .cvt-16 .cv-doc-tag .t2,.cvt-17 .cv-doc-tag .t2,.cvt-18 .cv-doc-tag .t2,.cvt-20 .cv-doc-tag .t2{color:var(--navy);}
+  .cvt-6 .cv-doc-tag .t0,.cvt-6 .cv-doc-tag .t1,.cvt-10 .cv-doc-tag .t0,.cvt-10 .cv-doc-tag .t1,.cvt-12 .cv-doc-tag .t0,.cvt-12 .cv-doc-tag .t1,
+  .cvt-14 .cv-doc-tag .t0,.cvt-14 .cv-doc-tag .t1,.cvt-15 .cv-doc-tag .t0,.cvt-15 .cv-doc-tag .t1,.cvt-16 .cv-doc-tag .t0,.cvt-16 .cv-doc-tag .t1,
+  .cvt-17 .cv-doc-tag .t0,.cvt-17 .cv-doc-tag .t1,.cvt-18 .cv-doc-tag .t0,.cvt-18 .cv-doc-tag .t1,.cvt-20 .cv-doc-tag .t0,.cvt-20 .cv-doc-tag .t1{color:var(--ink-soft);}
+  /* ใช้ร่วม: ท้ายหน้าพื้นสว่าง */
+  .cvt-10 .cv-bot,.cvt-14 .cv-bot,.cvt-16 .cv-bot,.cvt-17 .cv-bot,.cvt-18 .cv-bot,.cvt-20 .cv-bot{background:transparent;}
+  .cvt-10 .cv-foot-val,.cvt-14 .cv-foot-val,.cvt-16 .cv-foot-val,.cvt-17 .cv-foot-val,.cvt-18 .cv-foot-val,.cvt-20 .cv-foot-val{color:var(--navy);}
+  .cvt-10 .cv-foot-co,.cvt-14 .cv-foot-co,.cvt-16 .cv-foot-co,.cvt-17 .cv-foot-co,.cvt-18 .cv-foot-co,.cvt-20 .cv-foot-co{color:var(--ink-soft);}
+  .cvt-10 .cv-foot-lbl,.cvt-14 .cv-foot-lbl,.cvt-16 .cv-foot-lbl,.cvt-17 .cv-foot-lbl,.cvt-18 .cv-foot-lbl,.cvt-20 .cv-foot-lbl{color:var(--green-deep);}
+  .cvt-10 .cv-chip,.cvt-14 .cv-chip,.cvt-16 .cv-chip,.cvt-17 .cv-chip,.cvt-18 .cv-chip,.cvt-20 .cv-chip{border-color:#EF4444;color:#EF4444;}
+
+  /* ===== แนวฉีก ===== */
+  /* 6 · Poster : พื้นเหลืองทั้งหน้า ตัวหนังสือยักษ์ */
+  .cover-page.cvt-6,.exporting .cover-page.cvt-6{background:#F5C518 !important;}
+  .cvt-6 .cv-deco{display:block;inset:0;z-index:0;}
+  .cvt-6 .cv-deco::after{
+    content:'2026';position:absolute;right:-3cqw;top:38cqw;font-family:'Sora';font-weight:700;
+    font-size:34cqw;line-height:1;letter-spacing:-.06em;color:rgba(22,38,74,.07);
+  }
+  .cvt-6 .cv-body{padding-top:9cqw;}
+  .cvt-6 .cv-eyebrow{color:var(--navy);}
+  .cvt-6 .cv-title{font-size:10cqw;line-height:.95;letter-spacing:-.045em;text-transform:uppercase;}
+  .cvt-6 .cv-title-th{color:var(--navy);font-weight:600;margin-top:3cqw;}
+  .cvt-6 .cv-fields{margin-top:10cqw;border-top:.6cqw solid var(--navy);}
+  .cvt-6 .cv-row{border-bottom:.25cqw solid var(--navy) !important;}
+  .cvt-6 .cv-ic{background:var(--navy) !important;}
+  .cvt-6 .cv-lbl{color:var(--navy);font-weight:700;}
+  .cvt-6 .cv-bot{background:var(--navy);}
+
+  /* 7 · Diagonal : แบ่งเฉียงน้ำเงิน-เขียว การ์ดข้อมูลขอบเหลือง */
+  .cvt-7 .cv-deco{display:block;inset:0;z-index:0;background:linear-gradient(118deg,#16264A 0 56%,#1F7248 56% 100%) top/100% 66% no-repeat;}
+  .cvt-7 .cv-deco::after{
+    content:'';position:absolute;right:-18cqw;top:-14cqw;width:62cqw;height:62cqw;border-radius:50%;
+    border:1.4cqw solid rgba(255,255,255,.10);
+  }
+  .cvt-7 .cv-eyebrow{color:#8FD9B4;}
+  .cvt-7 .cv-title{color:#fff;font-size:7cqw;}
+  .cvt-7 .cv-title-th{color:#DCE3F2;}
+  .cvt-7 .cv-fields{
+    width:auto;margin-top:12cqw;background:#fff;padding:1.6cqw 4.4cqw;border-left:1.6cqw solid #F5C518;
+    box-shadow:0 2.4cqw 6cqw rgba(0,0,0,.22);
+  }
+
+  /* 8 · Ticket : ขาวดำแบบตั๋ว ขอบหนา กล่องข้อมูล */
+  .cover-page.cvt-8,.exporting .cover-page.cvt-8{background:#F7F4EC !important;}
+  .cvt-8 .cv-deco{display:block;inset:3.5cqw;z-index:0;border:.6cqw solid #111;}
+  .cvt-8 .cv-top{background:#111;margin:3.5cqw 3.5cqw 0;padding:4.2cqw 5cqw;}
+  .cvt-8 .cv-logo{border-radius:0;}
+  .cvt-8 .cv-doc-tag .t2{color:#F5C518;font-family:ui-monospace,Menlo,Consolas,monospace;font-size:2.8cqw;}
+  .cvt-8 .cv-body{padding:8cqw 8.5cqw 0;}
+  .cvt-8 .cv-eyebrow{display:inline-block;background:#111;color:#F5C518;padding:1cqw 2cqw;}
+  .cvt-8 .cv-title{color:#111;font-size:7.4cqw;text-transform:uppercase;letter-spacing:-.03em;line-height:1;}
+  .cvt-8 .cv-title-th{color:#333;}
+  .cvt-8 .cv-fields{margin-top:8cqw;padding-top:6cqw;border-top:.4cqw dashed #111;gap:0;}
+  .cvt-8 .cv-row{flex-direction:column;align-items:flex-start;gap:1cqw;border:.3cqw solid #111 !important;margin:0 -.3cqw -.3cqw 0;padding:2.4cqw 2.6cqw;}
+  .cvt-8 .cv-ic{display:none;}
+  .cvt-8 .cv-lbl{width:auto;color:#111;font-weight:700;}
+  .cvt-8 .cv-val{color:#111;font-size:2.4cqw;}
+  .cvt-8 .cv-bot{background:#111;margin:0 3.5cqw 3.5cqw;}
+  .cvt-8 .cv-foot-lbl{color:#F5C518;}
+
+  /* 9 · Aurora : พื้นมืดแสงสีฟุ้ง การ์ดใส */
+  .cover-page.cvt-9,.exporting .cover-page.cvt-9{background:#0E1730 !important;}
+  .cvt-9 .cv-deco{
+    display:block;inset:0;z-index:0;
+    background:
+      radial-gradient(circle at 12% 18%,rgba(34,164,93,.55),transparent 38%),
+      radial-gradient(circle at 88% 26%,rgba(59,130,246,.55),transparent 42%),
+      radial-gradient(circle at 70% 78%,rgba(245,197,24,.30),transparent 40%),
+      radial-gradient(circle at 18% 92%,rgba(139,92,246,.40),transparent 40%);
+  }
+  .cvt-9 .cv-eyebrow{color:#8FD9B4;}
+  .cvt-9 .cv-title{color:#fff;font-size:7cqw;}
+  .cvt-9 .cv-title-th{color:#C9D4EA;}
+  .cvt-9 .cv-fields{
+    width:auto;margin-top:11cqw;padding:1.4cqw 4.4cqw;border-radius:2.6cqw;
+    background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.22);
+  }
+  .cvt-9 .cv-bot{background:transparent;border-top:1px solid rgba(255,255,255,.14);}
+
+  /* 10 · Bauhaus : รูปทรงเรขาคณิตสีแบรนด์ พื้นครีม */
+  .cover-page.cvt-10,.exporting .cover-page.cvt-10{background:#F3EFE6 !important;}
+  .cvt-10 .cv-deco{
+    display:block;inset:0;z-index:0;
+    background:
+      radial-gradient(circle,#F5C518 0 69%,transparent 70%) 60cqw 12cqw/30cqw 30cqw no-repeat,
+      linear-gradient(#16264A,#16264A) 38cqw 22cqw/22cqw 22cqw no-repeat,
+      radial-gradient(circle at 0 100%,#22A45D 0 69%,transparent 70%) 6cqw 22cqw/22cqw 22cqw no-repeat,
+      linear-gradient(#EF4444,#EF4444) 6cqw 47cqw/18cqw 1.4cqw no-repeat,
+      linear-gradient(#16264A,#16264A) 88cqw 40cqw/5cqw 5cqw no-repeat;
+  }
+  .cvt-10 .cv-body{padding-top:36cqw;}
+  .cvt-10 .cv-title{font-size:6.6cqw;letter-spacing:-.03em;}
+  .cvt-10 .cv-fields{width:100%;margin-top:6cqw;border-top:.4cqw solid var(--navy);}
+  .cvt-10 .cv-row{padding:2cqw 0;}
+  .cvt-10 .cv-ic{border-radius:0;}
+  .cvt-10 .cv-bot{border-top:.4cqw solid var(--navy);margin:0 6cqw;padding-left:0;padding-right:0;}
+
+  /* ===== แนว HVAC ===== */
+  /* 11 · Chiller loop : แบบแปลนวงจรน้ำยา */
+  .cover-page.cvt-11,.exporting .cover-page.cvt-11{background:#12305A !important;}
+  .cvt-11 .cv-deco{
+    display:block;inset:0;z-index:0;
+    background-image:linear-gradient(rgba(255,255,255,.06) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.06) 1px,transparent 1px);
+    background-size:5cqw 5cqw;
+  }
+  .cvt-11 .cv-art{display:block;left:10cqw;right:10cqw;top:52cqw;height:28cqw;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='600' height='246' viewBox='0 0 600 246'%3E%3Cg fill='none' stroke='white' stroke-opacity='.6' stroke-width='2'%3E%3Crect x='170' y='24' width='260' height='46' rx='8'/%3E%3Crect x='170' y='150' width='260' height='46' rx='8'/%3E%3Ccircle cx='500' cy='110' r='26'/%3E%3Cpath d='M488 98 L516 110 L488 122 Z'/%3E%3Cpath d='M430 47 H500 V84'/%3E%3Cpath d='M500 136 V173 H430'/%3E%3Cpath d='M170 173 H100 V124'/%3E%3Cpath d='M100 96 V47 H170'/%3E%3Cpath d='M86 96 L114 124 M114 96 L86 124 M86 96 H114 M86 124 H114'/%3E%3Cpath d='M300 24 V-4' stroke-dasharray='4 4'/%3E%3Cpath d='M250 196 V222 M350 196 V222'/%3E%3C/g%3E%3Cg fill='white' fill-opacity='.65' font-family='monospace' font-size='12' text-anchor='middle'%3E%3Ctext x='300' y='52'%3ECONDENSER%3C/text%3E%3Ctext x='300' y='178'%3EEVAPORATOR%3C/text%3E%3Ctext x='500' y='156'%3ECOMP.%3C/text%3E%3Ctext x='100' y='146'%3EEXV%3C/text%3E%3Ctext x='250' y='238'%3ECHWS 44%C2%B0F%3C/text%3E%3Ctext x='360' y='238'%3ECHWR 54%C2%B0F%3C/text%3E%3Ctext x='300' y='12'%3ETO COOLING TOWER%3C/text%3E%3C/g%3E%3Cg fill='%23F5C518' fill-opacity='.9'%3E%3Ccircle cx='170' cy='47' r='4'/%3E%3Ccircle cx='430' cy='173' r='4'/%3E%3Ccircle cx='500' cy='84' r='4'/%3E%3Ccircle cx='100' cy='124' r='4'/%3E%3C/g%3E%3C/svg%3E");}
+  .cvt-11 .cv-eyebrow{color:#7FD3FF;}
+  .cvt-11 .cv-title{color:#fff;font-size:5.6cqw;}
+  .cvt-11 .cv-title-th{color:#B9C6E0;}
+  .cvt-11 .cv-fields{margin-top:37cqw;}
+  .cvt-11 .cv-row{padding:1.5cqw 0;}
+  .cvt-11 .cv-bot{background:#0C2142;}
+
+  /* 12 · Cooling tower fan : ใบพัดใหญ่ โทนฟ้าเย็น */
+  .cover-page.cvt-12,.exporting .cover-page.cvt-12{background:linear-gradient(180deg,#E3F2FC 0%,#FFFFFF 58%) !important;}
+  .cvt-12 .cv-art{display:block;right:-22cqw;top:4cqw;width:78cqw;height:78cqw;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='400' viewBox='0 0 400 400'%3E%3Cg transform='translate(200 200)'%3E%3Ccircle r='190' fill='none' stroke='%2316264A' stroke-opacity='.10' stroke-width='3'/%3E%3Ccircle r='170' fill='none' stroke='%231C7FB5' stroke-opacity='.18' stroke-width='2' stroke-dasharray='6 10'/%3E%3Cpath d='M0 0 C40 -30 60 -110 20 -160 C-10 -120 -30 -50 0 0Z' fill='%231C7FB5' fill-opacity='.14' transform='rotate(0)'/%3E%3Cpath d='M0 0 C40 -30 60 -110 20 -160 C-10 -120 -30 -50 0 0Z' fill='%231C7FB5' fill-opacity='.14' transform='rotate(72)'/%3E%3Cpath d='M0 0 C40 -30 60 -110 20 -160 C-10 -120 -30 -50 0 0Z' fill='%231C7FB5' fill-opacity='.14' transform='rotate(144)'/%3E%3Cpath d='M0 0 C40 -30 60 -110 20 -160 C-10 -120 -30 -50 0 0Z' fill='%231C7FB5' fill-opacity='.14' transform='rotate(216)'/%3E%3Cpath d='M0 0 C40 -30 60 -110 20 -160 C-10 -120 -30 -50 0 0Z' fill='%231C7FB5' fill-opacity='.14' transform='rotate(288)'/%3E%3Ccircle r='22' fill='%2316264A' fill-opacity='.18'/%3E%3Ccircle r='8' fill='white'/%3E%3C/g%3E%3C/svg%3E");}
+  .cvt-12 .cv-logo{box-shadow:0 .6cqw 2cqw rgba(14,76,117,.15);}
+  .cvt-12 .cv-body{padding-top:14cqw;}
+  .cvt-12 .cv-eyebrow{color:#0E7FB8;}
+  .cvt-12 .cv-title{font-size:6.4cqw;}
+  .cvt-12 .cv-fields{margin-top:16cqw;}
+  .cvt-12 .cv-bot{background:linear-gradient(120deg,#0E4C75,#1C7FB5);}
+  .cvt-12 .cv-foot-lbl{color:#BDE8FF;}
+
+  /* 13 · Airflow : เส้นลมไหลบนแถบน้ำเงิน */
+  .cvt-13 .cv-deco{display:block;left:0;right:0;top:0;height:66cqw;z-index:0;background:linear-gradient(150deg,#16264A 0%,#1B4F7A 100%);}
+  .cvt-13 .cv-art{display:block;left:0;right:0;top:10cqw;height:56cqw;background-size:100% 100%;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='800' height='420' viewBox='0 0 800 420'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0' x2='1'%3E%3Cstop offset='0' stop-color='%2339C2F0' stop-opacity='0'/%3E%3Cstop offset='.5' stop-color='%2339C2F0' stop-opacity='.7'/%3E%3Cstop offset='1' stop-color='%238FD9B4' stop-opacity='.2'/%3E%3C/linearGradient%3E%3C/defs%3E%3Cg fill='none' stroke='url(%23g)' stroke-linecap='round'%3E%3Cpath d='M-20 80 C150 20 300 130 460 70 S 700 30 820 60' stroke-width='2.5'/%3E%3Cpath d='M-20 120 C150 60 300 170 460 110 S 700 70 820 100' stroke-width='1.6'/%3E%3Cpath d='M-20 160 C150 100 300 210 460 150 S 700 110 820 140' stroke-width='3'/%3E%3Cpath d='M-20 200 C150 140 300 250 460 190 S 700 150 820 180' stroke-width='1.4'/%3E%3Cpath d='M-20 240 C150 180 300 290 460 230 S 700 190 820 220' stroke-width='2.2'/%3E%3Cpath d='M-20 280 C150 220 300 330 460 270 S 700 230 820 260' stroke-width='1.2'/%3E%3Cpath d='M-20 320 C150 260 300 370 460 310 S 700 270 820 300' stroke-width='2.6'/%3E%3Cpath d='M-20 360 C150 300 300 410 460 350 S 700 310 820 340' stroke-width='1.5'/%3E%3C/g%3E%3C/svg%3E");}
+  .cvt-13 .cv-body{padding-top:12cqw;}
+  .cvt-13 .cv-eyebrow{color:#7FD3FF;}
+  .cvt-13 .cv-title{color:#fff;font-size:6.6cqw;}
+  .cvt-13 .cv-title-th{color:#DCE3F2;}
+  .cvt-13 .cv-fields{margin-top:24cqw;}
+  .cvt-13 .cv-bot{background:#fff;border-top:.8cqw solid #39C2F0;}
+  .cvt-13 .cv-foot-val{color:var(--navy);}
+  .cvt-13 .cv-foot-co{color:var(--ink-soft);}
+  .cvt-13 .cv-foot-lbl{color:#1B4F7A;}
+  .cvt-13 .cv-chip{border-color:#EF4444;color:#EF4444;}
+
+  /* 14 · Psychrometric : แผนภูมิไซโครเมตริกจาง ๆ */
+  .cvt-14 .cv-art{display:block;right:0;top:2cqw;width:74cqw;height:52cqw;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='600' height='400' viewBox='0 0 600 400'%3E%3Cg stroke='%2316264A' stroke-opacity='.10'%3E%3Cpath d='M40 20 V380'/%3E%3Cpath d='M80 20 V380'/%3E%3Cpath d='M120 20 V380'/%3E%3Cpath d='M160 20 V380'/%3E%3Cpath d='M200 20 V380'/%3E%3Cpath d='M240 20 V380'/%3E%3Cpath d='M280 20 V380'/%3E%3Cpath d='M320 20 V380'/%3E%3Cpath d='M360 20 V380'/%3E%3Cpath d='M400 20 V380'/%3E%3Cpath d='M440 20 V380'/%3E%3Cpath d='M480 20 V380'/%3E%3Cpath d='M520 20 V380'/%3E%3Cpath d='M560 20 V380'/%3E%3Cpath d='M20 40 H580'/%3E%3Cpath d='M20 80 H580'/%3E%3Cpath d='M20 120 H580'/%3E%3Cpath d='M20 160 H580'/%3E%3Cpath d='M20 200 H580'/%3E%3Cpath d='M20 240 H580'/%3E%3Cpath d='M20 280 H580'/%3E%3Cpath d='M20 320 H580'/%3E%3Cpath d='M20 360 H580'/%3E%3C/g%3E%3Cg fill='none' stroke='%2322A45D' stroke-width='2'%3E%3Cpath d='M40 360 C200 350 330 300 420 210 C470 160 510 100 540 30' stroke-opacity='.55' stroke-width='3'/%3E%3Cpath d='M40 360 C220 354 360 320 460 250 C510 214 550 170 580 120' stroke-opacity='.35'/%3E%3Cpath d='M40 362 C240 358 390 336 500 290 C540 272 570 250 590 230' stroke-opacity='.28'/%3E%3Cpath d='M40 364 C260 362 420 352 540 330' stroke-opacity='.2'/%3E%3C/g%3E%3Cg stroke='%233B82F6' stroke-opacity='.25' stroke-dasharray='5 6'%3E%3Cpath d='M120 40 L360 380'/%3E%3Cpath d='M240 40 L480 380'/%3E%3Cpath d='M360 40 L560 330'/%3E%3C/g%3E%3Ccircle cx='392' cy='238' r='7' fill='%23EF4444' fill-opacity='.7'/%3E%3Cg fill='%2316264A' fill-opacity='.35' font-family='monospace' font-size='11'%3E%3Ctext x='430' y='40'%3ERH 100%25%3C/text%3E%3Ctext x='40' y='396'%3EDRY BULB %C2%B0F%3C/text%3E%3C/g%3E%3C/svg%3E");}
+  .cvt-14 .cv-deco{display:block;left:0;right:0;top:0;height:1.2cqw;z-index:1;background:linear-gradient(90deg,#16264A 0 50%,#22A45D 50%);}
+  .cvt-14 .cv-body{padding-top:14cqw;}
+  .cvt-14 .cv-title{font-size:6.2cqw;}
+  .cvt-14 .cv-title::after{content:'';display:block;width:12cqw;height:.7cqw;background:#22A45D;margin-top:3cqw;}
+  .cvt-14 .cv-fields{margin-top:7cqw;}
+  .cvt-14 .cv-bot{border-top:.35cqw solid var(--navy);margin:0 6cqw;padding-left:0;padding-right:0;}
+
+  /* 15 · Thermal : แถบอุณหภูมิร้อน-เย็น + เทอร์โมมิเตอร์ */
+  .cvt-15 .cv-deco{display:block;left:0;top:0;bottom:0;width:2.4cqw;z-index:1;
+    background:linear-gradient(180deg,#EF4444 0%,#F59E0B 25%,#F5C518 45%,#39C2F0 70%,#1D4ED8 100%);}
+  .cvt-15 .cv-deco::after{
+    content:'44°F';position:absolute;left:58cqw;top:14cqw;font-family:'Sora';font-weight:700;font-size:15cqw;
+    line-height:1;color:#EEF3FA;white-space:nowrap;
+  }
+  .cvt-15 .cv-art{display:block;right:6cqw;top:30cqw;width:16cqw;height:30cqw;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='300' viewBox='0 0 160 300'%3E%3Cg fill='none' stroke='%2316264A' stroke-opacity='.14' stroke-width='6'%3E%3Cpath d='M60 40 V230 A40 40 0 1 0 100 230 V40 A20 20 0 0 0 60 40Z'/%3E%3C/g%3E%3Cpath d='M70 140 V238 A28 28 0 1 0 90 238 V140Z' fill='%23EF4444' fill-opacity='.45'/%3E%3Cg stroke='%2316264A' stroke-opacity='.18' stroke-width='3'%3E%3Cpath d='M112 60 H140'/%3E%3Cpath d='M112 80 H128'/%3E%3Cpath d='M112 100 H140'/%3E%3Cpath d='M112 120 H128'/%3E%3Cpath d='M112 140 H140'/%3E%3Cpath d='M112 160 H128'/%3E%3Cpath d='M112 180 H140'/%3E%3Cpath d='M112 200 H128'/%3E%3C/g%3E%3C/svg%3E");}
+  .cvt-15 .cv-top,.cvt-15 .cv-body{padding-left:9cqw;}
+  .cvt-15 .cv-body{padding-top:9cqw;}
+  .cvt-15 .cv-eyebrow{color:#DC2626;}
+  .cvt-15 .cv-title{font-size:6.2cqw;}
+  .cvt-15 .cv-fields{margin-top:12cqw;}
+  .cvt-15 .cv-bot{padding-left:9cqw;padding-top:3.6cqw;
+    background:linear-gradient(90deg,#EF4444,#F5C518 50%,#39C2F0) top/100% .9cqw no-repeat,linear-gradient(120deg,#16264A,#2A3D66);}
+
+  /* ===== แนวทางการ ===== */
+  /* 16 · Letterhead : จัดกลาง เส้นคู่ ตารางข้อมูล */
+  .cvt-16 .cv-top{flex-direction:column;justify-content:center;gap:3cqw;padding:10cqw 6cqw 4cqw;}
+  .cvt-16 .cv-logo{padding:0;border-radius:0;height:9cqw !important;}
+  .cvt-16 .cv-doc-tag{text-align:center;}
+  .cvt-16 .cv-body{margin:0 9cqw;padding:7cqw 0 0;border-top:3px double var(--navy);text-align:center;}
+  .cvt-16 .cv-title{font-size:5.4cqw;}
+  .cvt-16 .cv-fields{width:100%;margin-top:9cqw;border:1px solid #C9D0E0;text-align:left;}
+  .cvt-16 .cv-row{padding:2cqw 3cqw;border-bottom:1px solid #C9D0E0 !important;}
+  .cvt-16 .cv-row:last-child{border-bottom:none !important;}
+  .cvt-16 .cv-ic{display:none;}
+  .cvt-16 .cv-lbl{width:38%;}
+  .cvt-16 .cv-bot{margin:0 9cqw;padding:3.4cqw 0 6cqw;border-top:3px double var(--navy);}
+
+  /* 17 · Frame : กรอบเส้นคู่รอบหน้า ไอคอนสีเดียว */
+  .cvt-17 .cv-deco{display:block;inset:4cqw;z-index:0;border:.5cqw solid var(--navy);}
+  .cvt-17 .cv-deco::after{content:'';position:absolute;inset:1cqw;border:1px solid var(--navy);}
+  .cvt-17 .cv-top{padding:10cqw 10cqw 0;}
+  .cvt-17 .cv-logo{padding:0;}
+  .cvt-17 .cv-body{padding:10cqw 10cqw 0;}
+  .cvt-17 .cv-title{font-size:5.6cqw;}
+  .cvt-17 .cv-fields{width:100%;}
+  .cvt-17 .cv-ic{background:var(--navy) !important;}
+  .cvt-17 .cv-bot{margin:0 10cqw 10cqw;padding:3cqw 0 0;border-top:1px solid var(--navy);}
+
+  /* 18 · Document control : แบบฟอร์มราชการ ตารางมีช่องหัวข้อ */
+  .cvt-18 .cv-deco{display:block;left:0;right:0;top:0;height:2.2cqw;z-index:1;
+    background:linear-gradient(#16264A,#16264A) top/100% 1.4cqw no-repeat,linear-gradient(#22A45D,#22A45D) 0 1.8cqw/100% .4cqw no-repeat;}
+  .cvt-18 .cv-top{padding-top:8cqw;}
+  .cvt-18 .cv-logo{padding:0;}
+  .cvt-18 .cv-doc-tag{border:1px solid var(--navy);padding:1.8cqw 2.6cqw;text-align:left;}
+  .cvt-18 .cv-title{font-size:5.2cqw;}
+  .cvt-18 .cv-fields{width:100%;margin-top:9cqw;border:1px solid var(--navy);}
+  .cvt-18 .cv-row{padding:0;gap:0;align-items:stretch;border-bottom:1px solid var(--navy) !important;}
+  .cvt-18 .cv-row:last-child{border-bottom:none !important;}
+  .cvt-18 .cv-ic{display:none;}
+  .cvt-18 .cv-lbl{width:34%;display:flex;align-items:center;background:#EEF1F7;padding:2.3cqw 2.6cqw;
+    border-right:1px solid var(--navy);color:var(--navy);font-weight:700;}
+  .cvt-18 .cv-val{padding:2.3cqw 2.6cqw;display:flex;align-items:center;}
+  .cvt-18 .cv-bot{border-top:1px solid var(--navy);margin:0 6cqw;padding-left:0;padding-right:0;}
+
+  /* 19 · Executive : ครีม-ทอง เรียบหรู */
+  .cover-page.cvt-19,.exporting .cover-page.cvt-19{background:#FBF9F4 !important;}
+  .cvt-19 .cv-deco{display:block;inset:0;z-index:0;
+    background:linear-gradient(#B8954A,#B8954A) 6cqw 0/1px 100% no-repeat,linear-gradient(#B8954A,#B8954A) 0 22cqw/100% 1px no-repeat;opacity:.55;}
+  .cvt-19 .cv-top{padding-left:10cqw;}
+  .cvt-19 .cv-logo{padding:0;background:transparent;}
+  .cvt-19 .cv-doc-tag .t0,.cvt-19 .cv-doc-tag .t1{color:#8A7346;}
+  .cvt-19 .cv-doc-tag .t2{color:var(--navy);}
+  .cvt-19 .cv-body{padding:12cqw 8cqw 0 10cqw;}
+  .cvt-19 .cv-eyebrow{color:#B8954A;}
+  .cvt-19 .cv-title{font-size:6cqw;font-weight:600;letter-spacing:-.015em;}
+  .cvt-19 .cv-title::after{content:'';display:block;width:10cqw;height:.35cqw;background:#B8954A;margin-top:3.4cqw;}
+  .cvt-19 .cv-fields{width:100%;margin-top:10cqw;}
+  .cvt-19 .cv-row{border-bottom-color:rgba(184,149,74,.35) !important;padding:2.2cqw 0;}
+  .cvt-19 .cv-ic{display:none;}
+  .cvt-19 .cv-lbl{color:#8A7346;width:34%;}
+  .cvt-19 .cv-val{font-weight:600;}
+  .cvt-19 .cv-bot{background:#16264A;padding-left:10cqw;}
+  .cvt-19 .cv-foot-lbl{color:#D8BD7E;}
+  .cvt-19 .cv-chip{border-color:#D8BD7E;color:#D8BD7E;}
+
+  /* 20 · Swiss : ตารางเลขลำดับ 01-06 เน้นตัวอักษร */
+  .cvt-20 .cv-deco{display:block;inset:0;z-index:0;
+    background-image:linear-gradient(90deg,#F1F3F8 1px,transparent 1px);background-size:11cqw 100%;background-position:6cqw 0;}
+  .cvt-20 .cv-logo{padding:0;}
+  .cvt-20 .cv-body{padding-top:14cqw;}
+  .cvt-20 .cv-eyebrow{color:#EF3E36;}
+  .cvt-20 .cv-title{font-size:7.6cqw;line-height:1;letter-spacing:-.04em;color:#111;}
+  .cvt-20 .cv-title::before{content:'';display:block;width:5cqw;height:5cqw;background:#EF3E36;margin-bottom:4cqw;}
+  .cvt-20 .cv-fields{width:100%;margin-top:9cqw;border-top:.5cqw solid #111;counter-reset:cvf;}
+  .cvt-20 .cv-row{counter-increment:cvf;border-bottom:1px solid #111 !important;}
+  .cvt-20 .cv-row::before{content:counter(cvf,decimal-leading-zero);flex:0 0 7cqw;font-family:'Sora';font-weight:700;font-size:2.6cqw;color:#EF3E36;}
+  .cvt-20 .cv-ic{display:none;}
+  .cvt-20 .cv-lbl{color:#111;font-weight:700;}
+  .cvt-20 .cv-val{color:#111;}
+  .cvt-20 .cv-bot{border-top:.5cqw solid #111;margin:0 6cqw;padding-left:0;padding-right:0;}
+  .cvt-20 .cv-foot-lbl{color:#EF3E36;}
+
   .print-foot{display:none;}
   .create-time{display:none;}
 
@@ -1669,6 +2132,8 @@
      สายฟ้าโคจรรอบวงแล้วดิ่งเข้าที่กลางวง จบแล้วจางหายไปเอง
      แสดงตอนเปิดแอปเท่านั้น ปิดตัวเองอัตโนมัติ ไม่ต้องกดอะไร -->
 <div class="ld-scr" id="ldScreen">
+  <div class="ld-bg" aria-hidden="true"></div>
+  <div class="ld-glow" aria-hidden="true"></div>
   <div class="ld-mid">
     <div class="ld-art">
       <div class="ld-board">
@@ -1684,7 +2149,32 @@
     <div class="ld-row"><span class="ld-nm">Report Online</span></div>
     <div class="ld-tail">รอสักครู่…</div>
   </div>
+  <div class="ld-ver" id="ldVer"></div>
 </div>
+<script>
+/* สุ่มลายพื้นหลังหน้าเปิดแอป ทำตรงนี้เลยก่อนหน้าจอวาด จะได้ไม่เห็นพื้นเปล่าแวบหนึ่ง
+   ไม่ซ้ำกับลายที่ขึ้นครั้งก่อน */
+(function(){
+  /* ลายพื้นหลัง 20 แบบ: ปิดไว้ ใช้หน้าเปิดแบบแรก (พื้นน้ำเงินเรียบ)
+     อยากเปิดลายกลับมา เปลี่ยนเป็น true */
+  var USE_PATTERNS = false;
+  if(!USE_PATTERNS){
+    var o = document.getElementById('ldScreen');
+    if(o){ o.className += ' ld-plain'; }
+    return;
+  }
+  try{
+    var el = document.getElementById('ldScreen');
+    if(!el || /\bld-p\d+\b/.test(el.className)) return;
+    var last = null; try{ last = localStorage.getItem('mce-ld-bg'); }catch(e){}
+    var n;
+    var COUNT = 20;   /* p1-p10 ชุดงานระบบ · p11-p20 ชุดรถแข่ง */
+    do { n = 1 + Math.floor(Math.random() * COUNT); } while(String(n) === last);
+    el.className += ' ld-p' + n;
+    try{ localStorage.setItem('mce-ld-bg', String(n)); }catch(e){}
+  }catch(e){}
+})();
+</script>
 
 <div class="topbar">
   <div class="topbar-inner">
@@ -1750,6 +2240,9 @@
 
   <!-- ===== COVER PAGE (prints as page 1) ===== -->
   <div class="cover-page" id="coverPage">
+    <div class="cv-deco" aria-hidden="true"></div>
+    <div class="cv-hero" id="cvHero" aria-hidden="true"></div>
+    <div class="cv-art" aria-hidden="true"></div>
 
     <div class="cv-top">
       <img data-logo class="cv-logo" src="" alt="McEnergy">
@@ -4962,6 +5455,7 @@
   var PHOTOS_PER_PAGE = 6;
 
   function renderPhotos(){
+    try{ syncCoverHero(); }catch(e){}
     var wrap = $('photoGrid');
     wrap.innerHTML = '';
     var grid = null;
@@ -5567,6 +6061,17 @@
     if(isNaN(d) || isNaN(m) || m < 1 || m > 12) return iso;
     return pad2(d) + '/' + pad2(m) + '/' + y;   /* dd/mm/yyyy */
   }
+  /* แบบปกที่ 5 ใช้รูปหน้างานรูปแรกเป็นภาพปก */
+  function syncCoverHero(){
+    var h = $('cvHero');
+    if(!h) return;
+    var first = (state.photos || []).filter(function(p){ return p && p.img; })[0];
+    var url = first ? first.img : '';
+    if(h.getAttribute('data-src') === url) return;
+    h.setAttribute('data-src', url);
+    h.style.backgroundImage = url ? 'url("' + url + '")' : '';
+    h.classList.toggle('has-img', !!url);
+  }
   function setCover(id, val){
     var el = $(id);
     if(!el) return;
@@ -5615,6 +6120,7 @@
     /* the cover names the person who leads the job - just the first name picked */
     var team = state.employees || [];
     setCover('cvPrepared', team.length ? team[0] : '');
+    syncCoverHero();
     syncFooter();
     try{ applyBrand(); }catch(e){}
   }
@@ -6290,7 +6796,7 @@
         '<meta name="viewport" content="width=820">' +
         '<link rel="preconnect" href="https://fonts.googleapis.com">' +
         '<link href="https://fonts.googleapis.com/css2?family=Sora:wght@500;600;700' +
-        '&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">' +
+        '&family=Inter:wght@400;500;600&family=Chakra+Petch:ital,wght@0,600;0,700;1,700&display=swap" rel="stylesheet">' +
         '<style>' + printCssToScreen(css) + '</style>' +
         '<style>' +
           'html{-webkit-text-size-adjust:100% !important;text-size-adjust:100% !important;}' +
@@ -6425,7 +6931,8 @@
   /* ---------- บันทึกปัญหาตอนสร้าง PDF ----------
      บนมือถือเปิดหน้าต่างนักพัฒนาดูไม่ได้ ถ้าค้างก็ได้แต่เดากันไปเรื่อย
      ตัวนี้จดทุกขั้นตอนพร้อมเวลาไว้ในแอปเลย พอมีปัญหาก็กางให้ดูได้ทันที */
-  var APP_VER = '5.2.6';
+  var APP_VER = '1.0.5';   /* เริ่มนับใหม่ที่ 1.0.4 (เดิม 5.2.8) */
+  (function(){ var v = document.getElementById('ldVer'); if(v){ v.textContent = 'Version ' + APP_VER; } })();
 
   /* ---- หน้าเปิดแอป ----
      เวลาที่ค้างหน้าจอ หน่วยเป็นมิลลิวินาที
