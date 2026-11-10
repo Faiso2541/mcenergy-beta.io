@@ -213,8 +213,7 @@
     background:#fff;border:1px solid var(--line);border-radius:11px;padding:7px;
     box-shadow:0 12px 30px rgba(22,38,74,.18);
   }
-  /* จอแคบ ปุ่ม ⋯ อยู่ชิดซ้าย เมนูต้องกางไปทางขวา ไม่งั้นล้นขอบจอ */
-  @media (max-width:560px){ .tb-menu{right:auto;left:0;} }
+  /* ตำแหน่งซ้าย/ขวาของเมนูคำนวณตอนเปิด (ดู JS เมนู ⋯) เพราะปุ่มอาจอยู่ชิดซ้ายหรือชิดขวาแล้วแต่ความกว้างจอ */
   .tb-menu[hidden]{display:none;}
   .tb-sec{
     font-size:10.5px;color:var(--ink-faint);padding:7px 8px 4px;letter-spacing:.2px;
@@ -3355,7 +3354,17 @@
     if(!btn || !menu) return;
 
     function close(){ menu.hidden = true; btn.setAttribute('aria-expanded','false'); }
-    function open(){ menu.hidden = false; btn.setAttribute('aria-expanded','true'); }
+    /* วางเมนูให้อยู่ในจอเสมอ: เริ่มจากชิดขวาของปุ่ม ถ้าล้นซ้ายหรือขวาค่อยเลื่อนเข้ามา */
+    function place(){
+      menu.style.left = 'auto'; menu.style.right = '0px';
+      var vw = document.documentElement.clientWidth, pad = 8;
+      var r = menu.getBoundingClientRect(), shift = 0;
+      if(r.left < pad){ shift = r.left - pad; }
+      else if(r.right > vw - pad){ shift = r.right - (vw - pad); }
+      if(shift){ menu.style.right = shift + 'px'; }
+    }
+    function open(){ menu.hidden = false; btn.setAttribute('aria-expanded','true'); place(); }
+    window.addEventListener('resize', function(){ if(!menu.hidden){ place(); } });
 
     btn.addEventListener('click', function(e){
       e.stopPropagation();
