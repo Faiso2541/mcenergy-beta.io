@@ -2769,6 +2769,11 @@
       <div class="t">Clean AHU &amp; FCU</div>
       <div class="m">งานล้าง · 11 ขั้น · 12 รูป</div>
     </button>
+    <button type="button" class="modal-opt" data-tpl="astro">
+      <svg class="tpl-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 3h6M10 3v6l-5 9a2 2 0 0 0 1.7 3h10.6a2 2 0 0 0 1.7-3l-5-9V3"/><path d="M7.5 15h9"/></svg>
+      <div class="t">Astro Service</div>
+      <div class="m">เติมเคมี CT · 6 รายการ · Log sheet · 22 รูป</div>
+    </button>
     <button type="button" class="modal-opt" data-tpl="logwc">
       <svg class="tpl-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3s5 5.5 5 9a5 5 0 0 1-10 0c0-3.5 5-9 5-9z"/></svg>
       <div class="t">Log sheet water cool</div>
@@ -2864,6 +2869,45 @@
         { t:'ทำการล้าง Tube และ Plate ด้วยน้ำสะอาดพร้อมใล่อากาศออกจากระบบ', n:1 },
         { t:'สภาพ Tube และ Plate หลังทำความสะอาด', n:2 },
         { t:'บันทึกค่า Condenser Approach หลังล้าง', n:1 }
+      ]
+    },
+    /* งานเติมเคมีและดูแลน้ำ Cooling Tower ของ Astro (อิงรายงาน NSTDA - MTEC 12/11/2026) */
+    astro: {
+      name: 'Astro Service',
+      mode: 'ct',          /* มี Cooling Tower Log Sheet ต่อท้ายสโคปงาน ใช้ข้อมูลชุดเดียวกับฟอร์ม Log sheet Cooling Tower */
+      statuses: [
+        { key:'normal',  label:'ปกติ',       bg:'#E6F5EC', fg:'#1F7248', border:'#2E9E63' },
+        { key:'done',    label:'เสร็จสิ้น',   bg:'#E6F0FB', fg:'#1D5FA8', border:'#378ADD' },
+        { key:'abn',     label:'ผิดปกติ',    bg:'#FBEAEA', fg:'#C94F4F', border:'#C94F4F' },
+        { key:'skipped', label:'ไม่ได้ทำ',    bg:'#FDF3D8', fg:'#8A6D0E', border:'#E0B400' }
+      ],
+      items: [
+        'ตรวจสอบสภาพคูลลิ่งทาวเวอร์, อ่างล่าง, อินฟิล, ลูกลอย, ท่อเดรน, ท่อ Over flow',
+        'ตรวจสอบเสียงและการสั่นสะเทือนเบื้องต้นขณะที่คูลลิ่งกำลังทำงาน',
+        'ตรวจสอบปริมาณสารเคมีที่อยู่ในถัง และเติมสารเคมีชดเชยในส่วนที่พร่องจนเต็ม',
+        'ทำความสะอาดถังเคมี ปั้มเคมี ให้อยู่ในสภาพสะอาดเรียบร้อย',
+        'ทีมงานได้ทำการดูดเศษฝุ่นละออง และเก็บสิ่งสกปรกที่เกาะตามถาด และอินฟิลเรียบร้อย',
+        'เก็บตัวอย่างน้ำคูลลิ่งทาวเวอร์ และน้ำเติม เพื่อนำไปวิเคราะห์คุณภาพ'
+      ],
+      photoSteps: [
+        { t:'ก่อนทำงาน', n:1 },
+        { t:'สภาพถังเคมี และถาดรองถัง', n:1 },
+        { t:'ปริมาณเคมี', n:1 },
+        { t:'ปั้มฟีดเคมี', n:1 },
+        { t:'สภาพอ่างรองรับน้ำคูลลิ่งทาวเวอร์', n:2 },
+        { t:'หลังทำงาน', n:1 },
+        { t:'เติมเคมี', n:2 },
+        { t:'สภาพถังเคมี และถาดรองถัง', n:1 },
+        { t:'ปริมาณเคมี', n:1 },
+        { t:'ดูดเศษฝุ่นละออง และเก็บสิ่งสกปรกที่เกาะตามถาด', n:2 },
+        { t:'สภาพอ่างรองรับน้ำคูลลิ่งทาวเวอร์', n:1 },
+        { t:'วัดค่า Conductivity น้ำ คูลลิ่งทาวเวอร์', n:1 },
+        { t:'วัดค่า TDS น้ำ คูลลิ่งทาวเวอร์', n:1 },
+        { t:'วัดค่า pH น้ำ คูลลิ่งทาวเวอร์', n:1 },
+        { t:'วัดค่า Conductivity น้ำเติม', n:1 },
+        { t:'วัดค่า TDS น้ำเติม', n:1 },
+        { t:'วัดค่า pH น้ำเติม', n:1 },
+        { t:'ตรวจเช็คค่า Approach', n:2 }
       ]
     },
     ahu: {
@@ -3188,8 +3232,10 @@
     'ฌัฐวุฒิ สารแดง',
     'วัชรพงษ์ เสนาบุญ',
     'ศิรวุธ ทาอามาตร์',
-    'ธรรมมาวุธ นวลมุสิก'
-
+    'ธรรมมาวุธ นวลมุสิก',
+    'ณรกร นาควิจิตร',
+    'อทินันท์ กาดกลางดอน',
+    'อนุชา ชื่นชม'
   ];
   var EMP_SEP = '\n';
 
@@ -4841,7 +4887,7 @@
   }
 
   /* ---- checklist (several templates at once) ---- */
-  var TPL_ORDER = ['service','project','tube','ahu','delivery','logwc','logac','logtrane','logmag','logct','logmp','loghb'];
+  var TPL_ORDER = ['service','project','tube','ahu','astro','delivery','logwc','logac','logtrane','logmag','logct','logmp','loghb'];
 
   function tplSelected(k){ return state.templates.indexOf(k) !== -1; }
   function selectedTemplates(){ return TPL_ORDER.filter(tplSelected); }
@@ -4928,7 +4974,7 @@
       if(!tplSelected(k)){ delete state.logs[k]; }
     });
     if(!tplSelected('delivery')){ state.partsTable = []; }
-    if(!tplSelected('logct')){ state.ct = null; }
+    if(!tplSelected('logct') && !tplSelected('astro')){ state.ct = null; }
     if(!tplSelected('logmp')){ state.mp = null; }
     if(!tplSelected('loghb')){ state.hb = null; }
   }
@@ -5045,6 +5091,8 @@
     var sel = selectedTemplates();
     var showHeads = sel.length > 1;
 
+    /* Astro กับ Log sheet Cooling Tower ใช้ Log Sheet ชุดเดียวกัน ถ้าเลือกทั้งคู่ให้แสดงครั้งเดียว */
+    var ctShown = false;
     host.innerHTML = sel.map(function(k){
       var t = TEMPLATES[k];
       var html = '<div class="scope-block" data-t="' + k + '">';
@@ -5057,7 +5105,7 @@
                 '">+ เพิ่มรายการตรวจสอบ (Other)</button>';
       }
       if(t.mode === 'log'){ html += logBlockHtml(k); }
-      if(t.mode === 'ct'){  html += ctBlockHtml(); }
+      if(t.mode === 'ct' && !ctShown){ html += ctBlockHtml(); ctShown = true; }
       if(t.mode === 'mp'){  html += mpBlockHtml(); }
       if(t.mode === 'hb'){  html += hbBlockHtml(); }
       return html + '</div>';
@@ -5071,6 +5119,10 @@
         checklistHtml('', []) + '</div>';
       host.insertAdjacentHTML('beforeend', extra);
     }
+  }
+  /* รับเฉพาะรูปที่เป็น data:image จริง ๆ กันไฟล์งาน (.json) ที่ถูกแก้มาฝังโค้ดผ่านช่องรูป */
+  function safeImg(v){
+    return (typeof v === 'string' && /^data:image\/(png|jpe?g|webp|gif|bmp|heic|heif);base64,[A-Za-z0-9+\/=\s]+$/i.test(v)) ? v : null;
   }
   function escapeAttr(s){ return (s||'').replace(/"/g,'&quot;'); }
 
@@ -5463,10 +5515,39 @@
      ถ้าเลือกตั้งแต่ 2 ฟอร์มขึ้นไป (เช่น Clean tube + Cooling Tower) ช่องรูปจะเยอะเกิน
      จึงกลับเป็นช่องรูปธรรมดา 6 ช่อง ไม่มีคำอธิบาย เพิ่ม / ลบช่องได้ และไม่บังคับใส่ครบทุกช่อง
      รูปที่ถ่ายไว้แล้วยังอยู่ครบ เอาฟอร์มออกจนเหลือ 1 ฟอร์ม คำอธิบายของฟอร์มนั้นจะกลับมา */
-  function syncStepPhotos(){
-    var stepForms = (state.templates || []).filter(function(k){
+  /* หลังเปิดแอปใหม่ / กู้ฉบับร่าง / เปิดไฟล์งาน ฉบับร่างอัตโนมัติไม่ได้เก็บช่องรูป
+     ช่องรูปจึงกลับเป็น 6 ช่องเปล่า ทั้งที่ยังจำว่าเลือกฟอร์มที่มีคำอธิบายใต้รูปอยู่
+     (คำอธิบายใต้รูปหายตอนส่ง) ตรงนี้วางช่องรูปและคำอธิบายของฟอร์มกลับคืน
+     รูปที่มีอยู่แล้วอยู่ที่เดิม และคำอธิบายที่ช่างแก้เองจะไม่ถูกทับ */
+  /* ฟอร์มที่มีคำอธิบายใต้รูป · Astro Service ใช้กับผู้รับเหมาภายนอก จึงให้คำอธิบายของ Astro
+     อยู่เสมอ แม้จะเลือกฟอร์มอื่นร่วมด้วย (เช่น Log sheet Cooling Tower) */
+  function photoStepForms(){
+    var list = (state.templates || []).filter(function(k){
       return TEMPLATES[k] && TEMPLATES[k].photoSteps;
     });
+    return list.indexOf('astro') !== -1 ? ['astro'] : list;
+  }
+  function restoreStepPhotos(){
+    var stepForms = photoStepForms();
+    if(stepForms.length !== 1){
+      if(state.photoTpl && stepForms.indexOf(state.photoTpl) === -1){ state.photoTpl = null; }
+      return;
+    }
+    var key = stepForms[0], caps = [];
+    TEMPLATES[key].photoSteps.forEach(function(st){
+      for(var k = 0; k < (st.n || 1); k++){ caps.push(st.t); }
+    });
+    var old = state.photos || [];
+    state.photoTpl = key;
+    state.photos = caps.map(function(c, i){
+      var o = old[i] || {};
+      var mine = (old.length === caps.length && o.caption) ? o.caption : '';
+      return { caption: mine || c, img: o.img || null };
+    });
+  }
+
+  function syncStepPhotos(){
+    var stepForms = photoStepForms();
     if(stepForms.length === 1){
       if(state.photoTpl !== stepForms[0]){ applyStepPhotos(stepForms[0]); }
       return;
@@ -5569,8 +5650,8 @@
       /* an empty slot the engineer never wanted can be dropped - but only on
          the general photo page, never on slots a form laid out */
       var canDrop = !state.photoTpl;
-      var slotInner = p.img
-        ? '<img src="'+p.img+'" alt="photo '+(i+1)+'"><button type="button" class="photo-x" data-i="'+i+'" title="ลบรูปนี้">&times;</button>'
+      var slotInner = safeImg(p.img)
+        ? '<img src="'+safeImg(p.img)+'" alt="photo '+(i+1)+'"><button type="button" class="photo-x" data-i="'+i+'" title="ลบรูปนี้">&times;</button>'
         : '<div class="empty"><svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="8.5" cy="10.5" r="1.5"/><path d="M21 15l-5-5-9 9"/></svg><span>คลิกเพื่อเลือกรูป</span></div>' +
           (canDrop ? '<button type="button" class="photo-drop" data-i="'+i+'" title="เอาช่องนี้ออก">ลบช่องนี้</button>' : '');
       /* the caption is the whole story of the photo, so it gets the full width
@@ -6476,9 +6557,13 @@
     state.fields            = d.fields || {};
     adoptTemplates(d);
     state.employees         = d.employees || [];
-    state.photos            = (d.photos && d.photos.length) ? d.photos
+    state.photos            = (d.photos && d.photos.length)
+                              ? d.photos.map(function(p){ p = p || {};
+                                  return { caption: typeof p.caption === 'string' ? p.caption : '',
+                                           img: safeImg(p.img) }; })
                               : JSON.parse(JSON.stringify(defaultPhotos));
     state.signature         = d.signature || null;
+    restoreStepPhotos();
 
     applyFieldValues();
     renderChecklist();
@@ -6978,21 +7063,26 @@
   /* ตัวสร้าง PDF สองตัวนี้คือขั้นแรกของทั้งปุ่ม "ส่ง Report" และ "ส่งเป็นไฟล์ PDF"
      ถ้าโหลดไม่ได้ ปุ่มตายพร้อมกันทั้งคู่ จึงเตรียมที่โหลดสำรองไว้
      เจ้าแรกล่มหรือโดนบล็อก ก็ไปต่อเจ้าที่สองเองโดยช่างไม่ต้องทำอะไร */
+  /* SRI: ไฟล์จาก CDN ต้องตรงกับลายนิ้วมือนี้เท่านั้น ถ้าถูกแก้ระหว่างทางเบราว์เซอร์จะไม่ยอมรัน
+     ทั้งสามเจ้าส่งไฟล์เดียวกันทุกไบต์ จึงใช้ค่าเดียวกันได้ */
   var PDF_LIBS = [
-    { test: function(){ return !!window.html2canvas; }, urls: [
+    { sri: 'sha384-ZZ1pncU3bQe8y31yfZdMFdSpttDoPmOZg2wguVK9almUodir1PghgT0eY7Mrty8H',
+      test: function(){ return !!window.html2canvas; }, urls: [
       'https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js',
       'https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js',
       'https://unpkg.com/html2canvas@1.4.1/dist/html2canvas.min.js' ] },
-    { test: function(){ return !!window.jspdf; }, urls: [
+    { sri: 'sha384-JcnsjUPPylna1s1fvi1u12X5qjY5OL56iySh75FdtrwhO/SWXgMjoVqcKyIIWOLk',
+      test: function(){ return !!window.jspdf; }, urls: [
       'https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js',
       'https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js',
       'https://unpkg.com/jspdf@2.5.1/dist/jspdf.umd.min.js' ] }
   ];
   var libsReady = null;
 
-  function loadScript(src){
+  function loadScript(src, sri){
     return new Promise(function(res, rej){
       var el = document.createElement('script');
+      if(sri){ el.integrity = sri; el.crossOrigin = 'anonymous'; }
       el.src = src; el.onload = res;
       el.onerror = function(){ rej(new Error('โหลดไม่สำเร็จ: ' + src)); };
       document.head.appendChild(el);
@@ -7006,7 +7096,7 @@
     if(i >= lib.urls.length){
       return Promise.reject(new Error('โหลดตัวสร้าง PDF ไม่สำเร็จ ลองใหม่เมื่อสัญญาณดีขึ้น'));
     }
-    return loadScript(lib.urls[i])
+    return loadScript(lib.urls[i], lib.sri)
       .then(function(){ if(!lib.test()) return loadLib(lib, i + 1); })
       .catch(function(){ return loadLib(lib, i + 1); });
   }
@@ -7362,9 +7452,12 @@
         var out = null;
         try{ out = JSON.parse(txt); }catch(e){}
         if(out && out.ok) return out;
-        if(out && out.error) throw new Error(out.error);
+        /* ปลายทางตอบมาชัดว่าไม่รับ (เช่นรหัสผิด) ห้ามส่งซ้ำแบบมองไม่เห็นผล
+           ไม่งั้นแอปจะขึ้นว่าส่งสำเร็จทั้งที่ไฟล์ไม่ได้ขึ้น Drive */
+        if(out && out.error){ var se = new Error(out.error); se.server = true; throw se; }
         throw new Error('ปลายทางตอบกลับไม่ถูกต้อง');
       }).catch(function(err){
+        if(err && err.server) throw err;
         /* some browsers block reading the reply from Apps Script even though
            the upload itself went through - send it once more blind so the
            file still lands in the folder, then say so honestly */
@@ -7631,6 +7724,7 @@
 
   /* ---- init ---- */
   loadDraft();
+  restoreStepPhotos();
   applyFieldValues();
   renderChecklist();
   renderPhotos();
